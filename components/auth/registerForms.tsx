@@ -10,6 +10,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Notification from "../general/notification";
 import { redirect } from "next/navigation";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import { VscLoading } from "react-icons/vsc";
 
 const RegisterForm = () => {
   const validationSchema = Yup.object({
@@ -247,7 +248,7 @@ const RegisterForm = () => {
               />
               {isLoading ? (
                 <div className={"absolute right-4 top-3 "}>
-                  <AiOutlineLoading3Quarters />
+                  <VscLoading />
                 </div>
               ) : isVerfied?.success ? (
                 <div className="absolute right-2 top-3  ">

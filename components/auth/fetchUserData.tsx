@@ -3,11 +3,14 @@
 import { useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { login } from "@/app/store/sellerSlice";
+import { login, setIsLogged } from "@/app/store/sellerSlice";
 import { decodeToken } from "@/helper/isAuthorized";
+import { useDispatch } from "react-redux";
 
 const FetchUserData: React.FC = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_BACK_END_URL;
+  const dispatch = useDispatch();
+  // const baseUrl = process.env.NEXT_PUBLIC_BACK_END_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,10 +33,11 @@ const FetchUserData: React.FC = () => {
 
         if (response.status === 200) {
           const userData = response.data;
-          login(userData);
+          dispatch(login(userData));
+          dispatch(setIsLogged(true));
         }
-      } catch (error) {
-        console.log("Error fetching user data in FetchUserData:", error);
+      } catch (error: any) {
+        console.log(error.message);
       }
     };
 

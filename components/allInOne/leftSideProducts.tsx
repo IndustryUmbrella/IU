@@ -40,7 +40,6 @@ const LeftSideProducts = () => {
           <Skeleton
             className="w-auto min-w-[150px] h-auto min-h-[150px] mb-2"
             baseColor="gray"
-            // className=""
           />
         </div>
       </div>

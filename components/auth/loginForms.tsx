@@ -6,7 +6,7 @@ import Button from "../general/button";
 import Link from "next/link";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "@/app/store/sellerSlice";
+import { login, setIsLogged } from "@/app/store/sellerSlice";
 import { RootState } from "@/app/store/store";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
@@ -20,7 +20,6 @@ const RegisterForm = () => {
     content: "",
     success: false,
   });
-
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email format")
@@ -56,15 +55,16 @@ const RegisterForm = () => {
         content: loggedUser?.data?.message || "Logged successfully!",
         success: true,
       });
+      dispatch(setIsLogged(true));
       dispatch(login(loggedUser?.data));
+
       setTimeout(() => {
         redirect(`/profile/${userData?.seller?._id}`);
       }, 5000);
     } catch (err: any) {
-      alert(err?.message);
       setShowNotification({
         isShow: true,
-        content: err?.message || "something went wrong",
+        content: err?.response?.data?.message || "something went wrong",
         success: false,
       });
     }
