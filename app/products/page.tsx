@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
 const Products = () => {
-  //   const [state, setState] = useState(initialValue);
-
   return (
     <div className="px-[6px] sm:px-mobile md:px-tablet lg:px-desktop mt-10">
       <Categories />
