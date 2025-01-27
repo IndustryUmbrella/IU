@@ -9,13 +9,10 @@ export default async function SellerDashboard({
   params: Promise<{ sellerId: any }>;
 }) {
   const { sellerId }: any = params;
-  //   console.log(sellerId, "[[[[[[[");
 
-  // Await cookies to get the auth token
   const cookieStore = await cookies();
   const token: string | undefined = cookieStore.get("authToken")?.value;
 
-  // Ensure token exists
   if (!token) {
     redirect("/login");
     return null;
