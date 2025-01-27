@@ -19,9 +19,9 @@ const UnsortedDivs = () => {
 
   return (
     <>
-      <div className=" w-[1000px] h-[510px] relative ">
+      <div className="w-full h-full max-w-[1000px] max-h-[510px] relative hidden lg:block">
         <div
-          className="mockup border"
+          className="mockup border z-[1000]"
           style={{
             position: "absolute",
             top: "0px",
@@ -37,7 +37,7 @@ const UnsortedDivs = () => {
           className="mockup"
           style={{
             position: "absolute",
-            top: "0px",
+            top: "40px",
             right: "0px",
             ...(isImageLoaded && {
               backgroundImage: `url(${Image2.src})`,
@@ -50,7 +50,7 @@ const UnsortedDivs = () => {
           className="mockup"
           style={{
             position: "absolute",
-            top: "100px",
+            top: "120px",
             right: "0px",
             ...(isImageLoaded && {
               backgroundImage: `url(${Image3.src})`,
@@ -125,9 +125,9 @@ const UnsortedDivs = () => {
           className="mockup"
           style={{
             top: "200px",
-            right: "180px",
+            right: "10px",
             ...(isImageLoaded && {
-              backgroundImage: `url(${Image2.src})`,
+              backgroundImage: `url(${Image1.src})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }),
@@ -136,7 +136,7 @@ const UnsortedDivs = () => {
         <div
           className="mockup"
           style={{
-            top: "200px",
+            top: "250px",
             right: "220px",
             ...(isImageLoaded && {
               backgroundImage: `url(${Image4.src})`,

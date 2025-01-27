@@ -1,12 +1,19 @@
 "use client";
-import React from "react";
-import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import { setNestedObjectValues, useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "../general/button";
 import Link from "next/link";
+import axios from "axios";
+
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Notification from "../general/notification";
+import { redirect } from "next/navigation";
+import { IoCheckmarkDoneCircle } from "react-icons/io5";
 
 const RegisterForm = () => {
   const validationSchema = Yup.object({
+    companyName: Yup.string().required("Company Name is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -21,35 +28,177 @@ const RegisterForm = () => {
       .required("Confirm Password is required"),
   });
 
+  const [isVerfied, setIsVerfied] = useState<any>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
+  const [showNotification, setShowNotification] = useState<any>({
+    isShow: false,
+    content: "",
+    success: false,
+  });
+
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const formik = useFormik({
     initialValues: {
+      companyName: "",
       email: "",
       code: "",
       password: "",
       confirmPassword: "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Form Data", values);
-      alert("Form submitted successfully!");
+    onSubmit: async (values) => {
+      try {
+        const user = await axios.post(`${baseUrl}/api/auth/create`, {
+          email: values.email,
+          password: values.password,
+          companyName: values.companyName,
+          phone: "",
+          address: "",
+          companyLogo: "",
+          companyStartingTime: "",
+          description: "",
+          slogan: "",
+          isVerified: true,
+        });
+        setShowNotification({
+          isShow: true,
+          content: user?.data?.data?.message || "account created successfully!",
+          success: true,
+        });
+        setTimeout(() => {
+          redirect("/login");
+        }, 5000);
+      } catch (err: any) {
+        if (err.response) {
+          setShowNotification({
+            isShow: true,
+            content: err.response.data.message || "Wrong Credential",
+            success: false,
+          });
+        } else if (err.request) {
+          setShowNotification({
+            isShow: true,
+            content: err.request || "Wrong Credential",
+            success: false,
+          });
+        } else {
+          setShowNotification({
+            isShow: true,
+            content: err.message || "Something went wrong",
+            success: false,
+          });
+        }
+      }
     },
   });
 
+  const sendTheCode = async () => {
+    try {
+      await axios.post(`${baseUrl}/api/verify/send-code`, {
+        email: formik.values.email,
+      });
+      setIsCodeSent(true);
+    } catch (err: any) {
+      setShowNotification({
+        isShow: true,
+        content: err?.message || " Try Again",
+        success: false,
+      });
+    }
+  };
+
+  const verifyTheEmail = async () => {
+    setIsLoading(true);
+    try {
+      const isVerify = await axios.post(`${baseUrl}/api/verify/verify-code`, {
+        email: formik.values.email,
+        verificationCode: formik.values.code,
+      });
+      setIsLoading(false);
+      setIsVerfied(isVerify.data);
+    } catch (err: any) {
+      if (err.response) {
+        setShowNotification({
+          isShow: true,
+          content: err.response || "Wrong code",
+          success: false,
+        });
+      } else if (err.request) {
+        setShowNotification({
+          isShow: true,
+          content: err.response.data.message || "something went wrong",
+          success: false,
+        });
+      } else {
+        setShowNotification({
+          isShow: true,
+          content: err.message || "something went wrong",
+          success: false,
+        });
+      }
+      setIsVerfied(err.response);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const notif = setTimeout(() => {
+      setShowNotification({
+        isShow: false,
+        content: "",
+        success: false,
+      });
+    }, 4000);
+    return () => clearTimeout(notif);
+  }, [showNotification]);
+
   return (
     <>
-      <div className=" border border-white min-h-[550px] px-10 py-10 ">
+      {showNotification.isShow && (
+        <Notification
+          isShow={showNotification.isShow}
+          success={showNotification.success}
+          content={showNotification.content}
+        />
+      )}
+      <div className=" border border-white rounded-md w-auto min-w-[340px] min-h-[550px] px-10 py-10 ">
         <h1 className="text-white text-3xl w-64 mb-6 font-aboreto capitalize">
           Join the Marketplace Revolution Now!
         </h1>
         <div className="flex justify-center">
-          <form onSubmit={formik.handleSubmit} className="space-y-4">
+          <form className="space-y-4">
+            <div className="relative flex flex-col">
+              <input
+                type="Company Name"
+                id="companyName"
+                name="companyName"
+                placeholder="e.g Amazon"
+                className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm  ${
+                  formik.touched.companyName && formik.errors.companyName
+                    ? "border-red-500"
+                    : "border-gray-300"
+                } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
+                value={formik.values.companyName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.companyName && formik.errors.companyName && (
+                <span className="text-red-500 text-[12px]">
+                  {formik.errors.companyName}
+                </span>
+              )}
+            </div>
             <div className="relative">
               <input
                 type="email"
                 id="email"
                 name="email"
                 placeholder="e.g example@gmail.com"
-                className={`w-80 h-12 border rounded px-2 text-sm ${
+                disabled={isVerfied?.success}
+                // disabled
+                className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm  ${
                   formik.touched.email && formik.errors.email
                     ? "border-red-500"
                     : "border-gray-300"
@@ -58,12 +207,22 @@ const RegisterForm = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
+
               <Button
-                type="secondary"
+                type={
+                  formik.errors.email || isVerfied?.success
+                    ? "disable"
+                    : "secondary"
+                }
                 size="xs"
                 text="Send Code"
-                className={"absolute right-2 top-2 text-[10px]"}
+                className="absolute right-2 top-3 text-[10px]"
+                disable={
+                  isVerfied?.success || formik.errors.email !== undefined
+                }
+                clickHandler={sendTheCode}
               />
+
               {formik.touched.email && formik.errors.email && (
                 <span className="text-red-500 text-[12px]">
                   {formik.errors.email}
@@ -71,13 +230,14 @@ const RegisterForm = () => {
               )}
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
               <input
                 type="text"
                 id="code"
                 name="code"
+                disabled={isVerfied?.success}
                 placeholder="e.g 12XIg"
-                className={`w-80 h-12 border rounded px-2 text-sm ${
+                className={`w-[260px] md:w-64 h-12 border rounded px-2 text-sm ${
                   formik.touched.code && formik.errors.code
                     ? "border-red-500"
                     : "border-gray-300"
@@ -86,6 +246,24 @@ const RegisterForm = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
+              {isLoading ? (
+                <div className={"absolute right-4 top-3 "}>
+                  <AiOutlineLoading3Quarters />
+                </div>
+              ) : isVerfied?.success ? (
+                <div className="absolute right-2 top-3  ">
+                  <IoCheckmarkDoneCircle size={28} color="green" />
+                </div>
+              ) : (
+                <Button
+                  type={`${formik.errors.code ? "disable" : "secondary"}`}
+                  size="xs"
+                  text="verify"
+                  disable={formik.errors.email !== undefined} // Disable the button if there are errors
+                  className={"absolute right-2 top-3 text-[10px]"}
+                  clickHandler={verifyTheEmail}
+                />
+              )}
               {formik.touched.code && formik.errors.code && (
                 <span className="text-red-500 text-[12px]">
                   {formik.errors.code}
@@ -99,7 +277,7 @@ const RegisterForm = () => {
                 id="password"
                 name="password"
                 placeholder="Enter Your Password"
-                className={`w-80 h-12 border rounded px-2 text-sm ${
+                className={`w-[260px] md:w-64 h-12 border rounded px-2 text-sm ${
                   formik.touched.password && formik.errors.password
                     ? "border-red-500"
                     : "border-gray-300"
@@ -121,7 +299,7 @@ const RegisterForm = () => {
                 id="confirmPassword"
                 name="confirmPassword"
                 placeholder="Confirm Your Password"
-                className={`w-80 h-12 border rounded px-2 text-sm ${
+                className={`w-[260px] md:w-64 h-12 border rounded px-2 text-sm ${
                   formik.touched.confirmPassword &&
                   formik.errors.confirmPassword
                     ? "border-red-500"
@@ -150,6 +328,7 @@ const RegisterForm = () => {
                 size="lg"
                 text="Submit"
                 className="w-full py-3"
+                clickHandler={formik.handleSubmit}
               />
             </div>
           </form>

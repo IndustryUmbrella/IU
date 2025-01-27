@@ -4,7 +4,7 @@ import Button from "../general/button";
 
 const MiddleSideProducts = () => {
   return (
-    <div className="bg-white px-4 w-[390px] h-[605px] rounded-md">
+    <div className="bg-white px-4 w-full min-w-[340px]  h-[605px] rounded-md">
       <Skeleton baseColor="#090909" circle width={50} height={50} />
       <Skeleton baseColor="#090909" height={400} />
       <div className="text-center">

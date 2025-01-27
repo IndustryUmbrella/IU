@@ -7,7 +7,7 @@ const Reigster = () => {
     <div className=" px-[6px] sm:px-mobile md:px-tablet lg:px-desktop mt-10">
       <div className="  flex items-center justify-around">
         <ReigsterForm />
-        <div className="  px-10 py-10">
+        <div className="hidden md:flex px-10 py-10">
           <AuthMockups />
         </div>
       </div>

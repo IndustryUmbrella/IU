@@ -38,3 +38,14 @@
 .categories > li {
   cursor: pointer;
 }
+input:disabled {
+  background-color: #f0f0f0;
+  color: gray;
+  border: 1px solid #ddd;
+  cursor: not-allowed;
+  user-select: none;
+}
+
+input:disabled:hover {
+  background-color: #f0f0f0;
+}

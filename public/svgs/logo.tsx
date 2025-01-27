@@ -4,10 +4,10 @@ const Logo = () => {
   return (
     <svg
       className="mt-5"
-      width="80"
-      height="80"
       viewBox="0 0 1375 1474"
       fill="none"
+      width={80}
+      height={80}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

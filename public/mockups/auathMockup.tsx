@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 
-const AuthMockups = () => {
-  //   const [state, setState] = useState(initialValue);
-
+const AuthMockups = ({ width, height }: { width?: any; height?: any }) => {
   return (
     <div>
       <svg
-        width="496"
-        height="458"
+        width={width || "495"} // Use the value of `width`, or fallback to "495"
+        height={height || "458"} // Use the value of `height`, or fallback to "458"
         viewBox="0 0 496 458"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

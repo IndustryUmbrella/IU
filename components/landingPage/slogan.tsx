@@ -3,32 +3,31 @@
 import React, { useEffect, useState } from "react";
 import "animate.css";
 import Button from "../general/button";
+import Link from "next/link";
 
 const Slogan = () => {
-  const [isBuy, setIsBuy] = useState(true); // Tracks whether "Buy" or "Sell" is displayed
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false); // Tracks outgoing animation state
-
+  const [isBuy, setIsBuy] = useState(true);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsAnimatingOut(true); // Start hinge animation (outgoing)
+      setIsAnimatingOut(true);
       setTimeout(() => {
-        setIsBuy((prev) => !prev); // Toggle between "Buy" and "Sell"
-        setIsAnimatingOut(false); // Reset animation state for the new text
-      }, 1500); // Duration of the hinge animation
-    }, 8000); // Loop every 6 seconds
-
-    return () => clearInterval(interval); // Cleanup the interval on unmount
+        setIsBuy((prev) => !prev);
+        setIsAnimatingOut(false);
+      }, 1500);
+    }, 8000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="w-4/12 overflow-y-hidden">
-      <div className="font-normal uppercase text-[60px] text-white font-aboreto ">
+    <div className="sm:px-32 lg:px-0  items-center justify-center lg:w-auto xl:w-10/12 overflow-y-hidden ">
+      <div className="font-normal uppercase text-[40px] sm:text-[40px]  text-center  md:text-[60px] lg:text-[58px] text-white  font-aboreto ">
         Fastest Path to{" "}
         <h1
-          className={`font-normal uppercase text-[60px] text-white font-aboreto ${
+          className={`font-normal uppercase  sm:text-[40px] text-center  md:text-[60px] lg:text-[60px] text-white font-aboreto ${
             isAnimatingOut
-              ? "animate__animated animate__bounceOut" // Outgoing animation
-              : "animate__animated animate__jackInTheBox" // Incoming animation
+              ? "animate__animated animate__bounceOut"
+              : "animate__animated animate__jackInTheBox"
           }`}
           style={{ display: "inline-block" }}
         >
@@ -36,14 +35,28 @@ const Slogan = () => {
         </h1>{" "}
         Your Product
       </div>
-      <p className="font-afacad text-white text-2xl mt-[50px]">
+      <p className="font-afacad text-white text-xl text-center lg:text-2xl mt-[50px]">
         Connect with trusted buyers and sellers in your community, anytime,
         anywhere
       </p>
 
-      <div className="mt-[60px] flex gap-x-[70px]">
-        <Button size="md" type="primary" text="Buy a Product" />
-        <Button size="md" type="secondary" text="Sell a Product" />
+      <div className="mt-[60px] flex flex-col md:flex-row gap-y-[30px] gap-x-[70px] items-center justify-center ">
+        <Link href="/products">
+          <Button
+            size="lg"
+            type="primary"
+            text="Buy a Product"
+            className={"w-full min-w-[280px] lg:min-w-max"}
+          />
+        </Link>
+        <Link href="/products">
+          <Button
+            size="lg"
+            type="secondary"
+            text="Sell a Product"
+            className={"w-full min-w-[280px] lg:min-w-max"}
+          />
+        </Link>
       </div>
     </div>
   );

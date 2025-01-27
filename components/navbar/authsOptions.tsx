@@ -10,7 +10,9 @@ const AuthOptions = () => {
       >
         Register
       </Link>
-      <Link href="/login">Login</Link>
+      <Link className="hidden md:flex" href="/login">
+        Login
+      </Link>
     </div>
   );
 };
