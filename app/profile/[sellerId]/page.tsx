@@ -21,14 +21,12 @@ export default async function SellerDashboard({
     return null;
   }
 
-  // Decode the token to get the authenticated user's ID
   const authenticatedUserId = decodeToken(token);
 
-  // Redirect if the sellerId doesn't match the authenticated user ID
-  //   if (sellerId !== authenticatedUserId) {
-  //     redirect(`/profile/${authenticatedUserId}`);
-  //     return null;
-  //   }
+  if (sellerId !== authenticatedUserId) {
+    redirect(`/profile/${authenticatedUserId}`);
+    return null;
+  }
 
   return <div className="text-white">Welcome to your Seller Dashboard</div>;
 }
