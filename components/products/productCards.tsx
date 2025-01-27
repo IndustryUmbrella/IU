@@ -20,14 +20,14 @@ const ProductsCards = () => {
             className="flex items-center justify-between w-auto space-x-4 py-6  h-auto"
           >
             {Array.from({ length: 4 }, (_, colIndex) => {
-              const imageIndex = rowIndex * 4 + colIndex; // Calculate the image index based on row and column
+              const imageIndex = rowIndex * 4 + colIndex;
               return (
                 <div
                   key={colIndex}
                   className="bg-white relative rounded-xl pb-2 w-80"
                 >
                   <Image
-                    src={Images[imageIndex % Images.length]} // Use modulo to loop through the images array
+                    src={Images[imageIndex % Images.length]}
                     alt={`Product ${imageIndex}`}
                     className="w-[330px] h-[320px] object-center"
                   />

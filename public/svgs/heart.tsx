@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 const Hearth = () => {
-  //   const [state, setState] = useState(initialValue);
-
   return (
     <svg
       width="18"

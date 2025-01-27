@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 const Categories = () => {
-  //   const [state, setState] = useState(initialValue);
-
   return (
     <div>
       <div className="border border-gray-600 rounded-3xl  bg-[#0C0C0C] py-1.5">

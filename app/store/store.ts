@@ -1,4 +1,3 @@
-// app/store/index.ts
 import { configureStore } from "@reduxjs/toolkit";
 import sellerSlice from "./sellerSlice";
 

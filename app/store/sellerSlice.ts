@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SellerSlice {
-  user: any; // Accepts any object, or replace with the exact structure
+  user: any;
 }
 
 const initialState: SellerSlice = {
@@ -13,10 +13,10 @@ const sellerSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action: PayloadAction<any>) => {
-      state.user = action.payload; // Store the entire loggedUser object
+      state.user = action.payload;
     },
     logout: (state) => {
-      state.user = null; // Clear user state on logout
+      state.user = null;
     },
   },
 });

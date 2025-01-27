@@ -7,7 +7,7 @@ import { login } from "@/app/store/sellerSlice";
 import { decodeToken } from "@/helper/isAuthorized";
 
 const FetchUserData: React.FC = () => {
-  const baseUrl = "http://localhost:5000";
+  const baseUrl = process.env.NEXT_PUBLIC_BACK_END_URL;
 
   useEffect(() => {
     const fetchData = async () => {

@@ -197,7 +197,6 @@ const RegisterForm = () => {
                 name="email"
                 placeholder="e.g example@gmail.com"
                 disabled={isVerfied?.success}
-                // disabled
                 className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm  ${
                   formik.touched.email && formik.errors.email
                     ? "border-red-500"
@@ -259,7 +258,7 @@ const RegisterForm = () => {
                   type={`${formik.errors.code ? "disable" : "secondary"}`}
                   size="xs"
                   text="verify"
-                  disable={formik.errors.email !== undefined} // Disable the button if there are errors
+                  disable={formik.errors.email !== undefined}
                   className={"absolute right-2 top-3 text-[10px]"}
                   clickHandler={verifyTheEmail}
                 />

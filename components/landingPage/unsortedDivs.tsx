@@ -14,7 +14,7 @@ const UnsortedDivs = () => {
   useEffect(() => {
     const img = new Image();
     img.src = Image1.src;
-    img.onload = () => setIsImageLoaded(true); // Set to true when the image is loaded
+    img.onload = () => setIsImageLoaded(true);
   }, []);
 
   return (
@@ -117,7 +117,6 @@ const UnsortedDivs = () => {
             ...(isImageLoaded && {
               backgroundImage: `url(${Image7.src})`,
               backgroundSize: "cover",
-              // backgroundPosition: "center",
             }),
           }}
         ></div>

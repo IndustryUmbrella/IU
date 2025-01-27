@@ -17,7 +17,7 @@ const Button = ({
     <div>
       <button
         type="button"
-        disabled={disable} // Disable the button when `disable` is true
+        disabled={disable}
         onClick={clickHandler ? () => clickHandler() : undefined}
         className={`${
           size === "lg"
