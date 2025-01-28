@@ -1,17 +1,19 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
-import Button from "../general/button";
-import Notification from "../general/notification";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { login, setIsLogged } from "@/app/store/sellerSlice";
+import Notification from "../general/notification";
+import PopUp from "../general/popUp";
+import { BiSolidDashboard } from "react-icons/bi";
+import { TbLogout2 } from "react-icons/tb";
 
 const AuthOptions = () => {
   const dispatch = useDispatch();
+  const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isLogged = useSelector((state: RootState) => state.seller.isLogged);
   const userData = useSelector((state: RootState) => state.seller.user);
   const [showNotification, setShowNotification] = useState({
@@ -20,6 +22,7 @@ const AuthOptions = () => {
     success: true,
   });
   const route = useRouter();
+  const popUpRef = useRef<HTMLDivElement>(null); // Ref to track the pop-up container
 
   const logoutUser = () => {
     try {
@@ -35,11 +38,29 @@ const AuthOptions = () => {
     } catch (err) {
       setShowNotification({
         isShow: true,
-        content: "can't logout now",
+        content: "Can't log out now",
         success: false,
       });
     }
   };
+
+  // Close pop-up when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        popUpRef.current &&
+        !popUpRef.current.contains(event.target as Node)
+      ) {
+        setPopUpOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   useEffect(() => {
     const notif = setTimeout(() => {
@@ -50,7 +71,8 @@ const AuthOptions = () => {
       });
       return () => clearTimeout(notif);
     }, 4000);
-  });
+  }, [showNotification]);
+
   return (
     <>
       {showNotification?.isShow && (
@@ -73,24 +95,40 @@ const AuthOptions = () => {
           </Link>
         </div>
       ) : (
-        <>
-          <div className="flex gap-x-2 items-center justify-center">
-            <Link href={`/profile/${userData?._id}`}>
-              <Button
-                size="md"
-                type="primary"
-                text="Dashboard"
-                clickHandler={logoutUser}
-              />
-            </Link>
-            <Button
-              size="md"
-              type="secondary"
-              text="Logut"
-              clickHandler={logoutUser}
-            />
+        <div className="relative" ref={popUpRef}>
+          <div
+            onClick={() => setPopUpOpen((prev) => !prev)}
+            className="bg-violet-800 p-3 cursor-pointer w-10 h-10 py-2 rounded-full text-xl text-white flex items-center justify-center"
+          >
+            {userData?.companyName?.charAt(0).toUpperCase()}
           </div>
-        </>
+          {popUpOpen && (
+            <PopUp
+              items={[
+                {
+                  label: (
+                    <div className="flex flex-row gap-x-2 items-center">
+                      <BiSolidDashboard size={28} />
+                      <p className="">Dashboard</p>
+                    </div>
+                  ),
+                  action: () =>
+                    route.push(`/profile/${userData?._id}?tab=account`),
+                },
+                {
+                  label: (
+                    <div className="flex flex-row gap-x-2 items-center">
+                      <TbLogout2 size={28} />
+                      <p className="">Logout</p>
+                    </div>
+                  ),
+                  action: logoutUser,
+                },
+              ]}
+              closePopUp={() => setPopUpOpen(false)}
+            />
+          )}
+        </div>
       )}
     </>
   );

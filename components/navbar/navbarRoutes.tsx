@@ -49,6 +49,16 @@ const NavbarRoutes = () => {
         >
           Products
         </Link>
+        <Link
+          href="/contact"
+          className={`text-md border-b-2 border-transparent transition-all duration-500 ${
+            pathname === "/contact"
+              ? "font-bold border-l-2 border-l-white px-1"
+              : "font-normal"
+          }`}
+        >
+          Contact
+        </Link>
       </nav>
     </div>
   );

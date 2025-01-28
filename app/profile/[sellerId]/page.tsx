@@ -39,9 +39,8 @@ export default function SellerDashboard({
   }, [searchParams]);
 
   useEffect(() => {
-    // Run authentication and data fetch logic only once when sellerId is available
     const fetchSellerData = async () => {
-      if (!sellerId) return; // Prevent unnecessary API calls
+      if (!sellerId) return;
 
       try {
         const token = Cookies.get("authToken");
@@ -59,7 +58,6 @@ export default function SellerDashboard({
           return;
         }
 
-        // Fetch seller data
         const response = await axios.get(
           `${baseUrl}/api/auth/seller/${sellerId}`,
           {
@@ -128,7 +126,6 @@ export default function SellerDashboard({
             </button>
           </div>
 
-          {/* Tab Content */}
           <div className="mt-4">
             {activeTab === "dashboard" && <div>Welcome to your Dashboard</div>}
             {activeTab === "account" && (

@@ -5,12 +5,15 @@ import * as Yup from "yup";
 import Button from "../general/button";
 import Link from "next/link";
 import axios from "axios";
-
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Notification from "../general/notification";
 import { redirect } from "next/navigation";
-import { IoCheckmarkDoneCircle } from "react-icons/io5";
-import { VscLoading } from "react-icons/vsc";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
+import {
+  faCoffee,
+  faSpinner,
+  faCircleNotch,
+} from "@fortawesome/free-solid-svg-icons";
 
 const RegisterForm = () => {
   const validationSchema = Yup.object({
@@ -32,6 +35,7 @@ const RegisterForm = () => {
   const [isVerfied, setIsVerfied] = useState<any>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
+  const [sendingCodeLoading, setSendingCodeLoading] = useState<boolean>(false);
   const [showNotification, setShowNotification] = useState<any>({
     isShow: false,
     content: "",
@@ -96,17 +100,25 @@ const RegisterForm = () => {
   });
 
   const sendTheCode = async () => {
+    setSendingCodeLoading(true);
     try {
       await axios.post(`${baseUrl}/api/verify/send-code`, {
         email: formik.values.email,
       });
       setIsCodeSent(true);
+      setShowNotification({
+        isShow: true,
+        content: " Verification Code Sent Successfull",
+        success: true,
+      });
+      setSendingCodeLoading(false);
     } catch (err: any) {
       setShowNotification({
         isShow: true,
-        content: err?.message || " Try Again",
+        content: err?.response?.data?.message || " wait a minute and Try Again",
         success: false,
       });
+      setSendingCodeLoading(false);
     }
   };
 
@@ -120,25 +132,15 @@ const RegisterForm = () => {
       setIsLoading(false);
       setIsVerfied(isVerify.data);
     } catch (err: any) {
-      if (err.response) {
-        setShowNotification({
-          isShow: true,
-          content: err.response || "Wrong code",
-          success: false,
-        });
-      } else if (err.request) {
-        setShowNotification({
-          isShow: true,
-          content: err.response.data.message || "something went wrong",
-          success: false,
-        });
-      } else {
-        setShowNotification({
-          isShow: true,
-          content: err.message || "something went wrong",
-          success: false,
-        });
-      }
+      setShowNotification({
+        isShow: true,
+        content:
+          err?.response?.data?.message ||
+          err?.response ||
+          err?.response?.data?.message,
+        success: false,
+      });
+
       setIsVerfied(err.response);
       setIsLoading(false);
     }
@@ -208,20 +210,29 @@ const RegisterForm = () => {
                 onBlur={formik.handleBlur}
               />
 
-              <Button
-                type={
-                  formik.errors.email || isVerfied?.success
-                    ? "disable"
-                    : "secondary"
-                }
-                size="xs"
-                text="Send Code"
-                className="absolute right-2 top-3 text-[10px]"
-                disable={
-                  isVerfied?.success || formik.errors.email !== undefined
-                }
-                clickHandler={sendTheCode}
-              />
+              {!sendingCodeLoading ? (
+                <Button
+                  type={
+                    formik.errors.email || isVerfied?.success
+                      ? "disable"
+                      : "secondary"
+                  }
+                  size="xs"
+                  text={"Send Code"}
+                  className="absolute right-2 top-3 text-[10px]"
+                  disable={
+                    isVerfied?.success || formik.errors.email !== undefined
+                  }
+                  clickHandler={sendTheCode}
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  spin
+                  size="3x"
+                  className="absolute right-2 top-4 text-[13px]"
+                />
+              )}
 
               {formik.touched.email && formik.errors.email && (
                 <span className="text-red-500 text-[12px]">
@@ -247,12 +258,15 @@ const RegisterForm = () => {
                 onBlur={formik.handleBlur}
               />
               {isLoading ? (
-                <div className={"absolute right-4 top-3 "}>
-                  <VscLoading />
-                </div>
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  spin
+                  size="3x"
+                  className="absolute right-2 top-4 text-[13px]"
+                />
               ) : isVerfied?.success ? (
                 <div className="absolute right-2 top-3  ">
-                  <IoCheckmarkDoneCircle size={28} color="green" />
+                  <IoCheckmarkDoneCircleSharp />
                 </div>
               ) : (
                 <Button

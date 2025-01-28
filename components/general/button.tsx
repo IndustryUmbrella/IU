@@ -7,7 +7,7 @@ const Button = ({
   clickHandler,
 }: {
   type: "primary" | "secondary" | "disable";
-  text: string;
+  text: any;
   size: "xs" | "sm" | "md" | "lg";
   className?: string;
   disable?: boolean;
