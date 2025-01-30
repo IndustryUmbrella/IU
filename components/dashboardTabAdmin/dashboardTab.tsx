@@ -14,11 +14,14 @@ import PersoanInfoAccount from "../accountTabAdmin/personalInfoAccount";
 import SocialMediaInfoAccount from "../accountTabAdmin/socialMediaInfoAccount";
 import Overlay from "../general/overlay";
 import NewProductForm from "./newProductForm";
+import ProductList from "./productList";
 
 const DashboardTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
   userData = userData || userData?.seller;
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
+  const [submitForm, setSubmitForm] = useState<(() => void) | null>(null);
+
   const [showNotification, setShowNotification] = useState<any>({
     isShow: false,
     content: "",
@@ -44,103 +47,6 @@ const DashboardTab = () => {
     onSubmit: async (values) => {},
   });
 
-  const updateSeller = async () => {
-    if (Object.keys(formik.errors).length > 0) return;
-
-    try {
-      const updateData: any = {};
-
-      if (formik.values.phone) updateData.phone = formik.values.phone;
-      if (formik.values.address) updateData.address = formik.values.address;
-      if (formik.values.companyStartingTime)
-        updateData.companyStartingTime = formik.values.companyStartingTime;
-
-      const socialLinks = [
-        formik.values.facebook && {
-          title: "Facebook",
-          link: formik.values.facebook,
-        },
-        formik.values.instagram && {
-          title: "Instagram",
-          link: formik.values.instagram,
-        },
-        formik.values.twitter && {
-          title: "Twitter",
-          link: formik.values.twitter,
-        },
-        formik.values.linkedin && {
-          title: "LinkedIn",
-          link: formik.values.linkedin,
-        },
-        formik.values.pinterest && {
-          title: "Pinterest",
-          link: formik.values.pinterest,
-        },
-        formik.values.website && {
-          title: "Website",
-          link: formik.values.website,
-        },
-      ].filter(Boolean); // Remove undefined values
-
-      if (socialLinks.length > 0) updateData.socialLinks = socialLinks;
-
-      // Make the PUT request only if there's data to update
-      if (Object.keys(updateData).length > 0) {
-        const response = await axios.put(
-          `http://localhost:5000/api/auth/seller/${
-            userData?.seller?._id || userData?._id
-          }`,
-          updateData
-        );
-        setShowNotification({
-          isShow: true,
-          content: "Fields Updated Successfully",
-          success: true,
-        });
-      } else {
-        setShowNotification({
-          isShow: true,
-          content: "No fields to update",
-          success: false,
-        });
-      }
-    } catch (err) {
-      console.error("Error updating seller:", err);
-    }
-  };
-  //   useEffect(() => {
-  //     if (userData) {
-  //       formik.setValues({
-  //         companyName: userData?.companyName || "",
-  //         email: userData?.email || "",
-  //         password: userData?.password || "",
-  //         phone: userData?.phone || "",
-  //         address: userData?.address || "",
-  //         companyStartingTime: userData?.companyStartingTime
-  //           ? formatDate(userData?.companyStartingTime)
-  //           : "",
-  //         facebook:
-  //           userData?.socialLinks?.find((link: any) => link.title === "Facebook")
-  //             ?.link || "",
-  //         instagram:
-  //           userData?.socialLinks?.find((link: any) => link.title === "Instagram")
-  //             ?.link || "",
-  //         twitter:
-  //           userData?.socialLinks?.find((link: any) => link.title === "Twitter")
-  //             ?.link || "",
-  //         linkedin:
-  //           userData?.socialLinks?.find((link: any) => link.title === "LinkedIn")
-  //             ?.link || "",
-  //         pinterest:
-  //           userData?.socialLinks?.find((link: any) => link.title === "Pinterest")
-  //             ?.link || "",
-  //         website:
-  //           userData?.socialLinks?.find((link: any) => link.title === "Website")
-  //             ?.link || "",
-  //       });
-  //     }
-  //   }, [userData]);
-
   useEffect(() => {
     const notif = setTimeout(() => {
       setShowNotification({
@@ -153,20 +59,20 @@ const DashboardTab = () => {
   }, [showNotification]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col px-20 ">
       {showOverlay && (
         <Overlay
           isOpen={showOverlay}
           onClose={() => setShowOverlay(false)}
-          onConfirm={() => alert("added")}
+          onConfirm={() => submitForm?.()}
         >
           <>
             <h1 className="text-3xl ">Add new Product</h1>
-            <NewProductForm />
+            <NewProductForm setShowOverlay={setShowOverlay} />
           </>
         </Overlay>
       )}
-      <div className="flex flex-row px-10 justify-between">
+      <div className="flex flex-row px-10 justify-between mb-10">
         <h1 className="text-3xl">Your product list</h1>
         <Button
           clickHandler={() => setShowOverlay(true)}
@@ -175,31 +81,7 @@ const DashboardTab = () => {
           text="+ Add Product"
         />
       </div>
-      {/* <div className="flex flex-col items-center justify-center ">
-        {showNotification.isShow && (
-          <Notification
-            isShow={showNotification.isShow}
-            success={showNotification.success}
-            content={showNotification.content}
-          />
-        )}
-        <form>
-          <PersoanInfoAccount formik={formik} />
-          <SocialMediaInfoAccount formik={formik} />
-
-          <div className="my-10">
-            <FileInput />
-          </div>
-
-          <Button
-            type={Object.keys(formik.errors).length > 0 ? "disable" : "primary"}
-            disable={(Object.keys(formik.errors).length = 0) ? true : false}
-            size="md"
-            text="Update"
-            clickHandler={updateSeller}
-          />
-        </form>
-      </div> */}
+      <ProductList />
     </div>
   );
 };

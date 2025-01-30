@@ -1,4 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
+import Button from "./button";
 
 interface OverlayProps {
   isOpen: boolean;
@@ -45,22 +46,22 @@ const Overlay: React.FC<OverlayProps> = ({
           width: overlayStyles?.width || "auto",
           height: overlayStyles?.height || "auto",
         }}
-        onClick={(e) => e.stopPropagation()} // Prevent click from closing the overlay
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="text-center">{children}</div>
         <div className="flex justify-evenly mt-4">
-          <button
-            className="bg-red-500 text-white px-6 py-2 rounded"
-            onClick={onConfirm}
-          >
-            Yes
-          </button>
-          <button
-            className="bg-gray-300 text-black px-6 py-2 rounded"
-            onClick={onClose}
-          >
-            No
-          </button>
+          <Button
+            size="md"
+            type="secondary"
+            text="Cancel"
+            clickHandler={onClose}
+          />
+          <Button
+            size="md"
+            type="primary"
+            text="yes"
+            clickHandler={onConfirm}
+          />
         </div>
       </div>
     </div>

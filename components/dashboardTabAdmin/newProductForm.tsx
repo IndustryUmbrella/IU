@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Select from "react-select";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import Button from "../general/button";
+import { triggerRefresh } from "@/app/store/productSlice";
+import Cookies from "js-cookie";
 
-const NewProductForm = () => {
+const NewProductForm = ({
+  setShowOverlay,
+  data,
+}: {
+  setShowOverlay: any;
+  data?: any;
+}) => {
+  const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.seller.user);
+  const products = useSelector((state: RootState) => state.product.products);
+
   const productSchema = Yup.object({
     productName: Yup.string().required("product name is required"),
     productDescription: Yup.string().required("description is required"),
@@ -24,6 +35,8 @@ const NewProductForm = () => {
     { value: "option2", label: "Option 2" },
     { value: "option3", label: "Option 3" },
   ];
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const token = Cookies.get("authToken");
 
   const formik = useFormik({
     initialValues: {
@@ -39,81 +52,85 @@ const NewProductForm = () => {
       console.log();
     },
   });
+  useEffect(() => {
+    if (products && data) {
+      formik.setValues({
+        productName: data.productName || "",
+        productDescription: data.productDescription || "",
+        productCategory: "",
+        productPrice: data.productPrice || "",
+        colores: data.colores?.[0] || "", // Ensure it's dynamic
+        limitedCounts: data.limitedCounts || 0, // Default to prevent undefined
+      });
+    }
+  }, [data, products]); // Ensure dependencies are correct
 
-  const addProduct = async () => {
-    console.log("clicked", formik.errors);
+  const addNewProduct = async () => {
+    // console.log("clicked", formik.errors);
     if (Object.keys(formik.errors).length > 0) return;
 
     try {
-      const updateData: any = {};
+      const productData: any = {
+        seller_id: userData?.seller?._id || userData?._id,
+        productName: formik.values.productName,
+        productDescription: formik.values.productDescription,
+        productCategory: "Option 2",
+        productImage: "",
+        productPrice: formik.values.productPrice,
+        colores: formik.values.colores,
+        limitedCounts: formik.values.limitedCounts,
+      };
 
-      if (formik.values.productName)
-        updateData.products = [
-          {
-            productName: formik.values.productCategory,
-            productDescription: formik.values.productCategory,
-            productPrice: formik.values.productPrice,
-            colores: formik.values.colores,
-            limitedCounts: formik.values.limitedCounts,
-          },
-        ];
-
-      //   if (formik.values.phone) updateData.phone = formik.values.phone;
-      //   if (formik.values.address) updateData.address = formik.values.address;
-      //   if (formik.values.companyStartingTime)
-      //     updateData.companyStartingTime = formik.values.companyStartingTime;
-
-      //   const product = [
-      //     formik.values.productName && {
-      //       title: "Facebook",
-      //       link: formik.values.facebook,
-      //     },
-      //     formik.values.instagram && {
-      //       title: "Instagram",
-      //       link: formik.values.instagram,
-      //     },
-      //     formik.values.twitter && {
-      //       title: "Twitter",
-      //       link: formik.values.twitter,
-      //     },
-      //     formik.values.linkedin && {
-      //       title: "LinkedIn",
-      //       link: formik.values.linkedin,
-      //     },
-      //     formik.values.pinterest && {
-      //       title: "Pinterest",
-      //       link: formik.values.pinterest,
-      //     },
-      //     formik.values.website && {
-      //       title: "Website",
-      //       link: formik.values.website,
-      //     },
-      //   ].filter(Boolean); // Remove undefined values
-
-      //   if (socialLinks.length > 0) updateData.socialLinks = socialLinks;
-
-      // Make the PUT request only if there's data to update
-      if (Object.keys(updateData).length > 0) {
-        const response = await axios.put(
-          `http://localhost:5000/api/auth/seller/${
-            userData?.seller?._id || userData?._id
-          }`,
-          updateData
-        );
-        // setShowNotification({
-        //   isShow: true,
-        //   content: "Fields Updated Successfully",
-        //   success: true,
-        // });
-      } else {
-        // setShowNotification({
-        //   isShow: true,
-        //   content: "No fields to update",
-        //   success: false,
-        // });
-      }
+      const response = await axios.post(
+        `${baseUrl}/api/product/add-product`,
+        productData
+      );
+      setShowOverlay(false);
+      dispatch(triggerRefresh());
+      // setShowNotification({
+      //   isShow: true,
+      //   content: "Fields Updated Successfully",
+      //   success: true,
+      // });
     } catch (err) {
-      console.error("Error adding product:", err);
+      console.log("Error adding product:", err, userData);
+    }
+  };
+  const updateProduct = async () => {
+    alert("cliked");
+    // console.log("clicked", formik.errors);
+    if (Object.keys(formik.errors).length > 0) return;
+
+    try {
+      const productData: any = {
+        seller_id: userData?.seller?._id || userData?._id,
+        productName: formik.values.productName,
+        productDescription: formik.values.productDescription,
+        productCategory: formik.values.productCategory,
+        productImage: "",
+        productPrice: formik.values.productPrice,
+        colores: formik.values.colores,
+        limitedCounts: formik.values.limitedCounts,
+      };
+
+      const response = await axios.put(
+        `${baseUrl}/api/product/product/${data?.productId}`,
+        productData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setShowOverlay(false);
+      dispatch(triggerRefresh());
+      // setShowNotification({
+      //   isShow: true,
+      //   content: "Fields Updated Successfully",
+      //   success: true,
+      // });
+    } catch (err) {
+      console.log("Error adding product:", err, userData);
     }
   };
 
@@ -279,7 +296,21 @@ const NewProductForm = () => {
             </div>
           </div>
         </div>
-        <Button type="primary" size="md" text="add" clickHandler={addProduct} />
+        {data ? (
+          <Button
+            type="primary"
+            size="md"
+            text="update"
+            clickHandler={updateProduct}
+          />
+        ) : (
+          <Button
+            type="primary"
+            size="md"
+            text="add"
+            clickHandler={addNewProduct}
+          />
+        )}
       </form>
     </>
   );

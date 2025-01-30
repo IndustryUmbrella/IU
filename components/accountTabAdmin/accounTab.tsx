@@ -12,10 +12,15 @@ import Notification from "../general/notification";
 import { validationSchema } from "@/helper/DashboardValidationScehma";
 import PersoanInfoAccount from "./personalInfoAccount";
 import SocialMediaInfoAccount from "./socialMediaInfoAccount";
+import { headers } from "next/headers";
+import Cookies from "js-cookie";
 
 const AccountTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
   userData = userData || userData?.seller;
+
+  const token = Cookies.get("authToken");
+  console.log(token, "#########");
 
   const [showNotification, setShowNotification] = useState<any>({
     isShow: false,
@@ -88,8 +93,14 @@ const AccountTab = () => {
           `http://localhost:5000/api/auth/seller/${
             userData?.seller?._id || userData?._id
           }`,
-          updateData
+          updateData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+
         setShowNotification({
           isShow: true,
           content: "Fields Updated Successfully",

@@ -98,13 +98,13 @@ export default function SellerDashboard({
           <h1 className="my-10">
             Welcome to your <b>{userData?.companyName}</b> Dashboard
           </h1>
-          <div className="flex flex-row justify-evenly">
-            <div className="flex flex-col gap-4 my-4 bg-gray-700 px-20 py-4 rounded">
+          <div className="flex flex-col lg:flex-row justify-evenly">
+            <div className="flex flex-row lg:flex-col gap-4 my-4 bg-[#0c0c0b]   shadow-xl shadow-gray-950 px-20 py-4 rounded-md">
               <button
                 className={`px-4 py-2 ${
                   activeTab === "dashboard"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
+                    ? "bg-[#090909] shadow-md shadow-gray-900 text-white"
+                    : "bg-white text-black rounded-md"
                 }`}
                 onClick={() => handleTabChange("dashboard")}
               >
@@ -113,8 +113,8 @@ export default function SellerDashboard({
               <button
                 className={`px-4 py-2 ${
                   activeTab === "account"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
+                    ? "bg-[#090909] shadow-md shadow-gray-900 text-white"
+                    : "bg-white text-black rounded-md"
                 }`}
                 onClick={() => handleTabChange("account")}
               >
@@ -123,8 +123,8 @@ export default function SellerDashboard({
               <button
                 className={`px-4 py-2 ${
                   activeTab === "settings"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
+                    ? "bg-[#090909] shadow-md shadow-gray-900 text-white"
+                    : "bg-white text-black rounded-md"
                 }`}
                 onClick={() => handleTabChange("settings")}
               >
