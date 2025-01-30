@@ -20,7 +20,8 @@ const AccountTab = () => {
   userData = userData || userData?.seller;
 
   const token = Cookies.get("authToken");
-  console.log(token, "#########");
+  // console.log(token, "#########");
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const [showNotification, setShowNotification] = useState<any>({
     isShow: false,
@@ -90,7 +91,7 @@ const AccountTab = () => {
       // Make the PUT request only if there's data to update
       if (Object.keys(updateData).length > 0) {
         const response = await axios.put(
-          `http://localhost:5000/api/auth/seller/${
+          `${baseUrl}/api/auth/seller/${
             userData?.seller?._id || userData?._id
           }`,
           updateData,
