@@ -8,6 +8,7 @@ const FileInput = () => {
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState(0);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   // Move useSelector inside the component
   const userData = useSelector((state: RootState) => state.seller.user);
@@ -32,7 +33,7 @@ const FileInput = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/image/upload", // Change this to your backend route
+        `${baseUrl}/api/image/upload`, // Change this to your backend route
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
