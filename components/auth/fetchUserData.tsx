@@ -13,6 +13,9 @@ const FetchUserData: React.FC = () => {
   const dispatch = useDispatch();
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const userData = useSelector((state: RootState) => state.seller.user);
+  const profile = useSelector(
+    (state: RootState) => state.seller.profilePicture
+  );
 
   const refresh = useSelector((state: any) => state.product.refresh);
 
@@ -51,7 +54,29 @@ const FetchUserData: React.FC = () => {
               }
             );
 
-            // Extract only the necessary data from the response
+            if (userData) {
+              try {
+                const response = await axios.get(
+                  `${baseUrl}/api/image/upload/${userData?._id}`,
+                  { withCredentials: true }
+                );
+
+                if (response.status == 200) {
+                  // Use baseUrl variable for constructing the image URL
+                  dispatch(
+                    setProfilePicture(`${baseUrl}${response.data.profileImage}`)
+                  );
+                  console.log(profile);
+                } else {
+                  console.log("Error fetching image:", response.data.message);
+                }
+              } catch (error) {
+                console.log("Error fetching image:", error);
+              }
+
+              // fetchProfileImage();
+            }
+
             const productData = fetchProductResponse.data;
             dispatch(setProducts(productData));
           } catch (err: any) {
@@ -64,32 +89,7 @@ const FetchUserData: React.FC = () => {
     };
 
     fetchData();
-  }, [dispatch, baseUrl, refresh]); // Add `refresh` as a dependency
-
-  useEffect(() => {
-    if (userData) {
-      const fetchProfileImage = async () => {
-        try {
-          const response = await axios.get(
-            `${baseUrl}/api/image/upload/${userData?._id}`,
-            { withCredentials: true }
-          );
-
-          if (response?.statusText == "OK") {
-            dispatch(
-              setProfilePicture(`${baseUrl}${response?.data?.profileImage}`)
-            );
-            // dispatch(triggerRefresh())
-          } else {
-            console.log("Error fetching image:", response?.data?.message);
-          }
-        } catch (error) {
-          console.log("Error fetching image:", error);
-        }
-      };
-      fetchProfileImage();
-    }
-  }, [baseUrl, userData]);
+  }, [dispatch, userData?._id, baseUrl, refresh]);
 
   return null;
 };

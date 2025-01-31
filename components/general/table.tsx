@@ -10,8 +10,8 @@ import Overlay from "./overlay";
 import NewProductForm from "../dashboardTabAdmin/newProductForm";
 
 interface TableProps {
-  columns: string[]; // Array of column names
-  data: any[]; // Array of objects representing rows
+  columns: string[];
+  data: any[];
 }
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
@@ -19,28 +19,17 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
   const [selectedId, setSelectedId] = useState<any>(null);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<any>({});
-  const popUpRef = useRef<HTMLDivElement>(null); // Ref to track the pop-up container
+  const popUpRef = useRef<HTMLDivElement>(null);
 
   if (data?.length === 0) {
-    return <div>No data available.</div>;
+    return <p className="text-black">No data available.</p>;
   }
-  // console.log(data, "DDDDDDDDDDDDDD");
-  const [activeStates, setActiveStates] = useState<boolean[]>(
-    data?.map((item) => item.isActive)
-  );
 
-  // const handleToggle = (index: number) => {
-  //   const newActiveStates = [...activeStates];
-  //   newActiveStates[index] = !newActiveStates[index];
-  //   setActiveStates(newActiveStates);
-  // };
   const showPopUp = (id: any) => {
     if (selectedId === id) {
-      // If the same item is clicked again, close it
       setIsPopUp(false);
       setSelectedId(null);
     } else {
-      // Open the PopUp for the new item
       setSelectedId(id);
       setIsPopUp(true);
     }
@@ -51,22 +40,22 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
     setSelectedProduct(data);
     console.log(data, "dddd");
   };
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        popUpRef.current &&
-        !popUpRef.current.contains(event.target as Node)
-      ) {
-        setIsPopUp(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleOutsideClick = (event: MouseEvent) => {
+  //     if (
+  //       popUpRef.current &&
 
-    document.addEventListener("mousedown", handleOutsideClick);
+  //     ) {
+  //       setIsPopUp(false);
+  //     }
+  //   };
 
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
+  //   document.addEventListener("mousedown", handleOutsideClick);
+
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleOutsideClick);
+  //   };
+  // }, [showPopUp]);
 
   return (
     <div>
@@ -127,19 +116,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                 style={{ border: "1px solid #ddd", padding: "8px" }}
                 className="text-center"
               >
-                {/* <button
-                  onClick={() => handleToggle(index)}
-                  style={{
-                    padding: "5px 10px",
-                    backgroundColor: activeStates[index] ? "green" : "red",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {activeStates[index] ? "Active" : "Inactive"}
-                </button> */}
                 Active
               </td>
               <td
@@ -149,7 +125,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                 <p
                   className="font-bold text-center flex items-center justify-center cursor-pointer"
                   onClick={() => showPopUp(index)}
-                  // ref={popUpRef}
                 >
                   <PiDotsThreeOutlineVertical size={18} />
                 </p>

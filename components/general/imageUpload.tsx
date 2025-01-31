@@ -1,20 +1,28 @@
+import { RootState } from "@/app/store/store";
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const ProfileImage = ({ sellerId }: { sellerId: string }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const userData: any = useSelector(
+    (state: RootState) => state.seller.profilePicture
+  );
 
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/image/upload/${sellerId}`
+        const response = await axios.get(
+          // `http://localhost:5000/api/image/upload/${sellerId}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/image/upload/${sellerId}`
         );
-        const data = await response.json();
+        // const data = await response.json();
 
-        if (response.ok) {
-          setImageUrl(`http://localhost:5000${data.profileImage}`);
+        if (response.status == 200) {
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}${response?.data.profileImage}`;
+          // setImageUrl(`http://localhost:5000${data.profileImage}`);
         } else {
-          console.log("Error fetching image:", data.message);
+          console.log("Error fetching image:", response?.data.profileImage);
         }
       } catch (error) {
         console.log("Error fetching image:", error);
@@ -28,7 +36,7 @@ const ProfileImage = ({ sellerId }: { sellerId: string }) => {
     <div>
       {imageUrl ? (
         <img
-          src={imageUrl}
+          src={userData}
           className="border"
           alt="Profile"
           style={{ width: "150px", height: "150px", borderRadius: "50%" }}

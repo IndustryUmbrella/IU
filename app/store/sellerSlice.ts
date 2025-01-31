@@ -3,13 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface SellerSlice {
   user: any;
   isLogged: Boolean;
-  profilePicture: {};
+  profilePicture: null;
 }
 
 const initialState: SellerSlice = {
   user: null,
   isLogged: false,
-  profilePicture: {},
+  profilePicture: null,
 };
 
 const sellerSlice = createSlice({

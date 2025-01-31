@@ -177,7 +177,7 @@ const AccountTab = () => {
         <PersoanInfoAccount formik={formik} />
         <SocialMediaInfoAccount formik={formik} />
 
-        {Object.keys(profilePicture).length > 0 ? (
+        {profilePicture ? (
           <div className="flex items-center justify-center">
             <img src={profilePicture} className="w-64 h-64 rounded" />
           </div>

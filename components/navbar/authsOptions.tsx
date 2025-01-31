@@ -11,23 +11,16 @@ import PopUp from "../general/popUp";
 import { BiSolidDashboard } from "react-icons/bi";
 import { TbLogout2 } from "react-icons/tb";
 import { setProducts } from "@/app/store/productSlice";
-import LogoImage from "../../public/images/Group.png";
+import ProfileImage from "../general/imageUpload";
 
 const AuthOptions = () => {
   const dispatch = useDispatch();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isLogged = useSelector((state: RootState) => state.seller.isLogged);
   const userData = useSelector((state: RootState) => state.seller.user);
-  const profilePicture: any = useSelector(
+  const profilePicture = useSelector(
     (state: RootState) => state.seller.profilePicture
   );
-  // useEffect(() => {
-  //   console.log(
-  //     profilePicture,
-  //     Object.keys(profilePicture).length == 0,
-  //     "....."
-  //   );
-  // }, []);
 
   const [showNotification, setShowNotification] = useState({
     isShow: false,
@@ -47,7 +40,7 @@ const AuthOptions = () => {
       });
       dispatch(login(null));
       dispatch(setIsLogged(false));
-      dispatch(setProfilePicture({}));
+      dispatch(setProfilePicture(null));
       dispatch(setProducts({}));
       route.push("/login");
     } catch (err) {
@@ -97,6 +90,7 @@ const AuthOptions = () => {
           success={showNotification.success}
         />
       )}
+      <div className="w-16 h-16"></div>
       {!isLogged ? (
         <div className="flex gap-x-4 items-center">
           <Link
@@ -111,10 +105,10 @@ const AuthOptions = () => {
         </div>
       ) : (
         <div className="relative" ref={popUpRef}>
-          {Object.keys(profilePicture).length > 0 ? (
+          {profilePicture ? (
             <img
               onClick={() => setPopUpOpen((prev) => !prev)}
-              src={profilePicture || LogoImage}
+              src={profilePicture}
               className="border cursor-pointer"
               alt="Profile"
               style={{ width: "50px", height: "50px", borderRadius: "50%" }}
