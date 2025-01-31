@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
         new URL(`/profile/${payload.id}`, request.url)
       );
     } catch (error) {
-      console.error("Token verification failed:", error);
+      console.log("Token verification failed:", error);
     }
   }
 

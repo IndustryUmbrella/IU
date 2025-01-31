@@ -21,13 +21,13 @@ const AuthOptions = () => {
   const profilePicture: any = useSelector(
     (state: RootState) => state.seller.profilePicture
   );
-  useEffect(() => {
-    console.log(
-      profilePicture,
-      Object.keys(profilePicture).length == 0,
-      "....."
-    );
-  }, []);
+  // useEffect(() => {
+  //   console.log(
+  //     profilePicture,
+  //     Object.keys(profilePicture).length == 0,
+  //     "....."
+  //   );
+  // }, []);
 
   const [showNotification, setShowNotification] = useState({
     isShow: false,

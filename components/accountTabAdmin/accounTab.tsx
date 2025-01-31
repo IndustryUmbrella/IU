@@ -117,7 +117,7 @@ const AccountTab = () => {
         });
       }
     } catch (err) {
-      console.error("Error updating seller:", err);
+      console.log("Error updating seller:", err);
     }
   };
   useEffect(() => {

@@ -49,7 +49,7 @@ const FileInput = () => {
 
       setUploadedImageUrl(response.data.imageUrl); // Assuming backend returns { imageUrl: "uploaded_url" }
     } catch (error) {
-      console.error("Upload failed", error);
+      console.log("Upload failed", error);
     }
   };
 

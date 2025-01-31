@@ -76,7 +76,7 @@ export default function SellerDashboard({
           dispatch(login(response.data));
         }
       } catch (error: any) {
-        console.error("Error fetching seller data:", error.message);
+        console.log("Error fetching seller data:", error.message);
       }
     };
 

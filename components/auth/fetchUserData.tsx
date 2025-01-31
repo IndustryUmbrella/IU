@@ -70,21 +70,21 @@ const FetchUserData: React.FC = () => {
     if (userData) {
       const fetchProfileImage = async () => {
         try {
-          const response = await fetch(
-            `http://localhost:5000/api/image/upload/${userData?._id}`
+          const response = await axios.get(
+            `${baseUrl}/api/image/upload/${userData?._id}`,
+            { withCredentials: true }
           );
-          const data = await response.json();
 
-          if (response.ok) {
+          if (response?.statusText == "OK") {
             dispatch(
-              setProfilePicture(`http://localhost:5000${data.profileImage}`)
+              setProfilePicture(`${baseUrl}${response?.data?.profileImage}`)
             );
             // dispatch(triggerRefresh())
           } else {
-            console.log("Error fetching image:", data.message);
+            console.log("Error fetching image:", response?.data?.message);
           }
         } catch (error) {
-          console.error("Error fetching image:", error);
+          console.log("Error fetching image:", error);
         }
       };
       fetchProfileImage();

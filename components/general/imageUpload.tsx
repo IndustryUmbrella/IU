@@ -14,10 +14,10 @@ const ProfileImage = ({ sellerId }: { sellerId: string }) => {
         if (response.ok) {
           setImageUrl(`http://localhost:5000${data.profileImage}`);
         } else {
-          console.error("Error fetching image:", data.message);
+          console.log("Error fetching image:", data.message);
         }
       } catch (error) {
-        console.error("Error fetching image:", error);
+        console.log("Error fetching image:", error);
       }
     };
 

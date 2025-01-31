@@ -6,7 +6,7 @@ export const decodeToken = (token: string) => {
 
     return decoded ? decoded?.sellerId : null;
   } catch (error) {
-    console.error("Failed to decode token", error);
+    console.log("Failed to decode token", error);
     return null;
   }
 };
