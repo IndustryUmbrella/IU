@@ -5,24 +5,37 @@ import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import { useRouter } from "next/navigation";
-import { login, setIsLogged } from "@/app/store/sellerSlice";
+import { login, setIsLogged, setProfilePicture } from "@/app/store/sellerSlice";
 import Notification from "../general/notification";
 import PopUp from "../general/popUp";
 import { BiSolidDashboard } from "react-icons/bi";
 import { TbLogout2 } from "react-icons/tb";
+import { setProducts } from "@/app/store/productSlice";
+import LogoImage from "../../public/images/Group.png";
 
 const AuthOptions = () => {
   const dispatch = useDispatch();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isLogged = useSelector((state: RootState) => state.seller.isLogged);
   const userData = useSelector((state: RootState) => state.seller.user);
+  const profilePicture: any = useSelector(
+    (state: RootState) => state.seller.profilePicture
+  );
+  useEffect(() => {
+    console.log(
+      profilePicture,
+      Object.keys(profilePicture).length == 0,
+      "....."
+    );
+  }, []);
+
   const [showNotification, setShowNotification] = useState({
     isShow: false,
     content: "",
     success: true,
   });
   const route = useRouter();
-  const popUpRef = useRef<HTMLDivElement>(null); // Ref to track the pop-up container
+  const popUpRef = useRef<HTMLDivElement>(null);
 
   const logoutUser = () => {
     try {
@@ -34,6 +47,8 @@ const AuthOptions = () => {
       });
       dispatch(login(null));
       dispatch(setIsLogged(false));
+      dispatch(setProfilePicture({}));
+      dispatch(setProducts({}));
       route.push("/login");
     } catch (err) {
       setShowNotification({
@@ -96,12 +111,22 @@ const AuthOptions = () => {
         </div>
       ) : (
         <div className="relative" ref={popUpRef}>
-          <div
-            onClick={() => setPopUpOpen((prev) => !prev)}
-            className="bg-violet-800 p-3 cursor-pointer w-10 h-10 py-2 rounded-full text-xl text-white flex items-center justify-center"
-          >
-            {userData?.companyName?.charAt(0).toUpperCase()}
-          </div>
+          {Object.keys(profilePicture).length > 0 ? (
+            <img
+              onClick={() => setPopUpOpen((prev) => !prev)}
+              src={profilePicture || LogoImage}
+              className="border cursor-pointer"
+              alt="Profile"
+              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+            />
+          ) : (
+            <div
+              onClick={() => setPopUpOpen((prev) => !prev)}
+              className="bg-violet-800 p-3 cursor-pointer w-10 h-10 py-2 rounded-full text-xl text-white flex items-center justify-center"
+            >
+              {userData?.companyName?.charAt(0).toUpperCase()}
+            </div>
+          )}
           {popUpOpen && (
             <PopUp
               items={[

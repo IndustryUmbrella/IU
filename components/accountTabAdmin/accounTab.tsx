@@ -18,6 +18,9 @@ import Cookies from "js-cookie";
 const AccountTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
   userData = userData || userData?.seller;
+  let profilePicture: any = useSelector(
+    (state: RootState) => state.seller.profilePicture
+  );
 
   const token = Cookies.get("authToken");
   // console.log(token, "#########");
@@ -84,11 +87,10 @@ const AccountTab = () => {
           title: "Website",
           link: formik.values.website,
         },
-      ].filter(Boolean); // Remove undefined values
+      ].filter(Boolean);
 
       if (socialLinks.length > 0) updateData.socialLinks = socialLinks;
 
-      // Make the PUT request only if there's data to update
       if (Object.keys(updateData).length > 0) {
         const response = await axios.put(
           `${baseUrl}/api/auth/seller/${
@@ -175,9 +177,15 @@ const AccountTab = () => {
         <PersoanInfoAccount formik={formik} />
         <SocialMediaInfoAccount formik={formik} />
 
-        <div className="my-10">
-          <FileInput />
-        </div>
+        {Object.keys(profilePicture).length > 0 ? (
+          <div className="flex items-center justify-center">
+            <img src={profilePicture} className="w-64 h-64 rounded" />
+          </div>
+        ) : (
+          <div className="my-10">
+            <FileInput />
+          </div>
+        )}
 
         <Button
           type={Object.keys(formik.errors).length > 0 ? "disable" : "primary"}

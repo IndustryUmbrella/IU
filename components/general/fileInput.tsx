@@ -1,35 +1,56 @@
 import UploadIcon from "@/public/svgs/uploadIcon";
 import React, { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store/store";
 
 const FileInput = () => {
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState(0);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+
+  // Move useSelector inside the component
+  const userData = useSelector((state: RootState) => state.seller.user);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
       setProgress(0); // Reset progress when a new file is selected
+      setUploadedImageUrl(null); // Reset previous upload
     }
   };
 
-  const handleUpload = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // Prevent page refresh
+  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
 
-    if (!file) return;
+    if (!file || !userData?._id) return;
 
-    const totalSize = file.size;
-    let uploadedSize = 0;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("seller_id", userData._id); // Send seller_id with the upload
 
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      uploadedSize += totalSize * 0.1; // Simulating 10% progress per interval
-      if (uploadedSize >= totalSize) {
-        uploadedSize = totalSize;
-        clearInterval(interval); // Stop when upload is complete
-      }
-      setProgress(Math.min((uploadedSize / totalSize) * 100, 100)); // Update progress
-    }, 500);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/image/upload", // Change this to your backend route
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setProgress(percentCompleted);
+            }
+          },
+        }
+      );
+
+      setUploadedImageUrl(response.data.imageUrl); // Assuming backend returns { imageUrl: "uploaded_url" }
+    } catch (error) {
+      console.error("Upload failed", error);
+    }
   };
 
   return (
@@ -67,7 +88,7 @@ const FileInput = () => {
             <div className="relative h-2 bg-gray-200 rounded-lg">
               <div
                 className="flex mb-2 h-2 bg-teal-500 rounded-lg"
-                style={{ width: `${progress}%` }} // Dynamically adjust progress width
+                style={{ width: `${progress}%` }}
               ></div>
             </div>
           </div>
@@ -86,6 +107,18 @@ const FileInput = () => {
       >
         Start Upload
       </button>
+
+      {/* Display uploaded image */}
+      {uploadedImageUrl && (
+        <div className="mt-4">
+          <p className="text-green-500">Upload successful!</p>
+          <img
+            src={uploadedImageUrl}
+            alt="Uploaded"
+            className="w-20 h-20 rounded-md border mt-2"
+          />
+        </div>
+      )}
     </>
   );
 };

@@ -3,15 +3,18 @@
 import { useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { login, setIsLogged } from "@/app/store/sellerSlice";
+import { login, setIsLogged, setProfilePicture } from "@/app/store/sellerSlice";
 import { decodeToken } from "@/helper/isAuthorized";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "@/app/store/productSlice";
+import { setProducts, triggerRefresh } from "@/app/store/productSlice";
+import { RootState } from "@/app/store/store";
 
 const FetchUserData: React.FC = () => {
   const dispatch = useDispatch();
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const refresh = useSelector((state: any) => state.product.refresh); // Listen for refresh state
+  const userData = useSelector((state: RootState) => state.seller.user);
+
+  const refresh = useSelector((state: any) => state.product.refresh);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +65,31 @@ const FetchUserData: React.FC = () => {
 
     fetchData();
   }, [dispatch, baseUrl, refresh]); // Add `refresh` as a dependency
+
+  useEffect(() => {
+    if (userData) {
+      const fetchProfileImage = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/api/image/upload/${userData?._id}`
+          );
+          const data = await response.json();
+
+          if (response.ok) {
+            dispatch(
+              setProfilePicture(`http://localhost:5000${data.profileImage}`)
+            );
+            // dispatch(triggerRefresh())
+          } else {
+            console.log("Error fetching image:", data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching image:", error);
+        }
+      };
+      fetchProfileImage();
+    }
+  }, [baseUrl, userData]);
 
   return null;
 };
