@@ -11,7 +11,7 @@ const productSlice = createSlice({
       state.products = action.payload;
     },
     triggerRefresh: (state) => {
-      state.refresh = !state.refresh; // Toggle refresh state to trigger useEffect
+      state.refresh = !state.refresh;
     },
   },
 });

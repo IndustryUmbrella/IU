@@ -4,55 +4,20 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 
-const FileInput = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+const FileInput = ({
+  file,
+  setFile,
+  handleFileChange,
+  handleUpload,
+  progress,
+}: {
+  file: any;
+  setFile: any;
+  handleFileChange: any;
+  handleUpload: any;
+  progress: number;
+}) => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-  // Move useSelector inside the component
-  const userData = useSelector((state: RootState) => state.seller.user);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      setProgress(0); // Reset progress when a new file is selected
-      setUploadedImageUrl(null); // Reset previous upload
-    }
-  };
-
-  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    if (!file || !userData?._id) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("seller_id", userData._id); // Send seller_id with the upload
-
-    try {
-      const response = await axios.post(
-        `${baseUrl}/api/image/upload`, // Change this to your backend route
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent.total) {
-              const percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              setProgress(percentCompleted);
-            }
-          },
-        }
-      );
-
-      setUploadedImageUrl(response.data.imageUrl); // Assuming backend returns { imageUrl: "uploaded_url" }
-    } catch (error) {
-      console.log("Upload failed", error);
-    }
-  };
 
   return (
     <>
@@ -104,22 +69,10 @@ const FileInput = () => {
       <button
         onClick={handleUpload}
         className="mt-4 px-6 py-2 bg-teal-500 text-white rounded-lg"
-        disabled={!file} // Disable button if no file is selected
+        disabled={!file}
       >
         Start Upload
       </button>
-
-      {/* Display uploaded image */}
-      {uploadedImageUrl && (
-        <div className="mt-4">
-          <p className="text-green-500">Upload successful!</p>
-          <img
-            src={uploadedImageUrl}
-            alt="Uploaded"
-            className="w-20 h-20 rounded-md border mt-2"
-          />
-        </div>
-      )}
     </>
   );
 };

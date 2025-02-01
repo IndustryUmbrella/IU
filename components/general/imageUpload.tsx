@@ -13,14 +13,11 @@ const ProfileImage = ({ sellerId }: { sellerId: string }) => {
     const fetchProfileImage = async () => {
       try {
         const response = await axios.get(
-          // `http://localhost:5000/api/image/upload/${sellerId}`
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/image/upload/${sellerId}`
         );
-        // const data = await response.json();
 
         if (response.status == 200) {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}${response?.data.profileImage}`;
-          // setImageUrl(`http://localhost:5000${data.profileImage}`);
         } else {
           console.log("Error fetching image:", response?.data.profileImage);
         }

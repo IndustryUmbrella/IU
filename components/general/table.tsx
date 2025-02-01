@@ -8,6 +8,11 @@ import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { FaDeleteLeft, FaPencil, FaTrash } from "react-icons/fa6";
 import Overlay from "./overlay";
 import NewProductForm from "../dashboardTabAdmin/newProductForm";
+import ConfirmationPrompt from "./confirmationPrompt";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { triggerRefresh } from "@/app/store/productSlice";
 
 interface TableProps {
   columns: string[];
@@ -18,13 +23,18 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
   const [isPopUp, setIsPopUp] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<any>(null);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
+  const [confirmationPrompt, setConfirmationPrompt] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  let [productForDelete, setProductForDelete] = useState<any>("");
   const [selectedProduct, setSelectedProduct] = useState<any>({});
   const popUpRef = useRef<HTMLDivElement>(null);
+  const token = Cookies.get("authToken");
 
   if (data?.length === 0) {
     return <p className="text-black">No data available.</p>;
   }
-
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const showPopUp = (id: any) => {
     if (selectedId === id) {
       setIsPopUp(false);
@@ -38,8 +48,30 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
   const setDataAndShowOverlay = (data: any) => {
     setShowOverlay(true);
     setSelectedProduct(data);
-    console.log(data, "dddd");
   };
+
+  const showThePrompt = (data: any) => {
+    setConfirmationPrompt(true);
+
+    setProductForDelete(data);
+    console.log(productForDelete, "ssssss");
+  };
+  const deleteaProduct = async () => {
+    try {
+      await axios.delete(
+        `${baseUrl}/api/product/product/${productForDelete?.productId}`,
+        {
+          data: { seller_id: productForDelete?.seller_id },
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      dispatch(triggerRefresh());
+      setConfirmationPrompt(false);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
   // useEffect(() => {
   //   const handleOutsideClick = (event: MouseEvent) => {
   //     if (
@@ -71,6 +103,16 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           />
         </Overlay>
       )}
+      {confirmationPrompt && (
+        <ConfirmationPrompt
+          onClose={() => setConfirmationPrompt(false)}
+          isOpen={confirmationPrompt}
+          onConfirm={() => deleteaProduct()}
+        >
+          Would You like to delete this product?
+        </ConfirmationPrompt>
+      )}
+
       <table
         className="text-black"
         style={{ width: "100%", borderCollapse: "collapse" }}
@@ -97,9 +139,11 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                 <div className="flex gap-x-2 items-center">
                   <Image
-                    src={Image1}
+                    src={row?.productImage[0]?.link || Image1}
                     alt={`Product `}
                     className="w-[40px] h-[40px] object-center rounded-md"
+                    width={40}
+                    height={40}
                   />
                   <div className="flex flex-col justify-center">
                     <p className="truncate w-16 sm:w-24 md:w-32 lg:w-full">
@@ -142,7 +186,10 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                       },
                       {
                         label: (
-                          <div className="flex flex-row gap-x-2 items-center">
+                          <div
+                            className="flex flex-row gap-x-2 items-center"
+                            onClick={() => showThePrompt(row)}
+                          >
                             <FaTrash color="red" size={18} />
                             <p className="">Delete</p>
                           </div>

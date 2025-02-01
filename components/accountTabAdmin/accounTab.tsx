@@ -17,13 +17,15 @@ import Cookies from "js-cookie";
 
 const AccountTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
+  const [file, setFile] = useState<File | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   userData = userData || userData?.seller;
   let profilePicture: any = useSelector(
     (state: RootState) => state.seller.profilePicture
   );
 
   const token = Cookies.get("authToken");
-  // console.log(token, "#########");
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const [showNotification, setShowNotification] = useState<any>({
@@ -50,6 +52,46 @@ const AccountTab = () => {
     validationSchema,
     onSubmit: async (values) => {},
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setProgress(0);
+      setUploadedImageUrl(null);
+    }
+  };
+
+  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (!file || !userData?._id) return;
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("seller_id", userData._id);
+
+      const response = await axios.post(
+        `${baseUrl}/api/image/upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / (progressEvent.total || 1)
+            );
+            setProgress(percentCompleted);
+          },
+        }
+      );
+      setUploadedImageUrl(response.data.imageUrl);
+    } catch (error) {
+      console.log("Upload failed", error);
+    }
+  };
 
   const updateSeller = async () => {
     if (Object.keys(formik.errors).length > 0) return;
@@ -183,7 +225,13 @@ const AccountTab = () => {
           </div>
         ) : (
           <div className="my-10">
-            <FileInput />
+            <FileInput
+              file={file}
+              setFile={setFile}
+              handleUpload={handleUpload}
+              handleFileChange={handleFileChange}
+              progress={progress}
+            />
           </div>
         )}
 
