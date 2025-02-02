@@ -10,12 +10,14 @@ const FileInput = ({
   handleFileChange,
   handleUpload,
   progress,
+  multiple,
 }: {
   file: any;
   setFile: any;
   handleFileChange: any;
   handleUpload: any;
   progress: number;
+  multiple?: boolean | false;
 }) => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -26,6 +28,7 @@ const FileInput = ({
         className="text-white px-10 py-10 cursor-pointer text-center flex flex-col items-center border-2 border-dashed rounded-md"
       >
         <input
+          multiple={multiple}
           type="file"
           id="file"
           className="w-[260px] md:w-64 text-black h-12 border rounded px-2 text-sm bg-transparent hidden"

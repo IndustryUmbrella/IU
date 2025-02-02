@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Select from "react-select";
@@ -8,6 +9,8 @@ import { RootState } from "@/app/store/store";
 import Button from "../general/button";
 import { triggerRefresh } from "@/app/store/productSlice";
 import Cookies from "js-cookie";
+import FileInput from "../general/fileInput";
+import Image from "next/image";
 
 const NewProductForm = ({
   setShowOverlay,
@@ -19,6 +22,11 @@ const NewProductForm = ({
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.seller.user);
   const products = useSelector((state: RootState) => state.product.products);
+
+  const [file, setFile] = useState<File | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [images, setImages] = useState<any>();
 
   const productSchema = Yup.object({
     productName: Yup.string().required("product name is required"),
@@ -42,6 +50,7 @@ const NewProductForm = ({
     initialValues: {
       productName: "",
       productDescription: "",
+      productImages: "",
       productPrice: 0,
       productCategory: "",
       colores: "",
@@ -57,6 +66,7 @@ const NewProductForm = ({
       formik.setValues({
         productName: data.productName || "",
         productDescription: data.productDescription || "",
+        productImages: data?.productImages || "",
         productCategory: "",
         productPrice: data.productPrice || "",
         colores: data.colores?.[0] || "", // Ensure it's dynamic
@@ -66,38 +76,51 @@ const NewProductForm = ({
   }, [data, products]); // Ensure dependencies are correct
 
   const addNewProduct = async () => {
-    // console.log("clicked", formik.errors);
     if (Object.keys(formik.errors).length > 0) return;
 
-    try {
-      const productData: any = {
-        seller_id: userData?.seller?._id || userData?._id,
-        productName: formik.values.productName,
-        productDescription: formik.values.productDescription,
-        productCategory: "Option 2",
-        productImage: "",
-        productPrice: formik.values.productPrice,
-        colores: formik.values.colores,
-        limitedCounts: formik.values.limitedCounts,
-      };
+    const formData = new FormData();
+    formData.append("seller_id", userData?._id);
+    formData.append("productName", formik.values?.productName);
+    formData.append("productDescription", formik.values?.productDescription);
+    formData.append("productCategory", "option");
+    formData.append("productPrice", String(formik?.values?.productPrice || 0)); // Convert number to string
+    formData.append("colores", JSON.stringify(formik.values?.colores || [])); // Convert array to string
+    formData.append("limitedCounts", String(formik.values?.limitedCounts || 0)); // Convert number to string
+    formData.append("productImage", "");
 
+    // Convert images object to an array and append each file to formData
+    if (images && typeof images === "object") {
+      const imageArray = Object.values(images); // Convert object to array
+      imageArray.forEach((image: any) => {
+        formData.append("images", image); // Append each image to the 'images' field
+      });
+    } else {
+      console.log("No images selected or images are not in the correct format");
+    }
+
+    // console.log(images, "iiiiiiiiiiiiiiiii");
+
+    try {
       const response = await axios.post(
         `${baseUrl}/api/product/add-product`,
-        productData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
       );
+
       setShowOverlay(false);
       dispatch(triggerRefresh());
-      // setShowNotification({
-      //   isShow: true,
-      //   content: "Fields Updated Successfully",
-      //   success: true,
-      // });
     } catch (err) {
-      console.log("Error adding product:", err, userData);
+      console.log("Error adding product:", err);
     }
   };
+
   const updateProduct = async () => {
-    alert("cliked");
+    // alert("cliked");
     // console.log("clicked", formik.errors);
     if (Object.keys(formik.errors).length > 0) return;
 
@@ -107,7 +130,7 @@ const NewProductForm = ({
         productName: formik.values.productName,
         productDescription: formik.values.productDescription,
         productCategory: formik.values.productCategory,
-        productImage: "",
+        productImage: data?.productImage,
         productPrice: formik.values.productPrice,
         colores: formik.values.colores,
         limitedCounts: formik.values.limitedCounts,
@@ -134,6 +157,51 @@ const NewProductForm = ({
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImages(e.target.files);
+    // const selectedFile = e.target.files?.[0];
+    // if (selectedFile) {
+    //   setFile(selectedFile);
+    //   setProgress(0);
+    //   setUploadedImageUrl(null);
+    // }
+  };
+
+  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log(e, "eeeeee");
+
+    try {
+      const formData = new FormData();
+      formData.append("seller_id", userData._id);
+      // formData.append("proudctName", userData._id);
+
+      // formData.append("file", file);
+
+      // const response = await axios.post(
+      //   `${baseUrl}/api/product/add-product`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //     onUploadProgress: (progressEvent) => {
+      //       const percentCompleted = Math.round(
+      //         (progressEvent.loaded * 100) / (progressEvent.total || 1)
+      //       );
+      //       setProgress(percentCompleted);
+      //     },
+      //   }
+      // );
+      // setUploadedImageUrl(response.data.imageUrl);
+    } catch (error) {
+      console.log("Upload failed", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(data, "dddddddddd");
+  }, []);
   return (
     <>
       <form className="space-y-4">
@@ -296,6 +364,30 @@ const NewProductForm = ({
             </div>
           </div>
         </div>
+
+        {data ? (
+          <div className="flex flex-row flex-wrap gap-x-4">
+            {data?.productImage?.map((img: any, idx: number) => (
+              <img
+                key={idx}
+                src={img.link}
+                alt="Product Image"
+                width={100}
+                height={100}
+                className="w-20 h-20 rounded object-cover"
+              />
+            ))}
+          </div>
+        ) : (
+          <FileInput
+            file={file}
+            setFile={setFile}
+            handleUpload={handleUpload}
+            handleFileChange={handleFileChange}
+            progress={progress}
+            multiple={true}
+          />
+        )}
         {data ? (
           <Button
             type="primary"

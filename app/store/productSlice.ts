@@ -5,10 +5,14 @@ const productSlice = createSlice({
   initialState: {
     products: [],
     refresh: false,
+    productsForBuyers: [],
   },
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload;
+    },
+    setProductsForBuyers: (state, action) => {
+      state.productsForBuyers = action.payload;
     },
     triggerRefresh: (state) => {
       state.refresh = !state.refresh;
@@ -16,5 +20,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { setProducts, triggerRefresh } = productSlice.actions;
+export const { setProducts, triggerRefresh, setProductsForBuyers } =
+  productSlice.actions;
 export default productSlice.reducer;
