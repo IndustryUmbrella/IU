@@ -39,14 +39,18 @@ const NewProductForm = ({
     limitedCounts: Yup.string(),
   });
   const options = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
+    { value: "living", label: "Home & living" },
+    { value: "jewerly", label: "Jewerly & Accessories" },
+    { value: "apperel", label: "Apperel and Wearbles" },
+    { value: "art", label: "Art & collections" },
+    { value: "gift", label: "Gift & Seasonable Items" },
+    { value: "beauty", label: "Beaaty & wellnes" },
+    { value: "crafts", label: "Crafts" },
   ];
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const token = Cookies.get("authToken");
 
-  const formik = useFormik({
+  const formik: any = useFormik({
     initialValues: {
       productName: "",
       productDescription: "",
@@ -67,7 +71,7 @@ const NewProductForm = ({
         productName: data.productName || "",
         productDescription: data.productDescription || "",
         productImages: data?.productImages || "",
-        productCategory: "",
+        productCategory: data?.productCategory || "",
         productPrice: data.productPrice || "",
         colores: data.colores?.[0] || "", // Ensure it's dynamic
         limitedCounts: data.limitedCounts || 0, // Default to prevent undefined
@@ -82,23 +86,20 @@ const NewProductForm = ({
     formData.append("seller_id", userData?._id);
     formData.append("productName", formik.values?.productName);
     formData.append("productDescription", formik.values?.productDescription);
-    formData.append("productCategory", "option");
+    formData.append("productCategory", formik.values?.productCategory?.value);
     formData.append("productPrice", String(formik?.values?.productPrice || 0)); // Convert number to string
     formData.append("colores", JSON.stringify(formik.values?.colores || [])); // Convert array to string
     formData.append("limitedCounts", String(formik.values?.limitedCounts || 0)); // Convert number to string
     formData.append("productImage", "");
 
-    // Convert images object to an array and append each file to formData
     if (images && typeof images === "object") {
-      const imageArray = Object.values(images); // Convert object to array
+      const imageArray = Object.values(images);
       imageArray.forEach((image: any) => {
-        formData.append("images", image); // Append each image to the 'images' field
+        formData.append("images", image);
       });
     } else {
       console.log("No images selected or images are not in the correct format");
     }
-
-    // console.log(images, "iiiiiiiiiiiiiiiii");
 
     try {
       const response = await axios.post(
@@ -120,8 +121,6 @@ const NewProductForm = ({
   };
 
   const updateProduct = async () => {
-    // alert("cliked");
-    // console.log("clicked", formik.errors);
     if (Object.keys(formik.errors).length > 0) return;
 
     try {
@@ -129,7 +128,7 @@ const NewProductForm = ({
         seller_id: userData?.seller?._id || userData?._id,
         productName: formik.values.productName,
         productDescription: formik.values.productDescription,
-        productCategory: formik.values.productCategory,
+        productCategory: formik.values.productCategory?.value,
         productImage: data?.productImage,
         productPrice: formik.values.productPrice,
         colores: formik.values.colores,

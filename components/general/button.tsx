@@ -25,7 +25,7 @@ const Button = ({
             : size === "md"
             ? "p-3 px-6"
             : size === "sm"
-            ? "p-1 px-3"
+            ? "p-1 px-3 w-full"
             : size === "xs"
             ? "p-1"
             : "p-2"

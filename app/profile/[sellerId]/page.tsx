@@ -27,7 +27,6 @@ export default function SellerDashboard({
   const [activeTab, setActiveTab] = useState<string>("dashboard");
 
   useEffect(() => {
-    // Resolve paramsPromise only once
     paramsPromise.then((unwrappedParams) => {
       setSellerId(unwrappedParams.sellerId);
     });
@@ -41,9 +40,8 @@ export default function SellerDashboard({
   }, [searchParams]);
 
   useEffect(() => {
-    // Run authentication and data fetch logic only once when sellerId is available
     const fetchSellerData = async () => {
-      if (!sellerId) return; // Prevent unnecessary API calls
+      if (!sellerId) return;
 
       try {
         const token = Cookies.get("authToken");

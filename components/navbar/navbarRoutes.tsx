@@ -40,9 +40,9 @@ const NavbarRoutes = () => {
           Sell
         </Link>
         <Link
-          href="/products"
+          href="/products?tab=all"
           className={`text-md border-b-2 border-transparent transition-all duration-500 ${
-            pathname === "/products"
+            pathname === "/products?tab=all"
               ? "font-bold border-l-2 border-l-white px-1"
               : "font-normal"
           }`}

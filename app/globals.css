@@ -49,3 +49,17 @@ input:disabled {
 input:disabled:hover {
   background-color: #f0f0f0;
 }
+
+.hidden-scrollbar {
+  overflow: auto;
+}
+
+/* Hide scrollbar for Webkit-based browsers */
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.hidden-scrollbar {
+  scrollbar-width: none;
+}

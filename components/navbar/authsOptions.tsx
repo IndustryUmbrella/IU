@@ -12,12 +12,14 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { TbLogout2 } from "react-icons/tb";
 import { setProducts } from "@/app/store/productSlice";
 import ProfileImage from "../general/imageUpload";
+import Button from "../general/button";
 
 const AuthOptions = () => {
   const dispatch = useDispatch();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isLogged = useSelector((state: RootState) => state.seller.isLogged);
   const userData = useSelector((state: RootState) => state.seller.user);
+  const [url, setUrl] = useState("");
   const profilePicture = useSelector(
     (state: RootState) => state.seller.profilePicture
   );
@@ -52,7 +54,6 @@ const AuthOptions = () => {
     }
   };
 
-  // Close pop-up when clicking outside
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
@@ -92,17 +93,31 @@ const AuthOptions = () => {
       )}
       <div className="w-16 h-16"></div>
       {!isLogged ? (
-        <div className="flex gap-x-4 items-center">
-          <Link
-            href="/register"
-            className="bg-white text-black rounded-md p-2 px-4"
-          >
-            Register
-          </Link>
-          <Link className="hidden md:flex" href="/login">
-            Login
-          </Link>
-        </div>
+        url.includes("sell") ? (
+          <div className="flex gap-x-4 items-center">
+            <Link
+              href="/register"
+              className="bg-white text-black rounded-md p-2 px-4"
+            >
+              Register
+            </Link>
+            <Link className="hidden md:flex" href="/login">
+              Login
+            </Link>
+          </div>
+        ) : (
+          <Button
+            size="sm"
+            className=""
+            text={
+              <Link className="text-sm" href="/sell">
+                Sell With IU
+              </Link>
+            }
+            type="primary"
+            clickHandler={() => {}}
+          ></Button>
+        )
       ) : (
         <div className="relative" ref={popUpRef}>
           {profilePicture ? (
