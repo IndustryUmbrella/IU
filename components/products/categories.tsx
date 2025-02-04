@@ -20,11 +20,11 @@ const Categories = ({
   return (
     <>
       <div className="border border-gray-600 rounded-3xl mt-5 w-full bg-[#0C0C0C] py-1.5">
-        <ul className="flex  gap-y-4 flex-row flex-wrap py-2 gap-x-3 sm:px-4  items-center justify-center sm:justify-between  text-[14px]">
+        <ul className="flex  gap-y-4 flex-row  flex-wrap py-2 gap-x-3 sm:px-4  items-center justify-center sm:justify-between  text-[14px]">
           <li
-            className={`px-3 py-2 rounded ${
+            className={`px-3 py-2  cursor-pointer ${
               activeTab === "all"
-                ? "bg-[#191919] shadow-md shadow-gray-900 text-white"
+                ? "bg-[#191919] shadow-md shadow-gray-900 text-white rounded-md"
                 : "bg-white text-black rounded-md"
             }`}
             onClick={() => handleTabChange("all")}
@@ -32,9 +32,9 @@ const Categories = ({
             All
           </li>
           <li
-            className={`px-3 py-2 ${
+            className={`px-3 py-2  cursor-pointer ${
               activeTab === "living"
-                ? "bg-[#191919] shadow-md shadow-gray-900 text-white"
+                ? "bg-[#191919] shadow-md shadow-gray-900 text-white rounded-md"
                 : "bg-white text-black rounded-md"
             }`}
             onClick={() => handleTabChange("living")}
@@ -42,9 +42,9 @@ const Categories = ({
             Home & Living
           </li>
           <li
-            className={`px-3 py-2 ${
+            className={`px-3 py-2  cursor-pointer ${
               activeTab == "jewerly"
-                ? "bg-[#191919] shadow-md shadow-gray-900 text-white"
+                ? "bg-[#191919] shadow-md shadow-gray-900 text-white rounded-md"
                 : "bg-white text-black rounded-md"
             }
             `}
@@ -53,9 +53,9 @@ const Categories = ({
             Jewerly & Accessories
           </li>
           <li
-            className={`px-3 py-2 ${
+            className={`px-3 py-2 cursor-pointer ${
               activeTab == "apperel"
-                ? "bg-[#191919] shadow-md shadow-gray-900 text-white"
+                ? "bg-[#191919] shadow-md shadow-gray-900 text-white rounded-md"
                 : "bg-white text-black rounded-md"
             }
             `}
@@ -64,9 +64,9 @@ const Categories = ({
             Apperl & Wearables
           </li>
           <li
-            className={`px-3 py-2 ${
+            className={`px-3 py-2 cursor-pointer ${
               activeTab == "art"
-                ? "bg-[#191919] shadow-md shadow-gray-900 text-white"
+                ? "bg-[#191919] shadow-md shadow-gray-900 text-white rounded-md"
                 : "bg-white text-black rounded-md"
             }
             `}
@@ -75,9 +75,9 @@ const Categories = ({
             Art & Collections
           </li>
           <li
-            className={`px-3 py-2 ${
+            className={`px-3 py-2 cursor-pointer ${
               activeTab == "gift"
-                ? "bg-[#191919] shadow-md shadow-gray-900 text-white"
+                ? "bg-[#191919] shadow-md shadow-gray-900 text-white rounded-md"
                 : "bg-white text-black rounded-md"
             }
             `}
@@ -86,9 +86,9 @@ const Categories = ({
             Gift & Seasonal Items
           </li>
           <li
-            className={`px-3 py-2 ${
+            className={`px-3 py-2 cursor-pointer ${
               activeTab == "beauty"
-                ? "bg-[#191919] shadow-md shadow-gray-900 text-white"
+                ? "bg-[#191919] shadow-md shadow-gray-900 text-white rounded-md"
                 : "bg-white text-black rounded-md"
             }
             `}
@@ -97,9 +97,9 @@ const Categories = ({
             Beauty & Wellnes
           </li>
           <li
-            className={`px-3 py-2 ${
+            className={`px-3 py-2 cursor-pointer ${
               activeTab == "crafts"
-                ? "bg-[#191919] shadow-md shadow-gray-900 text-white"
+                ? "bg-[#191919] shadow-md shadow-gray-900 text-white rounded-md"
                 : "bg-white text-black rounded-md"
             }
             `}

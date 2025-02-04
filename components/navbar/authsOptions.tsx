@@ -4,22 +4,21 @@ import React, { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { login, setIsLogged, setProfilePicture } from "@/app/store/sellerSlice";
 import Notification from "../general/notification";
 import PopUp from "../general/popUp";
 import { BiSolidDashboard } from "react-icons/bi";
 import { TbLogout2 } from "react-icons/tb";
 import { setProducts } from "@/app/store/productSlice";
-import ProfileImage from "../general/imageUpload";
 import Button from "../general/button";
 
 const AuthOptions = () => {
+  const pathname = usePathname();
   const dispatch = useDispatch();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isLogged = useSelector((state: RootState) => state.seller.isLogged);
   const userData = useSelector((state: RootState) => state.seller.user);
-  const [url, setUrl] = useState("");
   const profilePicture = useSelector(
     (state: RootState) => state.seller.profilePicture
   );
@@ -29,6 +28,7 @@ const AuthOptions = () => {
     content: "",
     success: true,
   });
+
   const route = useRouter();
   const popUpRef = useRef<HTMLDivElement>(null);
 
@@ -93,7 +93,7 @@ const AuthOptions = () => {
       )}
       <div className="w-16 h-16"></div>
       {!isLogged ? (
-        url.includes("sell") ? (
+        pathname?.includes("sell") ? (
           <div className="flex gap-x-4 items-center">
             <Link
               href="/register"

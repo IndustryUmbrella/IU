@@ -3,6 +3,7 @@ import React from "react";
 import NavbarRoutes from "./navbarRoutes";
 import AuthOptions from "./authsOptions";
 import BurgerMenu from "./burger";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -11,7 +12,9 @@ const Navbar = () => {
         <div className="flex md:hidden">
           <BurgerMenu />
         </div>
-        <Logo />
+        <Link href="/">
+          <Logo />
+        </Link>
         <NavbarRoutes />
       </div>
       <AuthOptions />

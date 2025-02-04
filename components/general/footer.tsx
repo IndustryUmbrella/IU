@@ -6,9 +6,11 @@ import SocialMedia from "../contact/socialMedia";
 const Footer = () => {
   return (
     <>
-      <div className="bg-white flex flex-col sm:flex-row flex-wrap justify-between px-[6px] lg:px-desktop md:px-tablet sm:px-mobile gap-y-4 mt-10 rounded p-4">
+      <div className="bg-white flex flex-col sm:flex-row flex-wrap justify-between overflow-x-hidden px-[6px] lg:px-desktop md:px-tablet sm:px-mobile gap-y-8 mt-10 rounded p-4">
         <div className="flex flex-col  font-light text-lg gap-x-3">
-          <Logo />
+          <Link href="/">
+            <Logo />
+          </Link>
           <h1 className="font-medium">Our Pages</h1>
           <Link href="/">Home</Link>
           <Link href="/sell">Sell</Link>
@@ -17,7 +19,7 @@ const Footer = () => {
         </div>
         <div className="flex flex-col font-light text-lg gap-x-3">
           <h1 className="font-medium">Our Categories</h1>
-          <Link href="/products?tab=all">all</Link>
+          <Link href="/products?tab=all">All Categories</Link>
           <Link href="/products?tab=living">Home & Living</Link>
           <Link href="/products?tab=jewerly">Jewelry & Accessories</Link>
           <Link href="/products?tab=gift">Gifts & Seasonal Items</Link>

@@ -42,6 +42,12 @@ function ProductsContent() {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    document.title = `${
+      activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
+    } Products | Industry Umbrella`;
+  });
+
   const handleTabChange = (newTab: CategoriesTab) => {
     setActiveTab(newTab);
     router.push(`/products?tab=${newTab}`);

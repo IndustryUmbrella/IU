@@ -5,8 +5,9 @@ import ProductRating from "@/components/products/productRating";
 import Button from "@/components/general/button";
 import Shop from "@/components/products/shop";
 import ProductsCards from "@/components/products/productCards";
+import { Metadata } from "next";
 
-const getProduct = async (id?: string) => {
+const getProduct = async (id?: any) => {
   if (!id) return null;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   try {
@@ -16,21 +17,40 @@ const getProduct = async (id?: string) => {
 
     if (!res.ok) return null;
 
-    const json = await res.json();
+    const jsonData = await res.json();
     const imageRes = await fetch(
-      `${baseUrl}/api/image/upload/${json?.data?.seller_id}`,
+      `${baseUrl}/api/image/upload/${jsonData?.data?.seller_id}`,
       { cache: "no-store" }
     );
-    const imageJson = imageRes.ok ? await imageRes.json() : null;
+    const imagejsonData = imageRes.ok ? await imageRes.json() : null;
 
     return {
-      product: json.data,
-      profileImage: imageJson?.imageUrl?.imageUrl || null,
+      product: jsonData.data,
+      profileImage: imagejsonData?.imageUrl?.imageUrl || null,
     };
   } catch (error) {
     return null;
   }
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: any;
+}): Promise<Metadata> {
+  const response: any = await getProduct(params.productId);
+  if (!response?.product) {
+    return {
+      title: "Product Not Found | Industry Umbrella",
+      description: "This product does not exist.",
+    };
+  }
+
+  return {
+    title: `${response.product.productName} | Industry Umbrella`,
+    description: response.product.productDescription || "Product details",
+  };
+}
 
 const ProductDetails = async ({
   params,
