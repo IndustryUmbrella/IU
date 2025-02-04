@@ -60,7 +60,7 @@ const Landing = () => {
             text={<Link href="/products?tab=all">See All Products</Link>}
           />
         </div>
-        <div className="flex  gap-x-4 justify-between overflow-x-auto hidden-scrollbar">
+        <div className="flex flex-col gap-y-4 xs:flex-row gap-x-4 justify-between overflow-x-auto hidden-scrollbar">
           <LeftSideProducts
             isLoading={isLoading}
             data={products?.slice(0, 3)}

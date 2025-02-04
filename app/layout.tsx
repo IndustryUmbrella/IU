@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
 import { StoreProvider } from "./store/StoreProvider";
 import FetchUserData from "@/components/auth/fetchUserData";
+import Footer from "@/components/general/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
           <FetchUserData />
           <Navbar />
           {children}
+          <Footer />
         </body>
       </html>
     </StoreProvider>

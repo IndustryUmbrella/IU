@@ -34,7 +34,7 @@ const MiddleSideProducts = ({
           />
         </div>
       ) : (
-        <div className="bg-white px-4 w-[500px] min-w-[440px] h-[605px] rounded-md">
+        <div className="bg-white px-4 w-full  sm:w-[500px] min-w-[350px] h-[605px] rounded-md">
           <div className="flex justify-between mt-2 ">
             <img
               src={data[0]?.productImage[0]?.link}
@@ -47,7 +47,7 @@ const MiddleSideProducts = ({
           <img
             src={data[0]?.productImage[0]?.link}
             alt=""
-            className="w-full px-10 h-[360px]"
+            className="w-full px-10 h-[320px] sm:h-[360px]"
           />
 
           <div className="text-center">

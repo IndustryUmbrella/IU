@@ -20,7 +20,7 @@ const Categories = ({
   return (
     <>
       <div className="border border-gray-600 rounded-3xl mt-5 w-full bg-[#0C0C0C] py-1.5">
-        <ul className="flex  gap-y-4 flex-row flex-wrap py-2 px-4  items-center justify-center sm:justify-between   text-[14px]">
+        <ul className="flex  gap-y-4 flex-row flex-wrap py-2 gap-x-3 sm:px-4  items-center justify-center sm:justify-between  text-[14px]">
           <li
             className={`px-3 py-2 rounded ${
               activeTab === "all"

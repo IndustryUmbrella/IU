@@ -63,6 +63,7 @@ const ProductsCards = ({ category }: { category: any }) => {
       setProductsToShow(filterCategory);
     }
   }, [category, products]);
+
   return (
     <div className="flex flex-col">
       {loading ? (
@@ -111,7 +112,11 @@ const ProductsCards = ({ category }: { category: any }) => {
           })}
         </div>
       ) : (
-        <div className="flex flex-wrap items-center  gap-6 p-4">
+        <div
+          className={`flex flex-wrap ${
+            productsToShow?.length == 0 ? "items-center  justify-center" : ""
+          }   gap-6 p-4`}
+        >
           {productsToShow?.length > 0 ? (
             productsToShow?.map((product: any, idx: number) => {
               return (

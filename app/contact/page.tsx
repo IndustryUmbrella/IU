@@ -1,5 +1,5 @@
 "use client";
-import SocialMeida from "@/components/contact/socialMedia";
+
 import Button from "@/components/general/button";
 import ContactMockup from "@/public/mockups/contactMockup";
 import { useFormik } from "formik";
@@ -7,6 +7,7 @@ import React, { useState, useEffect, useRef } from "react";
 import emailjs from "@emailjs/browser";
 
 import * as Yup from "yup";
+import SocialMedia from "@/components/contact/socialMedia";
 
 const Contact = () => {
   const [status, setStatus] = useState("");
@@ -150,7 +151,7 @@ const Contact = () => {
         />
       </form>
       <div className="w-full h-[1px] opacity-10 bg-white  mt-5"></div>
-      <SocialMeida />
+      <SocialMedia />
     </div>
   );
 };

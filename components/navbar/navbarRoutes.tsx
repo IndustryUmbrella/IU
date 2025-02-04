@@ -19,7 +19,7 @@ const NavbarRoutes = () => {
         >
           Home
         </Link>
-        <Link
+        {/* <Link
           href="/about"
           className={`text-md border-b-2 border-transparent transition-all duration-500 ${
             pathname === "/about"
@@ -28,7 +28,7 @@ const NavbarRoutes = () => {
           }`}
         >
           About
-        </Link>
+        </Link> */}
         <Link
           href="/sell"
           className={`text-md border-b-2 border-transparent transition-all duration-500 ${

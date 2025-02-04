@@ -51,20 +51,13 @@ const BurgerMenu = () => {
         >
           Home
         </Link>
-        <Link
+        {/* <Link
           href="/about"
           className="py-2 text-lg hover:border-b-2 transition-all duration-200 hover:border-b-[#090909] rounded"
           onClick={() => setIsOpen(false)}
         >
           About
-        </Link>
-        <Link
-          href="/contact"
-          className="py-2 text-lg hover:border-b-2 transition-all duration-200 hover:border-b-[#090909] rounded"
-          onClick={() => setIsOpen(false)}
-        >
-          Contact
-        </Link>
+        </Link> */}
         <Link
           href="/sell"
           className="py-2 text-lg hover:border-b-2 transition-all duration-200 hover:border-b-[#090909] rounded"
@@ -78,6 +71,13 @@ const BurgerMenu = () => {
           onClick={() => setIsOpen(false)}
         >
           Product
+        </Link>
+        <Link
+          href="/contact"
+          className="py-2 text-lg hover:border-b-2 transition-all duration-200 hover:border-b-[#090909] rounded"
+          onClick={() => setIsOpen(false)}
+        >
+          Contact
         </Link>
       </div>
     </>
