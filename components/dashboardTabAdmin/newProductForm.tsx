@@ -136,7 +136,9 @@ const NewProductForm = ({
       };
 
       const response = await axios.put(
-        `${baseUrl}/api/product/product/${data?.productId}`,
+        `${baseUrl}/api/product/product/${data?.productId}/${
+          userData?.seller_id || userData?._id
+        }`,
         productData,
         {
           headers: {

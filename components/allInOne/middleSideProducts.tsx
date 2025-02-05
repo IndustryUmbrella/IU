@@ -3,6 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import Button from "../general/button";
 import { FaHeart } from "react-icons/fa6";
 import { Carousel } from "react-responsive-carousel";
+import Link from "next/link";
 
 const MiddleSideProducts = ({
   isLoading,
@@ -56,10 +57,12 @@ const MiddleSideProducts = ({
             <p>{data[0]?.productPrice}</p>
           </div>
           <Button
-            className={"w-full mt-6"}
+            size="sm"
             type="secondary"
-            size="md"
-            text="See More"
+            text={
+              <Link href={`products/${data[0]?.productId}`}>More Details</Link>
+            }
+            className=" "
           />
         </div>
       )}

@@ -6,6 +6,7 @@ import Save from "@/public/svgs/save";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import { useState } from "react";
+import Link from "next/link";
 
 const LeftSideProducts = ({
   isLoading,
@@ -162,7 +163,11 @@ const LeftSideProducts = ({
                     <Button
                       size="sm"
                       type="primary"
-                      text="more details"
+                      text={
+                        <Link href={`products/${p.productId}`}>
+                          More Details
+                        </Link>
+                      }
                       className=" "
                     />
                   </div>

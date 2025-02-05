@@ -138,7 +138,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
             <tr key={index}>
               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                 <div className="flex gap-x-2 items-center">
-                  <Image
+                  <img
                     src={row?.productImage[0]?.link || Image1}
                     alt={`Product `}
                     className="w-[40px] h-[40px] object-center rounded-md"

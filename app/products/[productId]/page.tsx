@@ -18,15 +18,20 @@ const getProduct = async (id?: any) => {
     if (!res.ok) return null;
 
     const jsonData = await res.json();
+    const sellerData = await fetch(
+      `${baseUrl}/api/auth/seller-buyer/${jsonData?.data?.seller_id}`,
+      { cache: "no-store" }
+    );
+    const seller = sellerData.ok ? await sellerData.json() : null;
+
     const imageRes = await fetch(
       `${baseUrl}/api/image/upload/${jsonData?.data?.seller_id}`,
       { cache: "no-store" }
     );
     const imagejsonData = imageRes.ok ? await imageRes.json() : null;
-
     return {
       product: jsonData.data,
-      profileImage: imagejsonData?.imageUrl?.imageUrl || null,
+      seller: seller,
     };
   } catch (error) {
     return null;
@@ -64,28 +69,33 @@ const ProductDetails = async ({
     notFound();
   }
 
-  const { product, profileImage } = response;
+  const { product, seller } = response;
 
   return (
     <div>
-      <div className="p-6 flex flex-col md:flex-row gap-10">
+      <div className="p-6 flex flex-col md:flex-row gap-10 w-full">
         {product?.productImage?.length > 0 && (
           <ProductCarousel
             images={product.productImage.map((img: any) => img?.link)}
           />
         )}
-        <div className="flex flex-col-reverse sm:flex-row justify-around">
+        <div className="flex flex-col-reverse sm:flex-row justify-between  w-full">
           <div>
-            {profileImage && (
+            {seller?.companyLogo && (
               <div className="mt-4 flex items-center gap-4">
                 <img
-                  src={profileImage}
+                  src={seller?.companyLogo}
                   width={50}
                   height={50}
                   className="rounded-full border border-white border-opacity-20"
                   alt="Seller profile"
                 />
-                <p className="text-white">Seller's Profile</p>
+                <div className="flex flex-col">
+                  <p className="text-white font-semibold">
+                    {seller?.companyName}
+                  </p>
+                  <p className="text-white">{seller?.companyDescription}</p>
+                </div>
               </div>
             )}
             <div className="mt-5">

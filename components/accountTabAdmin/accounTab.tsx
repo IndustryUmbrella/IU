@@ -18,6 +18,8 @@ import Cookies from "js-cookie";
 const AccountTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
   const [file, setFile] = useState<File | null>(null);
+  const [images, setImages] = useState<any>();
+
   const [progress, setProgress] = useState(0);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   userData = userData || userData?.seller;
@@ -41,6 +43,7 @@ const AccountTab = () => {
       password: "",
       phone: "",
       address: "",
+      companyLogo: "",
       companyStartingTime: "",
       facebook: "",
       instagram: "",
@@ -55,6 +58,8 @@ const AccountTab = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
+    setImages(e.target.files);
+
     if (selectedFile) {
       setFile(selectedFile);
       setProgress(0);
@@ -64,45 +69,19 @@ const AccountTab = () => {
 
   const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    if (!file || !userData?._id) return;
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("seller_id", userData._id);
-
-      const response = await axios.post(
-        `${baseUrl}/api/image/upload`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / (progressEvent.total || 1)
-            );
-            setProgress(percentCompleted);
-          },
-        }
-      );
-      setUploadedImageUrl(response.data.imageUrl);
-    } catch (error) {
-      console.log("Upload failed", error);
-    }
   };
 
   const updateSeller = async () => {
     if (Object.keys(formik.errors).length > 0) return;
 
     try {
-      const updateData: any = {};
+      const formData: any = new FormData();
 
-      if (formik.values.phone) updateData.phone = formik.values.phone;
-      if (formik.values.address) updateData.address = formik.values.address;
+      if (formik.values.phone) formData.phone = formik.values.phone;
+      if (formik.values.address) formData.address = formik.values.address;
       if (formik.values.companyStartingTime)
-        updateData.companyStartingTime = formik.values.companyStartingTime;
+        formData.companyStartingTime = formik.values.companyStartingTime;
+      if (formik.values.companyLogo) formik.values.companyLogo;
 
       const socialLinks = [
         formik.values.facebook && {
@@ -131,14 +110,25 @@ const AccountTab = () => {
         },
       ].filter(Boolean);
 
-      if (socialLinks.length > 0) updateData.socialLinks = socialLinks;
+      if (socialLinks.length > 0) formData.socialLinks = socialLinks;
 
-      if (Object.keys(updateData).length > 0) {
+      if (images && typeof images === "object") {
+        const imageArray = Object.values(images);
+        imageArray.forEach((image: any) => {
+          formData.append("companyLogo", image);
+        });
+      } else {
+        console.log(
+          "No images selected or images are not in the correct format"
+        );
+      }
+
+      if (Object.keys(formData).length > 0) {
         const response = await axios.put(
           `${baseUrl}/api/auth/seller/${
             userData?.seller?._id || userData?._id
           }`,
-          updateData,
+          formData,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -169,6 +159,7 @@ const AccountTab = () => {
         email: userData?.email || "",
         password: userData?.password || "",
         phone: userData?.phone || "",
+        companyLogo: userData?.companyLogo || "",
         address: userData?.address || "",
         companyStartingTime: userData?.companyStartingTime
           ? formatDate(userData?.companyStartingTime)
@@ -219,9 +210,9 @@ const AccountTab = () => {
         <PersoanInfoAccount formik={formik} />
         <SocialMediaInfoAccount formik={formik} />
 
-        {profilePicture ? (
+        {userData?.companyLogo ? (
           <div className="flex items-center justify-center">
-            <img src={profilePicture} className="w-64 h-64 rounded" />
+            <img src={userData?.companyLogo} className="w-64 h-64 rounded" />
           </div>
         ) : (
           <div className="my-10">

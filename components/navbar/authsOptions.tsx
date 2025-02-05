@@ -120,10 +120,10 @@ const AuthOptions = () => {
         )
       ) : (
         <div className="relative" ref={popUpRef}>
-          {profilePicture ? (
+          {userData?.companyLogo ? (
             <img
               onClick={() => setPopUpOpen((prev) => !prev)}
-              src={profilePicture}
+              src={userData?.companyLogo}
               className="border cursor-pointer"
               alt="Profile"
               style={{ width: "50px", height: "50px", borderRadius: "50%" }}

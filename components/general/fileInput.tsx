@@ -69,13 +69,13 @@ const FileInput = ({
         </div>
       )}
 
-      <button
+      {/* <button
         onClick={handleUpload}
         className="mt-4 px-6 py-2 bg-teal-500 text-white rounded-lg"
         disabled={!file}
       >
         Start Upload
-      </button>
+      </button> */}
     </>
   );
 };

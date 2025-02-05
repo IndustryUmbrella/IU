@@ -2,6 +2,7 @@ import Hearth from "@/public/svgs/heart";
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Button from "../general/button";
+import Link from "next/link";
 
 const RightSideProducts = ({
   isLoading,
@@ -89,9 +90,13 @@ const RightSideProducts = ({
                     </div>
                   </div>
                   <Button
-                    type="primary"
                     size="sm"
-                    text="See More"
+                    type="primary"
+                    text={
+                      <Link href={`products/${product?.productId}`}>
+                        More Details
+                      </Link>
+                    }
                     className="mt-5"
                   />
                 </div>

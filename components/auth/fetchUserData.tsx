@@ -44,28 +44,6 @@ const FetchUserData: React.FC = () => {
             }
           );
 
-          if (userData) {
-            try {
-              const imageResponse = await axios.get(
-                `${baseUrl}/api/image/upload/${userData._id}`,
-                { withCredentials: true }
-              );
-
-              if (imageResponse.status === 200) {
-                dispatch(
-                  setProfilePicture(imageResponse?.data?.imageUrl?.imageUrl)
-                );
-              } else {
-                console.log(
-                  "Error fetching image:",
-                  imageResponse.data.message
-                );
-              }
-            } catch (error) {
-              console.log("Error fetching image:", error);
-            }
-          }
-
           const productData = fetchProductResponse.data;
           dispatch(setProducts(productData));
         }
