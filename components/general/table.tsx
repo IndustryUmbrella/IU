@@ -13,10 +13,12 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { triggerRefresh } from "@/app/store/productSlice";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 interface TableProps {
   columns: string[];
-  data: any[];
+  data: any;
 }
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
@@ -54,7 +56,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
     setConfirmationPrompt(true);
 
     setProductForDelete(data);
-    console.log(productForDelete, "ssssss");
   };
   const deleteaProduct = async () => {
     try {
@@ -68,7 +69,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
       dispatch(triggerRefresh());
       setConfirmationPrompt(false);
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.log("Error deleting product:", error);
     }
   };
 
@@ -134,75 +135,127 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.map((row, index) => (
-            <tr key={index}>
-              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                <div className="flex gap-x-2 items-center">
-                  <img
-                    src={row?.productImage[0]?.link || Image1}
-                    alt={`Product `}
-                    className="w-[40px] h-[40px] object-center rounded-md"
-                    width={40}
-                    height={40}
-                  />
-                  <div className="flex flex-col justify-center">
-                    <p className="truncate w-16 sm:w-24 md:w-32 lg:w-full">
-                      {row?.productDescription}
+          {/* <tr>
+            {Array.from({length:3},(_,index) => {
+
+            })}
+          </tr> */}
+          {data?.length == 0 || data == undefined
+            ? Array.from({ length: 4 }, (_, idx) => {
+                return (
+                  <tr className="" key={idx}>
+                    {Array.from({ length: 4 }, (_, idx) => {
+                      return (
+                        <td key={idx}>
+                          <div>
+                            {idx == 0 && (
+                              <div className="flex flex-row items-center gap-x-3 w-full px-2">
+                                <Skeleton
+                                  className="rounded"
+                                  width={40}
+                                  height={40}
+                                  baseColor="darkgrey"
+                                />
+                                <div className="flex flex-col  items-start justify-center pt-3 px-2 ">
+                                  <Skeleton
+                                    className="rounded "
+                                    height={15}
+                                    width={145}
+                                    baseColor="darkgrey"
+                                  />
+                                  <Skeleton
+                                    className="rounded"
+                                    width={60}
+                                    height={10}
+                                    baseColor="darkgrey"
+                                  />
+                                </div>
+                              </div>
+                            )}
+                            {idx > 0 && (
+                              <Skeleton
+                                width={145}
+                                className=""
+                                baseColor="darkgrey"
+                                highlightColor="#090909"
+                              />
+                            )}
+                          </div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })
+            : data?.map((row: any, index: number) => (
+                <tr key={index}>
+                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                    <div className="flex gap-x-2 items-center">
+                      <img
+                        src={row?.productImage[0]?.link || Image1}
+                        alt={`Product `}
+                        className="w-[40px] h-[40px] object-center rounded-md"
+                        width={40}
+                        height={40}
+                      />
+                      <div className="flex flex-col justify-center">
+                        <p className="truncate w-16 sm:w-24 md:w-32 lg:w-full">
+                          {row?.productDescription}
+                        </p>
+                        {row?.productName}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="border border-[#ddd] p-[8px] text-center">
+                    {row.productPrice}
+                  </td>
+                  <td
+                    style={{ border: "1px solid #ddd", padding: "8px" }}
+                    className="text-center"
+                  >
+                    Active
+                  </td>
+                  <td
+                    style={{ border: "1px solid #ddd", padding: "8px" }}
+                    className="relative"
+                  >
+                    <p
+                      className="font-bold text-center flex items-center justify-center cursor-pointer"
+                      onClick={() => showPopUp(index)}
+                    >
+                      <PiDotsThreeOutlineVertical size={18} />
                     </p>
-                    {row?.productName}
-                  </div>
-                </div>
-              </td>
-              <td className="border border-[#ddd] p-[8px] text-center">
-                {row.productPrice}
-              </td>
-              <td
-                style={{ border: "1px solid #ddd", padding: "8px" }}
-                className="text-center"
-              >
-                Active
-              </td>
-              <td
-                style={{ border: "1px solid #ddd", padding: "8px" }}
-                className="relative"
-              >
-                <p
-                  className="font-bold text-center flex items-center justify-center cursor-pointer"
-                  onClick={() => showPopUp(index)}
-                >
-                  <PiDotsThreeOutlineVertical size={18} />
-                </p>
-                {index == selectedId && isPopUp && (
-                  <PopUp
-                    items={[
-                      {
-                        label: (
-                          <div className="flex flex-row gap-x-2 items-center">
-                            <FaPencil size={18} />
-                            <p className="">Edit</p>
-                          </div>
-                        ),
-                        action: () => setDataAndShowOverlay(row),
-                      },
-                      {
-                        label: (
-                          <div
-                            className="flex flex-row gap-x-2 items-center"
-                            onClick={() => showThePrompt(row)}
-                          >
-                            <FaTrash color="red" size={18} />
-                            <p className="">Delete</p>
-                          </div>
-                        ),
-                        action: () => {},
-                      },
-                    ]}
-                    closePopUp={() => setIsPopUp(false)}
-                  />
-                )}
-              </td>
-            </tr>
-          ))}
+                    {index == selectedId && isPopUp && (
+                      <PopUp
+                        items={[
+                          {
+                            label: (
+                              <div className="flex flex-row gap-x-2 items-center">
+                                <FaPencil size={18} />
+                                <p className="">Edit</p>
+                              </div>
+                            ),
+                            action: () => setDataAndShowOverlay(row),
+                          },
+                          {
+                            label: (
+                              <div
+                                className="flex flex-row gap-x-2 items-center"
+                                onClick={() => showThePrompt(row)}
+                              >
+                                <FaTrash color="red" size={18} />
+                                <p className="">Delete</p>
+                              </div>
+                            ),
+                            action: () => {},
+                          },
+                        ]}
+                        closePopUp={() => setIsPopUp(false)}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </table>
     </div>

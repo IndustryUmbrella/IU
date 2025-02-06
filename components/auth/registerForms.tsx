@@ -9,11 +9,7 @@ import Notification from "../general/notification";
 import { redirect } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
-import {
-  faCoffee,
-  faSpinner,
-  faCircleNotch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const RegisterForm = () => {
   const validationSchema = Yup.object({
@@ -41,6 +37,7 @@ const RegisterForm = () => {
     content: "",
     success: false,
   });
+  let [submitLoading, setIsSubmitLoading] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -55,6 +52,7 @@ const RegisterForm = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
+        setIsSubmitLoading(true);
         const user = await axios.post(`${baseUrl}/api/auth/create`, {
           email: values.email,
           password: values.password,
@@ -75,25 +73,31 @@ const RegisterForm = () => {
         setTimeout(() => {
           redirect("/login");
         }, 5000);
+        setIsSubmitLoading(false);
       } catch (err: any) {
         if (err.response) {
+          setIsSubmitLoading(false);
+
           setShowNotification({
             isShow: true,
             content: err.response.data.message || "Wrong Credential",
             success: false,
           });
+          submitLoading = false;
         } else if (err.request) {
           setShowNotification({
             isShow: true,
             content: err.request || "Wrong Credential",
             success: false,
           });
+          setIsSubmitLoading(false);
         } else {
           setShowNotification({
             isShow: true,
             content: err.message || "Something went wrong",
             success: false,
           });
+          setIsSubmitLoading(false);
         }
       }
     },
@@ -338,9 +342,21 @@ const RegisterForm = () => {
             </p>
             <div>
               <Button
-                type="secondary"
+                type={submitLoading ? "disable" : "primary"}
                 size="lg"
-                text="Submit"
+                text={
+                  submitLoading ? (
+                    <FontAwesomeIcon
+                      icon={faSpinner}
+                      spin
+                      color="currentColor"
+                      size="1x"
+                      className="z-[10000] text-center"
+                    />
+                  ) : (
+                    "Submit"
+                  )
+                }
                 className="w-full py-3"
                 clickHandler={formik.handleSubmit}
               />

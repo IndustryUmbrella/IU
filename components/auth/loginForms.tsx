@@ -11,6 +11,8 @@ import { RootState } from "@/app/store/store";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
 import Notification from "../general/notification";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
@@ -20,6 +22,7 @@ const RegisterForm = () => {
     content: "",
     success: false,
   });
+  const [isLoading, setIsLoading] = useState(false);
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email format")
@@ -38,6 +41,7 @@ const RegisterForm = () => {
   });
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const loginUser = async () => {
+    setIsLoading(true);
     if (!formik.values.email || !formik.values.password) return;
 
     try {
@@ -61,7 +65,9 @@ const RegisterForm = () => {
       setTimeout(() => {
         redirect(`/profile/${userData?.seller?._id}`);
       }, 5000);
+      setIsLoading(false);
     } catch (err: any) {
+      setIsLoading(false);
       setShowNotification({
         isShow: true,
         content: err?.response?.data?.message || "something went wrong",
@@ -79,6 +85,7 @@ const RegisterForm = () => {
     }, 4000);
     return () => clearTimeout(notif);
   }, [showNotification]);
+
   return (
     <>
       {showNotification.isShow && (
@@ -146,9 +153,15 @@ const RegisterForm = () => {
             </p>
             <div>
               <Button
-                type="secondary"
+                type={isLoading ? "disable" : "secondary"}
                 size="lg"
-                text="Submit"
+                text={
+                  isLoading ? (
+                    <FontAwesomeIcon icon={faSpinner} spin size="1x" />
+                  ) : (
+                    "Submit"
+                  )
+                }
                 className="w-full py-3"
                 clickHandler={loginUser}
               />

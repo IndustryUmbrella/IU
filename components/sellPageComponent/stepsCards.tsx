@@ -1,6 +1,7 @@
 import Step1Mockup from "@/public/mockups/step1Mockup";
 import Step2Mockup from "@/public/mockups/Step2Mockup";
 import Step3Mockup from "@/public/mockups/step3Mockup";
+import Step4Mockup from "@/public/mockups/step4Mockup";
 import React from "react";
 
 const StepsCards = () => {
@@ -55,7 +56,7 @@ const StepsCards = () => {
         </div>
         <div className="bg-white p-2 rounded-3xl max:w-[480px] h-[300px] px-6">
           <div className="flex justify-between">
-            <Step1Mockup />
+            <Step4Mockup />
             <div className="bg-black text-white rounded-md p-1 w-auto h-8 px-2">
               Step 4
             </div>

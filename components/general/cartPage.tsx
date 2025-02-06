@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCartItems,
@@ -19,35 +19,47 @@ const Cart = ({ isOpen, setIsOpen }: { isOpen: any; setIsOpen: any }) => {
   };
 
   const handleUpdateQuantity = (id: string, quantity: number) => {
-    if (quantity < 1) return; // Prevent quantity from being less than 1
+    if (quantity < 1) return;
     dispatch(updateQuantity({ id, quantity }));
   };
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) return null; // Avoid mismatched content during hydration
 
   return (
     <div className="">
-      <h2>Cart</h2>
       {cartItems?.length === 0 ? (
         <p className="text-white">Your cart is empty.</p>
       ) : (
         <>
           <div
-            className={`fixed top-0 right-0 z-[10000] mb-10  bg-white text-primary p-4 flex flex-col   justify-start gap-y-4 h-full max-h-screen pb-10   overflow-y-auto w-auto transform transition-transform duration-500 ${
+            className={`fixed top-0 right-0 z-[10000] mb-10   overflow-x-hidden bg-white text-primary p-4 flex flex-col   justify-start gap-y-4 h-full max-h-screen pb-10   overflow-y-auto w-auto transform transition-transform duration-500 ${
               isOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
             <FaX
-              color="blue"
-              className="float-right z-[10000]"
+              color="black"
+              size={24}
+              className="float-right z-[10000] cursor-pointer"
               onClick={() => setIsOpen(false)}
             />
-            <div className="h-screen">
+            <div className="h-screen space-y-5">
               {cartItems?.map((item: any, index: any) => (
                 <div
                   key={index}
                   className="flex flex-row items-center border-b   border-b-black   w-full  gap-x-7"
                 >
                   <div className="flex flex-col gap-2">
-                    <img src={item?.productImage} width={60} height={60} />
+                    <img
+                      src={item?.productImage}
+                      width={100}
+                      height={100}
+                      className="border border-black rounded"
+                    />
                     <p>${Number(item?.price)?.toFixed(2)}</p>
                   </div>
 

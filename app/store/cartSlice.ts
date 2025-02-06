@@ -6,7 +6,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  productImage: any;
+  productImage: string;
 }
 
 interface CartState {
@@ -15,14 +15,25 @@ interface CartState {
 
 const loadCartFromLocalStorage = (): CartItem[] => {
   if (typeof window !== "undefined") {
-    const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error("Error loading cart from localStorage:", error);
+      return [];
+    }
   }
   return [];
 };
 
 const initialState: CartState = {
   items: loadCartFromLocalStorage(),
+};
+
+const saveCartToLocalStorage = (items: CartItem[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("cart", JSON.stringify(items));
+  }
 };
 
 const cartSlice = createSlice({
@@ -39,12 +50,11 @@ const cartSlice = createSlice({
         state.items.push({ id, name, price, quantity: 1, productImage });
       }
 
-      // Save to localStorage
-      localStorage.setItem("cart", JSON.stringify(state.items));
+      saveCartToLocalStorage(state.items);
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
-      localStorage.setItem("cart", JSON.stringify(state.items));
+      saveCartToLocalStorage(state.items);
     },
     updateQuantity: (
       state,
@@ -52,10 +62,12 @@ const cartSlice = createSlice({
     ) => {
       const { id, quantity } = action.payload;
       const item = state.items.find((item) => item.id === id);
-      if (item) {
+      if (item && quantity > 0) {
         item.quantity = quantity;
+      } else {
+        state.items = state.items.filter((item) => item.id !== id); // Remove item if quantity is 0
       }
-      localStorage.setItem("cart", JSON.stringify(state.items));
+      saveCartToLocalStorage(state.items);
     },
     clearCart: (state) => {
       state.items = [];
@@ -66,7 +78,6 @@ const cartSlice = createSlice({
 
 export const { addToCart, removeFromCart, updateQuantity, clearCart } =
   cartSlice.actions;
-
 export const selectCartItems = (state: RootState) => state.cart.items;
 
 export default cartSlice.reducer;

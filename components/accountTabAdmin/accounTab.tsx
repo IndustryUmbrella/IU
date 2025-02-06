@@ -14,6 +14,9 @@ import PersoanInfoAccount from "./personalInfoAccount";
 import SocialMediaInfoAccount from "./socialMediaInfoAccount";
 import { headers } from "next/headers";
 import Cookies from "js-cookie";
+import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "react-loading-skeleton";
+import NoUserInfoSkeleton from "./noUserInfoSkeleton";
 
 const AccountTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
@@ -196,6 +199,7 @@ const AccountTab = () => {
     }, 4000);
     return () => clearTimeout(notif);
   }, [showNotification]);
+  console.log(userData, "m.......");
 
   return (
     <div className="flex items-center justify-center">
@@ -206,33 +210,52 @@ const AccountTab = () => {
           content={showNotification.content}
         />
       )}
-      <form>
-        <PersoanInfoAccount formik={formik} />
-        <SocialMediaInfoAccount formik={formik} />
+      <form className="">
+        <PersoanInfoAccount formik={formik} userData={userData} />
+
+        <SocialMediaInfoAccount formik={formik} userData={userData} />
 
         {userData?.companyLogo ? (
           <div className="flex items-center justify-center">
             <img src={userData?.companyLogo} className="w-64 h-64 rounded" />
           </div>
         ) : (
-          <div className="my-10">
-            <FileInput
-              file={file}
-              setFile={setFile}
-              handleUpload={handleUpload}
-              handleFileChange={handleFileChange}
-              progress={progress}
-            />
+          <div className="my-10 text-center ">
+            {userData === undefined ? (
+              <Skeleton
+                width={200}
+                height={140}
+                baseColor="#333"
+                highlightColor="#666"
+              />
+            ) : (
+              <FileInput
+                file={file}
+                setFile={setFile}
+                handleUpload={handleUpload}
+                handleFileChange={handleFileChange}
+                progress={progress}
+              />
+            )}
           </div>
         )}
 
-        <Button
-          type={Object.keys(formik.errors).length > 0 ? "disable" : "primary"}
-          disable={(Object.keys(formik.errors).length = 0) ? true : false}
-          size="md"
-          text="Update"
-          clickHandler={updateSeller}
-        />
+        {userData === undefined ? (
+          <Skeleton
+            width={100}
+            height={40}
+            baseColor="#333"
+            highlightColor="#666"
+          />
+        ) : (
+          <Button
+            type={Object.keys(formik.errors).length > 0 ? "disable" : "primary"}
+            disable={(Object.keys(formik.errors).length = 0) ? true : false}
+            size="md"
+            text="Update"
+            clickHandler={updateSeller}
+          />
+        )}
       </form>
     </div>
   );

@@ -84,6 +84,10 @@ const AuthOptions = () => {
     }, 4000);
   }, [showNotification]);
 
+  useEffect(() => {
+    console.log(cartItem?.length);
+  }, [cartItem]);
+
   return (
     <>
       {showNotification?.isShow && (
@@ -121,11 +125,16 @@ const AuthOptions = () => {
               type="primary"
               clickHandler={() => {}}
             ></Button>
-            <div className="relative" onClick={() => setIsOpen(!isOpen)}>
-              <FaBagShopping size={24} className="cursor-pointer" />
+            <div className="relative">
+              <FaBagShopping
+                size={24}
+                className="cursor-pointer"
+                onClick={() => setIsOpen(!isOpen)}
+              />
+              {/* 
               <p className=" rounded-full w-auto h-auto absolute p-1 px-2  top-5 right-1 text-xs   bg-green-600">
-                {cartItem?.length}
-              </p>
+                {cartItem?.length ? `${cartItem.length}` : ""}
+              </p> */}
             </div>
           </div>
         )
