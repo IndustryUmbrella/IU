@@ -30,7 +30,7 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#090909]`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-primary`}
         >
           <FetchUserData />
           <Navbar />

@@ -12,16 +12,18 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { TbLogout2 } from "react-icons/tb";
 import { setProducts } from "@/app/store/productSlice";
 import Button from "../general/button";
+import Cart from "../general/cartPage";
+import { FaBagShopping, FaCartShopping } from "react-icons/fa6";
 
 const AuthOptions = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isLogged = useSelector((state: RootState) => state.seller.isLogged);
   const userData = useSelector((state: RootState) => state.seller.user);
-  const profilePicture = useSelector(
-    (state: RootState) => state.seller.profilePicture
-  );
+  const cartItem = useSelector((state: RootState) => state.cart.items);
 
   const [showNotification, setShowNotification] = useState({
     isShow: false,
@@ -91,6 +93,7 @@ const AuthOptions = () => {
           success={showNotification.success}
         />
       )}
+      <Cart isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="w-16 h-16"></div>
       {!isLogged ? (
         pathname?.includes("sell") ? (
@@ -106,17 +109,25 @@ const AuthOptions = () => {
             </Link>
           </div>
         ) : (
-          <Button
-            size="sm"
-            className=""
-            text={
-              <Link className="text-sm" href="/sell">
-                Sell With IU
-              </Link>
-            }
-            type="primary"
-            clickHandler={() => {}}
-          ></Button>
+          <div className="flex flex-row items-center gap-x-4">
+            <Button
+              size="sm"
+              className=""
+              text={
+                <Link className="text-sm" href="/sell">
+                  Sell With IU
+                </Link>
+              }
+              type="primary"
+              clickHandler={() => {}}
+            ></Button>
+            <div className="relative" onClick={() => setIsOpen(!isOpen)}>
+              <FaBagShopping size={24} className="cursor-pointer" />
+              <p className=" rounded-full w-auto h-auto absolute p-1 px-2  top-5 right-1 text-xs   bg-green-600">
+                {cartItem?.length}
+              </p>
+            </div>
+          </div>
         )
       ) : (
         <div className="relative" ref={popUpRef}>

@@ -1,16 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Image1 from "../../public/images/image1.png";
-import Image2 from "../../public/images/image2.png";
-import Image3 from "../../public/images/image3.png";
-import Image4 from "../../public/images/image4.png";
-import Image5 from "../../public/images/image5.png";
+
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import Cart from "@/public/svgs/cart";
 import axios from "axios";
 import { setProductsForBuyers } from "@/app/store/productSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,11 +12,20 @@ import { RootState } from "@/app/store/store";
 import { FaArrowRight, FaCartShopping } from "react-icons/fa6";
 import Link from "next/link";
 import NoProductMockup from "@/public/mockups/noProductMockup";
+import { addToCart } from "@/app/store/cartSlice";
+import Cart from "../general/cartPage";
+
+interface Product {
+  productId: string;
+  productName: string;
+  productDescription: string;
+  productPrice: number;
+  productImage: { link: string }[];
+}
 
 const ProductsCards = ({ category }: { category: any }) => {
-  const Images = [Image1, Image2, Image3, Image4, Image5];
   const [loading, setIsLoading] = useState(false);
-  const [productsToShow, setProductsToShow] = useState<any>([]);
+  const [productsToShow, setProductsToShow] = useState<Product[]>([]);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const dispatch = useDispatch();
   const products = useSelector(
@@ -42,7 +45,6 @@ const ProductsCards = ({ category }: { category: any }) => {
           );
 
           dispatch(setProductsForBuyers(response?.data?.data));
-
           setIsLoading(false);
         } catch (err: any) {
           console.log(err?.message);
@@ -64,6 +66,18 @@ const ProductsCards = ({ category }: { category: any }) => {
     }
   }, [category, products]);
 
+  const handleAddToCart = (product: Product) => {
+    dispatch(
+      addToCart({
+        id: product?.productId,
+        name: product?.productName,
+        price: product?.productPrice,
+        quantity: 1,
+        productImage: product?.productImage[0]?.link,
+      })
+    );
+  };
+
   return (
     <div className="flex flex-col">
       {loading ? (
@@ -78,7 +92,7 @@ const ProductsCards = ({ category }: { category: any }) => {
                   <Skeleton
                     baseColor="#ccc"
                     highlightColor="white"
-                    className="rounded-md  h-32 w-auto"
+                    className="rounded-md h-32 w-auto"
                   />
                   <div className="flex justify-around gap-1 px-[3px] py-4 ">
                     <div className="flex flex-col ">
@@ -114,11 +128,11 @@ const ProductsCards = ({ category }: { category: any }) => {
       ) : (
         <div
           className={`flex flex-wrap ${
-            productsToShow?.length == 0 ? "items-center  justify-center" : ""
-          }   gap-6 p-4`}
+            productsToShow?.length == 0 ? "items-center justify-center" : ""
+          } gap-6 p-4`}
         >
           {productsToShow?.length > 0 ? (
-            productsToShow?.map((product: any, idx: number) => {
+            productsToShow?.map((product: Product, idx: number) => {
               return (
                 <div
                   key={idx}
@@ -127,7 +141,7 @@ const ProductsCards = ({ category }: { category: any }) => {
                   <Carousel showThumbs={false} className="py-3">
                     {product?.productImage?.map((img: any, index: number) => {
                       return (
-                        <div key={index}>
+                        <div key={`${product.productId}-${index}`}>
                           <img
                             src={img?.link}
                             width={200}
@@ -152,8 +166,15 @@ const ProductsCards = ({ category }: { category: any }) => {
                         Price {product?.productPrice}$
                       </p>
                     </div>
-                    <div className="flex flex-col gap-y-5">
-                      <FaCartShopping color="white" size={22} />
+                    <div
+                      className="flex flex-col gap-y-5"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <FaCartShopping
+                        color="white"
+                        size={22}
+                        className="cursor-pointer"
+                      />
                       <Link
                         href={`/products/${product?.productId}`}
                         className="bg-white rounded-full p-1.5"
@@ -175,6 +196,7 @@ const ProductsCards = ({ category }: { category: any }) => {
           )}
         </div>
       )}
+      {/* <Cart /> */}
     </div>
   );
 };
