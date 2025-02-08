@@ -2,11 +2,10 @@ import React from "react";
 import { notFound } from "next/navigation";
 import ProductCarousel from "@/components/products/productCarousel";
 import ProductRating from "@/components/products/productRating";
-import Button from "@/components/general/button";
 import Shop from "@/components/products/shop";
 import ProductsCards from "@/components/products/productCards";
 import { Metadata } from "next";
-
+import ProductCartActions from "@/components/products/handleAddToCart";
 const getProduct = async (id?: any) => {
   if (!id) return null;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -125,12 +124,12 @@ const ProductDetails = async ({
               </p>
             </div>
             <ProductRating />
-            <Button type="primary" size="sm" text="Buy it now" />
+            <ProductCartActions product={product} />
           </div>
           <Shop />
         </div>
       </div>
-      <ProductsCards category={product?.productCategory} />
+      <ProductsCards showLoadMore={false} category={product?.productCategory} />
     </div>
   );
 };

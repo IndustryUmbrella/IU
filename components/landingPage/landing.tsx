@@ -24,7 +24,7 @@ const Landing = () => {
       const getProducts = async () => {
         try {
           const response = await axios.get(
-            `${baseUrl}/api/product/all-product`,
+            `${baseUrl}/api/product/all-product?limit=10`,
             {
               withCredentials: true,
             }

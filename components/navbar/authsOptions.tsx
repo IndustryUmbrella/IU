@@ -24,6 +24,7 @@ const AuthOptions = () => {
   const isLogged = useSelector((state: RootState) => state.seller.isLogged);
   const userData = useSelector((state: RootState) => state.seller.user);
   const cartItem = useSelector((state: RootState) => state.cart.items);
+  // const cart_length = useSelector((state: RootState) => state.cart.cartsLength);
 
   const [showNotification, setShowNotification] = useState({
     isShow: false,
@@ -131,9 +132,9 @@ const AuthOptions = () => {
                 className="cursor-pointer"
                 onClick={() => setIsOpen(!isOpen)}
               />
-              {/* 
-              <p className=" rounded-full w-auto h-auto absolute p-1 px-2  top-5 right-1 text-xs   bg-green-600">
-                {cartItem?.length ? `${cartItem.length}` : ""}
+
+              {/* <p className=" rounded-full w-auto h-auto absolute p-1 px-2  top-5 right-1 text-xs   bg-green-600">
+                {cart_length}
               </p> */}
             </div>
           </div>

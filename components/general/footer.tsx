@@ -29,6 +29,13 @@ const Footer = () => {
           <Link href="/products?tab=apperel">Apparel & Wearables</Link>
         </div>
         <div className="flex flex-col font-light text-lg gap-x-3">
+          <h1 className="font-medium">Our Policies</h1>
+          <Link href="/">Terms and Policies</Link>
+          <Link href="/">Shiping</Link>
+          <Link href="/">Our Team</Link>
+          <Link href="/">Gifts & Seasonal Items</Link>
+        </div>
+        <div className="flex flex-col font-light text-lg gap-x-3">
           <h1 className="font-medium">Contact Us:</h1>
           <p>Support: iu.afg11111@gmail.com</p>
           <p>Phone: +123456789</p>

@@ -73,11 +73,11 @@ const NewProductForm = ({
         productImages: data?.productImages || "",
         productCategory: data?.productCategory || "",
         productPrice: data.productPrice || "",
-        colores: data.colores?.[0] || "", // Ensure it's dynamic
-        limitedCounts: data.limitedCounts || 0, // Default to prevent undefined
+        colores: data.colores?.[0] || "",
+        limitedCounts: data.limitedCounts || 0,
       });
     }
-  }, [data, products]); // Ensure dependencies are correct
+  }, [data, products]);
 
   const addNewProduct = async () => {
     if (Object.keys(formik.errors).length > 0) return;
@@ -160,41 +160,14 @@ const NewProductForm = ({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setImages(e.target.files);
-    // const selectedFile = e.target.files?.[0];
-    // if (selectedFile) {
-    //   setFile(selectedFile);
-    //   setProgress(0);
-    //   setUploadedImageUrl(null);
-    // }
   };
 
   const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(e, "eeeeee");
 
     try {
       const formData = new FormData();
       formData.append("seller_id", userData._id);
-      // formData.append("proudctName", userData._id);
-
-      // formData.append("file", file);
-
-      // const response = await axios.post(
-      //   `${baseUrl}/api/product/add-product`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //     onUploadProgress: (progressEvent) => {
-      //       const percentCompleted = Math.round(
-      //         (progressEvent.loaded * 100) / (progressEvent.total || 1)
-      //       );
-      //       setProgress(percentCompleted);
-      //     },
-      //   }
-      // );
-      // setUploadedImageUrl(response.data.imageUrl);
     } catch (error) {
       console.log("Upload failed", error);
     }

@@ -65,7 +65,7 @@ function ProductsContent() {
             />
             <div className="mt-4 flex-grow"></div>
           </div>
-          <ProductsCards category={activeTab} />
+          <ProductsCards showLoadMore={true} category={activeTab} />
         </div>
       ) : (
         <NotFound />

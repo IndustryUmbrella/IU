@@ -6,6 +6,7 @@ const productSlice = createSlice({
     products: [],
     refresh: false,
     productsForBuyers: [],
+    productLimit: 5,
   },
   reducers: {
     setProducts: (state, action) => {
@@ -17,9 +18,16 @@ const productSlice = createSlice({
     triggerRefresh: (state) => {
       state.refresh = !state.refresh;
     },
+    setProductLimit: (state, action) => {
+      state.productLimit = action.payload;
+    },
   },
 });
 
-export const { setProducts, triggerRefresh, setProductsForBuyers } =
-  productSlice.actions;
+export const {
+  setProducts,
+  triggerRefresh,
+  setProductsForBuyers,
+  setProductLimit,
+} = productSlice.actions;
 export default productSlice.reducer;

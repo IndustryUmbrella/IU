@@ -32,21 +32,23 @@ const Cart = ({ isOpen, setIsOpen }: { isOpen: any; setIsOpen: any }) => {
 
   return (
     <div className="">
-      {cartItems?.length === 0 ? (
-        <p className="text-white">Your cart is empty.</p>
-      ) : (
-        <>
-          <div
-            className={`fixed top-0 right-0 z-[10000] mb-10   overflow-x-hidden bg-white text-primary p-4 flex flex-col   justify-start gap-y-4 h-full max-h-screen pb-10   overflow-y-auto w-auto transform transition-transform duration-500 ${
-              isOpen ? "translate-x-0" : "translate-x-full"
-            }`}
-          >
-            <FaX
-              color="black"
-              size={24}
-              className="float-right z-[10000] cursor-pointer"
-              onClick={() => setIsOpen(false)}
-            />
+      <>
+        <div
+          className={`fixed top-0 right-0 z-[10000] mb-10   overflow-x-hidden bg-white text-primary p-4 flex flex-col   justify-start gap-y-4 h-full max-h-screen pb-10   overflow-y-auto w-auto transform transition-transform duration-500 ${
+            isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <FaX
+            color="black"
+            size={24}
+            className="float-right z-[10000] cursor-pointer"
+            onClick={() => setIsOpen(false)}
+          />
+          {cartItems?.length == 0 ? (
+            <p className="text-primary text-center w-full flex items-center px-16">
+              Your cart is empty.
+            </p>
+          ) : (
             <div className="h-screen space-y-5">
               {cartItems?.map((item: any, index: any) => (
                 <div
@@ -109,9 +111,9 @@ const Cart = ({ isOpen, setIsOpen }: { isOpen: any; setIsOpen: any }) => {
                 />
               </div>
             </div>
-          </div>
-        </>
-      )}
+          )}
+        </div>
+      </>
     </div>
   );
 };

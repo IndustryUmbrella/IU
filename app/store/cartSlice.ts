@@ -11,6 +11,7 @@ interface CartItem {
 
 interface CartState {
   items: CartItem[];
+  cartsLength: Number;
 }
 
 const loadCartFromLocalStorage = (): CartItem[] => {
@@ -28,6 +29,7 @@ const loadCartFromLocalStorage = (): CartItem[] => {
 
 const initialState: CartState = {
   items: loadCartFromLocalStorage(),
+  cartsLength: 0,
 };
 
 const saveCartToLocalStorage = (items: CartItem[]) => {
