@@ -20,7 +20,7 @@ const Slogan = () => {
   }, []);
 
   return (
-    <div className="sm:px-32 lg:px-0  items-center justify-center lg:w-auto xl:w-10/12 overflow-y-hidden ">
+    <div className="sm:px-32 lg:px-0  items-center justify-center mt-10 lg:w-auto xl:w-10/12 overflow-y-hidden ">
       <div className="font-normal uppercase text-[40px] sm:text-[40px]  text-center  md:text-[60px] lg:text-[58px] text-white  font-aboreto ">
         Fastest Path to{" "}
         <h1

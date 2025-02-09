@@ -9,6 +9,7 @@ import {
 import { RootState } from "@/app/store/store";
 import { FaTrash, FaX } from "react-icons/fa6";
 import Button from "./button";
+import Link from "next/link";
 
 const Cart = ({ isOpen, setIsOpen }: { isOpen: any; setIsOpen: any }) => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const Cart = ({ isOpen, setIsOpen }: { isOpen: any; setIsOpen: any }) => {
     setHydrated(true);
   }, []);
 
-  if (!hydrated) return null; // Avoid mismatched content during hydration
+  if (!hydrated) return null;
 
   return (
     <div className="">
@@ -107,7 +108,8 @@ const Cart = ({ isOpen, setIsOpen }: { isOpen: any; setIsOpen: any }) => {
                   className={"w-auto mt-6"}
                   type="secondary"
                   size="md"
-                  text="buy it now"
+                  text={<Link href="/checkout">Buy it Now</Link>}
+                  clickHandler={() => setIsOpen(false)}
                 />
               </div>
             </div>

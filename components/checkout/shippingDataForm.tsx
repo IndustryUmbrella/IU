@@ -215,7 +215,7 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
             id="address"
             name="address"
             placeholder="address"
-            className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
+            className={`w-full  h-12 border rounded px-2 text-sm ${
               formik.touched.address && formik.errors.address
                 ? "border-red-500"
                 : "border-gray-300"

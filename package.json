@@ -21,6 +21,7 @@
     "animate.css": "^4.1.1",
     "axios": "^1.7.9",
     "formik": "^2.4.6",
+    "gsap": "^3.12.7",
     "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",
     "mjml": "^4.15.3",

@@ -1,75 +1,81 @@
+"use client";
+
 import Step1Mockup from "@/public/mockups/step1Mockup";
 import Step2Mockup from "@/public/mockups/Step2Mockup";
 import Step3Mockup from "@/public/mockups/step3Mockup";
 import Step4Mockup from "@/public/mockups/step4Mockup";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const StepsCards = () => {
+  const cardsRef = useRef<any>([]);
+
+  useEffect(() => {
+    gsap.fromTo(
+      cardsRef.current,
+      { opacity: 0, scale: 0.8, y: 50 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.2,
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+  }, []);
+
   return (
-    <>
-      <div className=" gap-32 flex flex-wrap  items-center justify-center mt-10">
-        <div className="bg-white p-2 rounded-3xl max:w-[480px] h-[300px] px-6">
+    <div className="gap-32 flex flex-wrap items-center justify-center mt-10">
+      {[
+        {
+          mockup: <Step1Mockup />,
+          title: "Step 1",
+          text: "Register your company, log in, add additional information, and complete your profile.",
+        },
+        {
+          mockup: <Step2Mockup />,
+          title: "Step 2",
+          text: "Add product details, wait for approval from IU team, then see your product list in the Product Tab.",
+        },
+        {
+          mockup: <Step3Mockup />,
+          title: "Step 3",
+          text: "Promote your products to appear at the top, increasing visibility for global customers.",
+        },
+        {
+          mockup: <Step4Mockup />,
+          title: "Step 4",
+          text: "Receive payments based on the buyer's chosen method when customers order your product.",
+        },
+      ].map((step, index) => (
+        <div
+          key={index}
+          ref={(el: any) => (cardsRef.current[index] = el!)}
+          className="bg-white p-2 rounded-3xl max-w-[480px] h-[300px] px-6 opacity-0 transform scale-90"
+        >
           <div className="flex justify-between">
-            <Step1Mockup />
+            {step.mockup}
             <div className="bg-black text-white rounded-md p-1 w-auto h-8 px-2">
-              Step 1
+              {step.title}
             </div>
           </div>
           <div>
             <p className="text-primary w-[340px] h-[280px] text-base font-light mt-3 px-4">
-              Register Your company Login To Your Account Add your Additional
-              Information and Complete your profile
+              {step.text}
             </p>
           </div>
         </div>
-
-        <div className="bg-white p-2 rounded-3xl max:w-[480px] h-[300px] px-6">
-          <div className="flex justify-between">
-            <Step2Mockup />
-            <div className="bg-black text-white rounded-md p-1 w-auto h-8 px-2">
-              Step 2
-            </div>
-          </div>
-          <div>
-            <p className="text-primary w-[340px] h-[280px] text-base font-light mt-3 px-4">
-              Add Your Product Details. Wait Until you product Approve by IU
-              team. After approving you can see your product lists in Product
-              Tab
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white p-2 rounded-3xl max:w-[480px] h-[300px] px-6">
-          <div className="flex justify-between">
-            <Step3Mockup />
-            <div className="bg-black text-white rounded-md p-1 w-auto h-8 px-2">
-              Step 3
-            </div>
-          </div>
-          <div>
-            <p className="text-primary w-[340px] h-[280px]  text-base font-light mt-3 px-4">
-              You can promote your products to top of products list, customers
-              will find your product faster. your product will show for global
-              customers in everywhere.
-            </p>
-          </div>
-        </div>
-        <div className="bg-white p-2 rounded-3xl max:w-[480px] h-[300px] px-6">
-          <div className="flex justify-between">
-            <Step4Mockup />
-            <div className="bg-black text-white rounded-md p-1 w-auto h-8 px-2">
-              Step 4
-            </div>
-          </div>
-          <div>
-            <p className="text-primary w-[340px] h-[280px] text-base font-light mt-3 px-4">
-              while customers order your product. you will receive the payment
-              based the buyer payment method.
-            </p>
-          </div>
-        </div>
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
 

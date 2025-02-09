@@ -17,6 +17,13 @@ import Link from "next/link";
 import NoProductMockup from "@/public/mockups/noProductMockup";
 import { addToCart } from "@/app/store/cartSlice";
 import Button from "../general/button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircle,
+  faSpider,
+  faSpinner,
+  faTruckLoading,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface Product {
   productId: string;
@@ -24,6 +31,8 @@ interface Product {
   productDescription: string;
   productPrice: number;
   productImage: { link: string }[];
+
+  productCategory: string;
 }
 
 const ProductsCards = ({
@@ -35,7 +44,7 @@ const ProductsCards = ({
 }) => {
   const [loading, setIsLoading] = useState(false);
   const [productsToShow, setProductsToShow] = useState<Product[]>([]);
-  const [skeletonLoading, setSkeletonLoading] = useState(false); // Add state to manage skeletons for Load More
+  const [skeletonLoading, setSkeletonLoading] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const dispatch = useDispatch();
   const products = useSelector(
@@ -61,7 +70,7 @@ const ProductsCards = ({
         console.log(err?.message);
         setSkeletonLoading(false);
       } finally {
-        setIsLoading(false); // Hide skeletons after fetching
+        setIsLoading(false);
         setSkeletonLoading(false);
       }
     };
@@ -88,6 +97,8 @@ const ProductsCards = ({
         price: product?.productPrice,
         quantity: 1,
         productImage: product?.productImage[0]?.link,
+        description: product?.productDescription,
+        category: product?.productCategory || "",
       })
     );
   };
@@ -215,7 +226,7 @@ const ProductsCards = ({
           )}
 
           {skeletonLoading && (
-            <div className="flex flex-wrap gap-6 p-4">
+            <div className="flex w-full flex-wrap  gap-6 p-4">
               {Array.from({ length: 5 }, (_, rowIndex) => {
                 return (
                   <div
@@ -259,11 +270,18 @@ const ProductsCards = ({
           )}
         </div>
       )}
+
       {showLoadMore && (
         <Button
-          type="primary"
+          type={!loading && !skeletonLoading ? "primary" : "disable"}
           size="md"
-          text="Load More"
+          text={
+            !loading && !skeletonLoading ? (
+              "Load More"
+            ) : (
+              <FontAwesomeIcon icon={faSpinner} spin color="black" size="1x" />
+            )
+          }
           className="mx-4"
           clickHandler={handleLoadMore}
         />

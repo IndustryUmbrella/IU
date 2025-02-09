@@ -145,13 +145,10 @@ const RegisterForm = () => {
               )}
             </div>
 
-            <p className="text-white">
-              haven't an account?{" "}
-              <Link className="underline" href="/register">
-                Register
-              </Link>
-            </p>
             <div>
+              <Link href="/forgotPassword" className="text-white">
+                Forgot Password?
+              </Link>
               <Button
                 type={isLoading ? "disable" : "secondary"}
                 size="lg"
@@ -162,9 +159,15 @@ const RegisterForm = () => {
                     "Submit"
                   )
                 }
-                className="w-full py-3"
+                className="w-full py-3 mt-2"
                 clickHandler={loginUser}
               />
+              <p className="text-white mt-5 ">
+                haven't an account?{" "}
+                <Link className="underline" href="/register">
+                  Register
+                </Link>
+              </p>
             </div>
           </form>
         </div>

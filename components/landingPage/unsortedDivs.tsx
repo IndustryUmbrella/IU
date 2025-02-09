@@ -19,7 +19,7 @@ const UnsortedDivs = () => {
 
   return (
     <>
-      <div className="w-full h-full max-w-[1000px] max-h-[510px] relative hidden lg:block">
+      <div className="w-full h-full max-w-[1000px] max-h-[510px] mt-10 relative hidden lg:block">
         <div
           className="mockup border z-[1000]"
           style={{

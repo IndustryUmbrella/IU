@@ -7,6 +7,8 @@ interface CartItem {
   price: number;
   quantity: number;
   productImage: string;
+  description: string;
+  category: string;
 }
 
 interface CartState {
@@ -43,13 +45,22 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      const { id, name, price, productImage } = action.payload;
+      const { id, name, price, productImage, description, category } =
+        action.payload;
       const existingItem = state.items.find((item) => item.id === id);
 
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        state.items.push({ id, name, price, quantity: 1, productImage });
+        state.items.push({
+          id,
+          name,
+          price,
+          quantity: 1,
+          productImage,
+          description,
+          category,
+        });
       }
 
       saveCartToLocalStorage(state.items);

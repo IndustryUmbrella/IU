@@ -10,8 +10,8 @@ const PaymentDetails = ({ setShipStep }: { setShipStep: any }) => {
   const cartItem = useSelector((state: RootState) => state.cart.items);
   return (
     <>
-      <FaArrowLeft color="black" size={25} onClick={() => setShipStep(1)} />
       <PaymentForm />
+      <FaArrowLeft color="white" size={25} onClick={() => setShipStep(1)} />
     </>
   );
 };

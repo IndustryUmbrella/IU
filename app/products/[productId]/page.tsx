@@ -22,12 +22,6 @@ const getProduct = async (id?: any) => {
       { cache: "no-store" }
     );
     const seller = sellerData.ok ? await sellerData.json() : null;
-
-    const imageRes = await fetch(
-      `${baseUrl}/api/image/upload/${jsonData?.data?.seller_id}`,
-      { cache: "no-store" }
-    );
-    const imagejsonData = imageRes.ok ? await imageRes.json() : null;
     return {
       product: jsonData.data,
       seller: seller,

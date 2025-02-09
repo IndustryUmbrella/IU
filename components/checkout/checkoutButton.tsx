@@ -33,8 +33,6 @@ export default function PaymentForm() {
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    // e.preventDefault();
-
     if (!stripe || !elements) return;
 
     setLoading(true);
@@ -57,7 +55,7 @@ export default function PaymentForm() {
         payment_method: {
           card: elements.getElement(CardNumberElement)!,
           billing_details: {
-            name: `${buyerData?.firstname} ${buyerData?.lastname}`, // Replace with actual customer info
+            name: `${buyerData?.firstname} ${buyerData?.lastname}`,
           },
         },
       }
@@ -83,35 +81,37 @@ export default function PaymentForm() {
 
   return (
     <form
-      className="p-4 border rounded flex flex-col gap-4"
+      className="p-4 border rounded flex flex-col gap-4 w-full"
       onSubmit={handleSubmit}
     >
-      <div className="w-full">
+      <div className="w-full text-white">
         <label htmlFor="card-number">Card Number</label>
         <CardNumberElement
           id="card-number"
-          className="p-3 border rounded w-full h-12 mb-4"
+          className="p-3 border rounded bg-white w-full h-12 mb-4 text-[#fff]"
           onChange={formik.handleChange}
         />
       </div>
-      <div className="w-full">
+      <div className="w-full text-white">
         <label htmlFor="expiry-date">Expiry Date</label>
         <CardExpiryElement
           id="expiry-date"
-          className="p-3 border rounded w-full h-12 mb-4"
+          className="p-3 border rounded bg-white w-full h-12 mb-4"
           onChange={formik.handleChange}
         />
       </div>
-      <div className="w-full">
-        <label htmlFor="cvv">CVV</label>
+      <div className="w-full ">
+        <label htmlFor="cvv" className="text-white">
+          CVV
+        </label>
         <CardCvcElement
           id="cvv"
-          className="p-3 border rounded h-12 w-full mb-4"
+          className="p-3 border  rounded bg-white h-12 w-full mb-4"
           onChange={formik.handleChange}
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 text-white">
         <label htmlFor="amount">
           Amount:{" "}
           {cartItems
@@ -129,7 +129,9 @@ export default function PaymentForm() {
       />
 
       {error && (
-        <div className="bg-red-400 text-white rounded px-5">{error}</div>
+        <div className="bg-red-400 text-white rounded px-5 text-sm py-6">
+          {error}
+        </div>
       )}
     </form>
   );
