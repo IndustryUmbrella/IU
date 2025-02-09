@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import * as Yup from "yup";
@@ -10,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { GiPadlockOpen } from "react-icons/gi";
 
-const ResetPasswordPage = () => {
+function ResetPasswordContent() {
   const validationSchema = Yup.object({
     newPassword: Yup.string()
       .min(8, "Password should be at least 8 characters")
@@ -39,7 +40,6 @@ const ResetPasswordPage = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      console.log("cliiiiiiiiiiiiiiiiiiked");
       if (!token) {
         setShowNotification({
           isShow: true,
@@ -162,6 +162,12 @@ const ResetPasswordPage = () => {
       </form>
     </div>
   );
-};
+}
 
-export default ResetPasswordPage;
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <ResetPasswordContent />
+    </Suspense>
+  );
+}
