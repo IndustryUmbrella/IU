@@ -6,6 +6,8 @@ import Shop from "@/components/products/shop";
 import ProductsCards from "@/components/products/productCards";
 import { Metadata } from "next";
 import ProductCartActions from "@/components/products/handleAddToCart";
+import ShareButton from "@/components/general/shareButton";
+import SellerSocialMedia from "@/components/auth/sellerSocial/sellerSocialMedia";
 const getProduct = async (id?: any) => {
   if (!id) return null;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -120,7 +122,10 @@ const ProductDetails = async ({
             <ProductRating />
             <ProductCartActions product={product} />
           </div>
-          <Shop />
+          <div className="flex flex-col  items-center justify-between my-10 gap-y-5  ">
+            <ShareButton details={product} />
+            <SellerSocialMedia socialLinks={seller} />
+          </div>
         </div>
       </div>
       <ProductsCards showLoadMore={false} category={product?.productCategory} />

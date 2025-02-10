@@ -5,6 +5,7 @@ const Button = ({
   className,
   disable,
   clickHandler,
+  action,
 }: {
   type: "primary" | "secondary" | "disable";
   text: any;
@@ -12,11 +13,12 @@ const Button = ({
   className?: string;
   disable?: boolean;
   clickHandler?: Function;
+  action?: "button" | "submit" | "reset";
 }) => {
   return (
     <div>
       <button
-        type="button"
+        type={action || "button"}
         disabled={type == "disable" ? true : false}
         onClick={clickHandler ? () => clickHandler() : undefined}
         className={`${

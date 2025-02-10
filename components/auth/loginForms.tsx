@@ -37,44 +37,43 @@ const RegisterForm = () => {
       password: "",
     },
     validationSchema,
-    onSubmit: async () => {},
+    onSubmit: async () => {
+      setIsLoading(true);
+      if (!formik.values.email || !formik.values.password) return;
+
+      try {
+        const loggedUser = await axios.post(`${baseUrl}/api/auth/login`, {
+          email: formik.values.email,
+          password: formik.values.password,
+        });
+        const token = loggedUser?.data?.seller?.token;
+
+        if (token) {
+          Cookies.set("authToken", token, { expires: 7 });
+        }
+        setShowNotification({
+          isShow: true,
+          content: loggedUser?.data?.message || "Logged successfully!",
+          success: true,
+        });
+        dispatch(setIsLogged(true));
+        dispatch(login(loggedUser?.data));
+
+        setTimeout(() => {
+          redirect(`/profile/${userData?.seller?._id}`);
+        }, 5000);
+        setIsLoading(false);
+      } catch (err: any) {
+        setIsLoading(false);
+        setShowNotification({
+          isShow: true,
+          content: err?.response?.data?.message || "something went wrong",
+          success: false,
+        });
+      }
+    },
   });
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const loginUser = async () => {
-    setIsLoading(true);
-    if (!formik.values.email || !formik.values.password) return;
-
-    try {
-      const loggedUser = await axios.post(`${baseUrl}/api/auth/login`, {
-        email: formik.values.email,
-        password: formik.values.password,
-      });
-      const token = loggedUser?.data?.seller?.token;
-
-      if (token) {
-        Cookies.set("authToken", token, { expires: 7 });
-      }
-      setShowNotification({
-        isShow: true,
-        content: loggedUser?.data?.message || "Logged successfully!",
-        success: true,
-      });
-      dispatch(setIsLogged(true));
-      dispatch(login(loggedUser?.data));
-
-      setTimeout(() => {
-        redirect(`/profile/${userData?.seller?._id}`);
-      }, 5000);
-      setIsLoading(false);
-    } catch (err: any) {
-      setIsLoading(false);
-      setShowNotification({
-        isShow: true,
-        content: err?.response?.data?.message || "something went wrong",
-        success: false,
-      });
-    }
-  };
   useEffect(() => {
     const notif = setTimeout(() => {
       setShowNotification({
@@ -100,7 +99,7 @@ const RegisterForm = () => {
           Your Next Purchase is Just a Login Away.
         </h1>
         <div className="flex justify-center mt-10">
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={formik.handleSubmit}>
             <div className="relative flex flex-col">
               <input
                 type="email"
@@ -150,6 +149,7 @@ const RegisterForm = () => {
                 Forgot Password?
               </Link>
               <Button
+                action="submit"
                 type={isLoading ? "disable" : "secondary"}
                 size="lg"
                 text={
@@ -160,7 +160,6 @@ const RegisterForm = () => {
                   )
                 }
                 className="w-full py-3 mt-2"
-                clickHandler={loginUser}
               />
               <p className="text-white mt-5 ">
                 haven't an account?{" "}

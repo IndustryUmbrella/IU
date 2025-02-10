@@ -25,12 +25,8 @@ const sellerSlice = createSlice({
     logout: (state) => {
       state.user = null;
     },
-    setProfilePicture: (state, action: PayloadAction<any>) => {
-      state.profilePicture = action.payload;
-    },
   },
 });
 
-export const { login, logout, setIsLogged, setProfilePicture } =
-  sellerSlice.actions;
+export const { login, logout, setIsLogged } = sellerSlice.actions;
 export default sellerSlice.reducer;

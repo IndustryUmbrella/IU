@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 
-const Logo = () => {
+const Logo = ({ className }: { className?: any }) => {
   return (
     <svg
-      className=""
+      // className={"w-[60px] h-[60px] sm:w-[50px] sm:h-[50px]"}
+      className={className}
       viewBox="0 0 1375 1474"
       fill="none"
-      width={80}
-      height={80}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

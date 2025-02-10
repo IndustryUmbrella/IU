@@ -9,7 +9,6 @@ const PersoanInfoAccount = ({
   formik: any;
   userData: any;
 }) => {
-  console.log(userData, "..........");
   return (
     <>
       <h1 className="text-3xl my-5 text-center md:text-left">

@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { login, setIsLogged, setProfilePicture } from "@/app/store/sellerSlice";
+import { login, setIsLogged } from "@/app/store/sellerSlice";
 import { decodeToken } from "@/helper/isAuthorized";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "@/app/store/productSlice";

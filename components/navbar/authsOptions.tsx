@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import { usePathname, useRouter } from "next/navigation";
-import { login, setIsLogged, setProfilePicture } from "@/app/store/sellerSlice";
+import { login, setIsLogged } from "@/app/store/sellerSlice";
 import Notification from "../general/notification";
 import PopUp from "../general/popUp";
 import { BiSolidDashboard } from "react-icons/bi";
@@ -45,7 +45,6 @@ const AuthOptions = () => {
       });
       dispatch(login(null));
       dispatch(setIsLogged(false));
-      dispatch(setProfilePicture(null));
       dispatch(setProducts({}));
       route.push("/login");
     } catch (err) {

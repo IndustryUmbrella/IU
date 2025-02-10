@@ -11,6 +11,7 @@ import { login } from "@/app/store/sellerSlice";
 import Cookies from "js-cookie";
 import NotFound from "@/app/not-found";
 import DashboardTab from "@/components/dashboardTabAdmin/dashboardTab";
+import SettingTab from "@/components/settingTabAdmin/settingTab";
 
 export default function SellerDashboard({
   params: paramsPromise,
@@ -59,7 +60,6 @@ export default function SellerDashboard({
           return;
         }
 
-        // Fetch seller data
         const response = await axios.get(
           `${baseUrl}/api/auth/seller/${sellerId}`,
           {
@@ -96,8 +96,8 @@ export default function SellerDashboard({
           <h1 className="my-10">
             Welcome to your <b>{userData?.companyName}</b> Dashboard
           </h1>
-          <div className="flex flex-col lg:flex-row justify-evenly">
-            <div className="flex flex-row lg:flex-col gap-4 my-4 bg-[#0c0c0b]   shadow-xl shadow-gray-950 px-20 py-4 rounded-md">
+          <div className="flex flex-col lg:flex-row ">
+            <div className="flex flex-row lg:flex-col gap-4 my-4 bg-[#0c0c0b]   shadow-xl shadow-gray-950 px-4 sm:px-20 py-4 rounded-md">
               <button
                 className={`px-4 py-2 ${
                   activeTab === "dashboard"
@@ -108,6 +108,7 @@ export default function SellerDashboard({
               >
                 Dashboard
               </button>
+
               <button
                 className={`px-4 py-2 ${
                   activeTab === "account"
@@ -118,6 +119,7 @@ export default function SellerDashboard({
               >
                 Account
               </button>
+
               <button
                 className={`px-4 py-2 ${
                   activeTab === "settings"
@@ -142,7 +144,7 @@ export default function SellerDashboard({
               >
                 {activeTab === "dashboard" && <DashboardTab />}
                 {activeTab === "account" && <AccountTab />}
-                {activeTab === "settings" && <div>Update your Settings</div>}
+                {activeTab === "settings" && <SettingTab userData={userData} />}
               </div>
             </div>
           </div>

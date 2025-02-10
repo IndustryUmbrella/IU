@@ -13,7 +13,7 @@ const Navbar = () => {
           <BurgerMenu />
         </div>
         <Link href="/">
-          <Logo />
+          <Logo className={"w-[60px] h-[60px] sm:w-[80px] sm:h-[80px]"} />
         </Link>
         <NavbarRoutes />
       </div>

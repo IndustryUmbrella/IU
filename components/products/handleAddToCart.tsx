@@ -23,7 +23,7 @@ const ProductCartActions = ({ product }: { product: any }) => {
   };
 
   return (
-    <>
+    <div className="mt-5">
       <Button
         type="primary"
         size="sm"
@@ -37,7 +37,7 @@ const ProductCartActions = ({ product }: { product: any }) => {
         className="mt-2"
         clickHandler={() => handleAddToCart(product)}
       />
-    </>
+    </div>
   );
 };
 

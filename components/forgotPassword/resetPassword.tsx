@@ -55,7 +55,7 @@ function ResetPasswordContent() {
           `${baseUrl}/api/auth/reset-password`,
           {
             resetToken: token,
-            newPassword: values.newPassword,
+            newPassword: formik.values.newPassword,
           }
         );
 
@@ -111,7 +111,7 @@ function ResetPasswordContent() {
         onSubmit={formik.handleSubmit}
         className="flex gap-y-4 flex-col w-full"
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
           <input
             id="newPassword"
             name="newPassword"
@@ -120,7 +120,7 @@ function ResetPasswordContent() {
             value={formik.values.newPassword}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            className="border border-black rounded h-12 w-full max-w-80  px-2 mb-3"
+            className="border border-black rounded h-12 w-full max-w-80  px-2"
           />
           {formik.touched.newPassword && formik.errors.newPassword && (
             <span className="text-sm text-red-500">
@@ -129,7 +129,7 @@ function ResetPasswordContent() {
           )}
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
           <input
             id="confirmNewPassword"
             name="confirmNewPassword"
@@ -138,7 +138,7 @@ function ResetPasswordContent() {
             value={formik.values.confirmNewPassword}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            className="border border-black rounded h-12 w-full max-w-80  px-2 mb-3"
+            className="border border-black rounded h-12 w-full max-w-80  px-2"
           />
           {formik.touched.confirmNewPassword &&
             formik.errors.confirmNewPassword && (
@@ -148,17 +148,18 @@ function ResetPasswordContent() {
             )}
         </div>
 
-        <button
-          type="submit"
-          className="bg-primary hover:bg-white  text-white hover:text-primary transition-all duration-300 border border-white hover:border hover:border-black  rounded-md  px-4 py-3"
-          disabled={loading}
-        >
-          {loading ? (
-            <FontAwesomeIcon icon={faSpinner} spin />
-          ) : (
-            "Reset Password"
-          )}
-        </button>
+        <Button
+          action="submit"
+          text={
+            loading ? (
+              <FontAwesomeIcon icon={faSpinner} spin />
+            ) : (
+              "Reset password"
+            )
+          }
+          type={loading ? "disable" : "secondary"}
+          size="md"
+        />
       </form>
     </div>
   );

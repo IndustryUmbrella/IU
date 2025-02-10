@@ -57,8 +57,8 @@ const ConfirmationPrompt: React.FC<ConfirmationPromptProps> = ({
         >
           <FaX />
         </div>
-        <div className="text-center">{children}</div>
-        <div className="flex justify-evenly mt-4">
+        <div className="">{children}</div>
+        <div className="flex  gap-x-4 mt-4">
           <Button
             size="md"
             type="secondary"

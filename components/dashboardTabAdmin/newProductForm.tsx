@@ -11,6 +11,9 @@ import { triggerRefresh } from "@/app/store/productSlice";
 import Cookies from "js-cookie";
 import FileInput from "../general/fileInput";
 import Image from "next/image";
+import Notification from "../general/notification";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const NewProductForm = ({
   setShowOverlay,
@@ -27,6 +30,12 @@ const NewProductForm = ({
   const [progress, setProgress] = useState(0);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [images, setImages] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showNotification, setShowNotification] = useState({
+    isShow: false,
+    content: "",
+    success: true,
+  });
 
   const productSchema = Yup.object({
     productName: Yup.string().required("product name is required"),
@@ -56,13 +65,17 @@ const NewProductForm = ({
       productDescription: "",
       productImages: "",
       productPrice: 0,
-      productCategory: "",
+      productCategory: null,
       colores: "",
       limitedCounts: "",
     },
     validationSchema: productSchema,
     onSubmit: (value) => {
-      console.log();
+      if (data) {
+        updateProduct();
+      } else {
+        addNewProduct();
+      }
     },
   });
   useEffect(() => {
@@ -98,10 +111,15 @@ const NewProductForm = ({
         formData.append("images", image);
       });
     } else {
-      console.log("No images selected or images are not in the correct format");
+      setShowNotification({
+        isShow: true,
+        content: "No Image Selected",
+        success: false,
+      });
     }
 
     try {
+      setIsLoading(true);
       const response = await axios.post(
         `${baseUrl}/api/product/add-product`,
         formData,
@@ -112,11 +130,21 @@ const NewProductForm = ({
           },
         }
       );
-
+      setShowNotification({
+        isShow: true,
+        content: "Product added  Successfully",
+        success: true,
+      });
+      setIsLoading(false);
       setShowOverlay(false);
       dispatch(triggerRefresh());
-    } catch (err) {
-      console.log("Error adding product:", err);
+    } catch (err: any) {
+      setShowNotification({
+        isShow: true,
+        content: err?.message || "Something went wrong",
+        success: false,
+      });
+      setIsLoading(false);
     }
   };
 
@@ -124,6 +152,7 @@ const NewProductForm = ({
     if (Object.keys(formik.errors).length > 0) return;
 
     try {
+      setIsLoading(true);
       const productData: any = {
         seller_id: userData?.seller?._id || userData?._id,
         productName: formik.values.productName,
@@ -146,15 +175,21 @@ const NewProductForm = ({
           },
         }
       );
+      setIsLoading(false);
       setShowOverlay(false);
       dispatch(triggerRefresh());
-      // setShowNotification({
-      //   isShow: true,
-      //   content: "Fields Updated Successfully",
-      //   success: true,
-      // });
+      setShowNotification({
+        isShow: true,
+        content: "Fields Updated Successfully",
+        success: true,
+      });
     } catch (err) {
-      console.log("Error adding product:", err, userData);
+      setIsLoading(false);
+      setShowNotification({
+        isShow: true,
+        content: "Fields Updated Successfully",
+        success: true,
+      });
     }
   };
 
@@ -174,11 +209,26 @@ const NewProductForm = ({
   };
 
   useEffect(() => {
-    console.log(data, "dddddddddd");
-  }, []);
+    const notif = setTimeout(() => {
+      setShowNotification({
+        isShow: false,
+        content: "",
+        success: true,
+      });
+    }, 4000);
+    return () => clearTimeout(notif);
+  }, [showNotification]);
+
   return (
     <>
-      <form className="space-y-4">
+      {showNotification.isShow && (
+        <Notification
+          isShow={showNotification.isShow}
+          content={showNotification.content}
+          success={showNotification.success}
+        />
+      )}
+      <form className="space-y-4" onSubmit={formik.handleSubmit}>
         <div className="flex flex-col items-center md:flex-row gap-x-10 gap-y-4 justify-center mt-10">
           <div className=" flex flex-col gap-y-2">
             <div className="relative flex items-start flex-col">
@@ -255,9 +305,10 @@ const NewProductForm = ({
               <Select
                 id="productCategory"
                 name="productCategory"
-                value={formik.values.productCategory} // Bind the selected value to Formik
-                onChange={(option: any) => {
-                  formik.setFieldValue("productCategory", option); // Update Formik's value
+                options={options}
+                value={formik.values.productCategory}
+                onChange={(option) => {
+                  formik.setFieldValue("productCategory", option);
                 }}
                 styles={{
                   control: (baseStyles, state) => ({
@@ -278,12 +329,10 @@ const NewProductForm = ({
                   }),
                   menuList: (baseStyles) => ({
                     ...baseStyles,
-                    // backgroundColor: "blue",
                     maxHeight: "150px",
                     overflowY: "auto",
                   }),
                 }}
-                options={options}
               />
 
               {formik.errors.productCategory &&
@@ -360,21 +409,31 @@ const NewProductForm = ({
             handleFileChange={handleFileChange}
             progress={progress}
             multiple={true}
+            iconColor="black"
+            inputTitle="Your Product Images"
           />
         )}
         {data ? (
           <Button
-            type="primary"
+            type={isLoading ? "disable" : "secondary"}
             size="md"
-            text="update"
-            clickHandler={updateProduct}
+            text={
+              isLoading ? <FontAwesomeIcon icon={faSpinner} spin /> : "Update"
+            }
+            action="submit"
           />
         ) : (
           <Button
-            type="primary"
+            type={isLoading ? "disable" : "secondary"}
             size="md"
-            text="add"
-            clickHandler={addNewProduct}
+            text={
+              isLoading ? (
+                <FontAwesomeIcon icon={faSpinner} spin />
+              ) : (
+                "Add Product"
+              )
+            }
+            action="submit"
           />
         )}
       </form>

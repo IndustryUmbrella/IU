@@ -93,11 +93,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
   return (
     <div>
       {showOverlay && (
-        <Overlay
-          onClose={() => setShowOverlay(false)}
-          isOpen={showOverlay}
-          onConfirm={() => alert("ok")}
-        >
+        <Overlay onClose={() => setShowOverlay(false)} isOpen={showOverlay}>
           <NewProductForm
             data={selectedProduct}
             setShowOverlay={setShowOverlay}

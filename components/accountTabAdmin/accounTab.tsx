@@ -17,11 +17,14 @@ import Cookies from "js-cookie";
 import "react-loading-skeleton/dist/skeleton.css";
 import Skeleton from "react-loading-skeleton";
 import NoUserInfoSkeleton from "./noUserInfoSkeleton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const AccountTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
   const [file, setFile] = useState<File | null>(null);
   const [images, setImages] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [progress, setProgress] = useState(0);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
@@ -78,13 +81,19 @@ const AccountTab = () => {
     if (Object.keys(formik.errors).length > 0) return;
 
     try {
-      const formData: any = new FormData();
+      setIsLoading(true);
+      const formData = new FormData();
 
-      if (formik.values.phone) formData.phone = formik.values.phone;
-      if (formik.values.address) formData.address = formik.values.address;
-      if (formik.values.companyStartingTime)
-        formData.companyStartingTime = formik.values.companyStartingTime;
-      if (formik.values.companyLogo) formik.values.companyLogo;
+      formData.append("phone", formik.values.phone || "");
+      formData.append("address", formik.values.address || "");
+      formData.append(
+        "companyStartingTime",
+        formik.values.companyStartingTime || ""
+      );
+
+      if (file) {
+        formData.append("companyLogo", file);
+      }
 
       const socialLinks = [
         formik.values.facebook && {
@@ -113,48 +122,38 @@ const AccountTab = () => {
         },
       ].filter(Boolean);
 
-      if (socialLinks.length > 0) formData.socialLinks = socialLinks;
-
-      if (images && typeof images === "object") {
-        const imageArray = Object.values(images);
-        imageArray.forEach((image: any) => {
-          formData.append("companyLogo", image);
-        });
-      } else {
-        console.log(
-          "No images selected or images are not in the correct format"
-        );
+      if (socialLinks.length > 0) {
+        formData.append("socialLinks", JSON.stringify(socialLinks));
       }
 
-      if (Object.keys(formData).length > 0) {
-        const response = await axios.put(
-          `${baseUrl}/api/auth/seller/${
-            userData?.seller?._id || userData?._id
-          }`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      const response = await axios.put(
+        `${baseUrl}/api/auth/seller/${userData?.seller?._id || userData?._id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setIsLoading(false);
 
-        setShowNotification({
-          isShow: true,
-          content: "Fields Updated Successfully",
-          success: true,
-        });
-      } else {
-        setShowNotification({
-          isShow: true,
-          content: "No fields to update",
-          success: false,
-        });
-      }
+      setShowNotification({
+        isShow: true,
+        content: "Fields Updated Successfully",
+        success: true,
+      });
     } catch (err) {
-      console.log("Error updating seller:", err);
+      setIsLoading(false);
+
+      setShowNotification({
+        isShow: true,
+        content: "Update failed!",
+        success: false,
+      });
     }
   };
+
   useEffect(() => {
     if (userData) {
       formik.setValues({
@@ -162,11 +161,11 @@ const AccountTab = () => {
         email: userData?.email || "",
         password: userData?.password || "",
         phone: userData?.phone || "",
-        companyLogo: userData?.companyLogo || "",
         address: userData?.address || "",
         companyStartingTime: userData?.companyStartingTime
           ? formatDate(userData?.companyStartingTime)
           : "",
+        companyLogo: userData?.companyLogo || "",
         facebook:
           userData?.socialLinks?.find((link: any) => link.title === "Facebook")
             ?.link || "",
@@ -199,10 +198,9 @@ const AccountTab = () => {
     }, 4000);
     return () => clearTimeout(notif);
   }, [showNotification]);
-  console.log(userData, "m.......");
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center  px-4 sm:px-20">
       {showNotification.isShow && (
         <Notification
           isShow={showNotification.isShow}
@@ -249,10 +247,20 @@ const AccountTab = () => {
           />
         ) : (
           <Button
-            type={Object.keys(formik.errors).length > 0 ? "disable" : "primary"}
-            disable={(Object.keys(formik.errors).length = 0) ? true : false}
+            type={
+              Object.keys(formik.errors).length > 0 || isLoading
+                ? "disable"
+                : "primary"
+            }
+            disable={
+              (Object.keys(formik.errors).length = 0) || isLoading
+                ? true
+                : false
+            }
             size="md"
-            text="Update"
+            text={
+              isLoading ? <FontAwesomeIcon icon={faSpinner} spin /> : "Update"
+            }
             clickHandler={updateSeller}
           />
         )}

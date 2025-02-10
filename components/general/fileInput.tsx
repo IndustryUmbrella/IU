@@ -11,6 +11,8 @@ const FileInput = ({
   handleUpload,
   progress,
   multiple,
+  iconColor,
+  inputTitle,
 }: {
   file: any;
   setFile: any;
@@ -18,6 +20,8 @@ const FileInput = ({
   handleUpload: any;
   progress: number;
   multiple?: boolean | false;
+  iconColor?: string | "white";
+  inputTitle?: string;
 }) => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -34,9 +38,13 @@ const FileInput = ({
           className="w-[260px] md:w-64 text-black h-12 border rounded px-2 text-sm bg-transparent hidden"
           onChange={handleFileChange}
         />
-        <UploadIcon />
-        <p className="text-gray-500">Your Brand Logo</p>
-        <p className="text-gray-500 w-[260px]">
+        <UploadIcon color={iconColor} />
+        {inputTitle ? (
+          <p className="text-gray-500">{inputTitle}</p>
+        ) : (
+          <p className="text-gray-500">Your Brand Logo</p>
+        )}
+        <p className="text-gray-500 w-[260px] px-4">
           For best results, photos should be at least 1080px with JPG or PNG
           file.
         </p>
