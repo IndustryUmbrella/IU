@@ -22,11 +22,9 @@ const ConfirmationPrompt: React.FC<ConfirmationPromptProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      // Get screen dimensions and calculate the size for the ConfirmationPrompt
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
 
-      // Subtract 50px from both width and height
       const newWidth = screenWidth - 100;
       const newHeight = screenHeight - 100;
 
@@ -34,21 +32,14 @@ const ConfirmationPrompt: React.FC<ConfirmationPromptProps> = ({
     }
   }, [isOpen]);
 
-  if (!isOpen) return null; // Don't render the ConfirmationPrompt if it's not open
-
+  if (!isOpen) return null;
   return (
     <div
       className="fixed inset-0 backdrop-blur-[3px] backdrop:bg-black text-black bg-opacity-50 z-50 flex  justify-center items-center"
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded shadow-lg relative w-auto h-auto"
-        style={
-          {
-            // width: ConfirmationPromptStyles?.width || "auto",
-            // height: ConfirmationPromptStyles?.height || "auto",
-          }
-        }
+        className="bg-white p-6  rounded shadow-lg relative w-full max-w-[400px] h-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div
@@ -57,18 +48,18 @@ const ConfirmationPrompt: React.FC<ConfirmationPromptProps> = ({
         >
           <FaX />
         </div>
-        <div className="">{children}</div>
-        <div className="flex  gap-x-4 mt-4">
+        <div className="border-b-2 border-b-black w-full pb-5">{children}</div>
+        <div className="flex  gap-x-4 mt-6">
           <Button
             size="md"
-            type="secondary"
+            type="primary"
             text="Cancel"
             clickHandler={onClose}
           />
           <Button
             size="md"
-            type="primary"
-            text="yes"
+            type="secondary"
+            text="Yes"
             clickHandler={onConfirm}
           />
         </div>

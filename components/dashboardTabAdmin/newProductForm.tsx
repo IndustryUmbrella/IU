@@ -2,18 +2,18 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import Select from "react-select";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import Button from "../general/button";
 import { triggerRefresh } from "@/app/store/productSlice";
 import Cookies from "js-cookie";
-import FileInput from "../general/fileInput";
-import Image from "next/image";
 import Notification from "../general/notification";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import ProductBasicInfo from "./productBasicInfo";
+import ProductPriceInfo from "./productPriceInfo";
+import ProductMediaStep from "./productMediaStep";
 
 const NewProductForm = ({
   setShowOverlay,
@@ -26,10 +26,8 @@ const NewProductForm = ({
   const userData = useSelector((state: RootState) => state.seller.user);
   const products = useSelector((state: RootState) => state.product.products);
 
-  const [file, setFile] = useState<File | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const [images, setImages] = useState<any>();
+  const [productSubmitionStep, setProductSubmitionStep] = useState(1);
+  const [images, setImages] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showNotification, setShowNotification] = useState({
     isShow: false,
@@ -38,24 +36,20 @@ const NewProductForm = ({
   });
 
   const productSchema = Yup.object({
-    productName: Yup.string().required("product name is required"),
-    productDescription: Yup.string().required("description is required"),
-    productPrice: Yup.number().required("prodcut price is required").min(1),
+    productName: Yup.string().required("Product name is required"),
+    productDescription: Yup.string().required("Description is required"),
+    productPrice: Yup.number().required("Product price is required").min(1),
+    sizes: Yup.string(),
     productCategory: Yup.object().shape({
-      value: Yup.string().required("Selection is required"),
+      value: Yup.string().required("Category selection is required"),
     }),
-    colores: Yup.string(),
-    limitedCounts: Yup.string(),
+    discount: Yup.number().required("Discount is required"),
+    subCategory: Yup.string().required("Subcategory is required"),
+    colors: Yup.string(),
+    stockQuantity: Yup.string().required("Limited count is required"),
+    weight: Yup.number().required(),
   });
-  const options = [
-    { value: "living", label: "Home & living" },
-    { value: "jewerly", label: "Jewerly & Accessories" },
-    { value: "apperel", label: "Apperel and Wearbles" },
-    { value: "art", label: "Art & collections" },
-    { value: "gift", label: "Gift & Seasonable Items" },
-    { value: "beauty", label: "Beaaty & wellnes" },
-    { value: "crafts", label: "Crafts" },
-  ];
+
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const token = Cookies.get("authToken");
 
@@ -64,13 +58,17 @@ const NewProductForm = ({
       productName: "",
       productDescription: "",
       productImages: "",
-      productPrice: 0,
+      productPrice: "",
+      discount: "",
+      sizes: "",
       productCategory: null,
-      colores: "",
-      limitedCounts: "",
+      subCategory: "",
+      colors: "",
+      weight: 0,
+      stockQuantity: "",
     },
     validationSchema: productSchema,
-    onSubmit: (value) => {
+    onSubmit: () => {
       if (data) {
         updateProduct();
       } else {
@@ -78,6 +76,7 @@ const NewProductForm = ({
       }
     },
   });
+
   useEffect(() => {
     if (products && data) {
       formik.setValues({
@@ -85,29 +84,34 @@ const NewProductForm = ({
         productDescription: data.productDescription || "",
         productImages: data?.productImages || "",
         productCategory: data?.productCategory || "",
-        productPrice: data.productPrice || "",
-        colores: data.colores?.[0] || "",
-        limitedCounts: data.limitedCounts || 0,
+        subCategory: data?.subCategory || "",
+        productPrice: data?.productPrice || "",
+        discount: data?.discount || 0,
+        sizes: data?.sizes || "",
+        colors: data.colors?.[0] || "",
+        stockQuantity: data.stockQuantity || 0,
+        weight: data?.weight || 0,
       });
     }
   }, [data, products]);
 
   const addNewProduct = async () => {
     if (Object.keys(formik.errors).length > 0) return;
-
     const formData = new FormData();
     formData.append("seller_id", userData?._id);
-    formData.append("productName", formik.values?.productName);
-    formData.append("productDescription", formik.values?.productDescription);
-    formData.append("productCategory", formik.values?.productCategory?.value);
-    formData.append("productPrice", String(formik?.values?.productPrice || 0)); // Convert number to string
-    formData.append("colores", JSON.stringify(formik.values?.colores || [])); // Convert array to string
-    formData.append("limitedCounts", String(formik.values?.limitedCounts || 0)); // Convert number to string
-    formData.append("productImage", "");
+    formData.append("productName", formik.values.productName);
+    formData.append("productDescription", formik.values.productDescription);
+    formData.append("productCategory", formik.values.productCategory?.value);
+    formData.append("subCategory", formik.values.subCategory);
+    formData.append("productPrice", String(formik.values.productPrice || 0));
+    formData.append("discount", String(formik.values.discount || 0));
+    formData.append("colors", JSON.stringify(formik.values.colors || []));
+    formData.append("sizes", JSON.stringify(formik.values.sizes || []));
+    formData.append("stockQuantity", String(formik.values.stockQuantity || 0));
+    formData.append("weight", String(formik.values.weight || 0));
 
     if (images && typeof images === "object") {
-      const imageArray = Object.values(images);
-      imageArray.forEach((image: any) => {
+      Object.values(images).forEach((image: any) => {
         formData.append("images", image);
       });
     } else {
@@ -116,23 +120,20 @@ const NewProductForm = ({
         content: "No Image Selected",
         success: false,
       });
+      return;
     }
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        `${baseUrl}/api/product/add-product`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${Cookies.get("authToken")}`,
-          },
-        }
-      );
+      await axios.post(`${baseUrl}/api/product/add-product`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setShowNotification({
         isShow: true,
-        content: "Product added  Successfully",
+        content: "Product added successfully",
         success: true,
       });
       setIsLoading(false);
@@ -153,289 +154,126 @@ const NewProductForm = ({
 
     try {
       setIsLoading(true);
-      const productData: any = {
-        seller_id: userData?.seller?._id || userData?._id,
-        productName: formik.values.productName,
-        productDescription: formik.values.productDescription,
-        productCategory: formik.values.productCategory?.value,
-        productImage: data?.productImage,
-        productPrice: formik.values.productPrice,
-        colores: formik.values.colores,
-        limitedCounts: formik.values.limitedCounts,
-      };
-
-      const response = await axios.put(
+      await axios.put(
         `${baseUrl}/api/product/product/${data?.productId}/${
           userData?.seller_id || userData?._id
         }`,
-        productData,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          seller_id: userData?._id,
+          productName: formik.values.productName,
+          productDescription: formik.values.productDescription,
+          productCategory: formik.values.productCategory?.value,
+          productImage: data?.productImage,
+          productPrice: formik.values.productPrice,
+          discount: formik.values.discount,
+          sizes: formik.values.sizes,
+          colors: formik.values.colors,
+          stockQuantity: formik.values.stockQuantity,
+          weight: formik.values.weight,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setIsLoading(false);
       setShowOverlay(false);
       dispatch(triggerRefresh());
       setShowNotification({
         isShow: true,
-        content: "Fields Updated Successfully",
+        content: "Product updated successfully",
         success: true,
       });
     } catch (err) {
-      setIsLoading(false);
       setShowNotification({
         isShow: true,
-        content: "Fields Updated Successfully",
-        success: true,
+        content: "Something went wrong",
+        success: false,
       });
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImages(e.target.files);
-  };
-
-  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    try {
-      const formData = new FormData();
-      formData.append("seller_id", userData._id);
-    } catch (error) {
-      console.log("Upload failed", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const notif = setTimeout(() => {
-      setShowNotification({
-        isShow: false,
-        content: "",
-        success: true,
-      });
-    }, 4000);
+    const notif = setTimeout(
+      () => setShowNotification({ isShow: false, content: "", success: true }),
+      4000
+    );
     return () => clearTimeout(notif);
   }, [showNotification]);
 
   return (
     <>
-      {showNotification.isShow && (
-        <Notification
-          isShow={showNotification.isShow}
-          content={showNotification.content}
-          success={showNotification.success}
-        />
-      )}
+      {showNotification.isShow && <Notification {...showNotification} />}
       <form className="space-y-4" onSubmit={formik.handleSubmit}>
-        <div className="flex flex-col items-center md:flex-row gap-x-10 gap-y-4 justify-center mt-10">
-          <div className=" flex flex-col gap-y-2">
-            <div className="relative flex items-start flex-col">
-              <input
-                type="text"
-                id="productName"
-                name="productName"
-                placeholder="e.g Locket"
-                className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                  formik.touched.productName && formik.errors.productName
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-                value={formik.values.productName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.productName && formik.errors.productName && (
-                <span className="text-red-500 text-[12px]">
-                  {formik.errors.productName}
-                </span>
-              )}
-            </div>
+        {productSubmitionStep === 1 ? (
+          <ProductBasicInfo formik={formik} />
+        ) : productSubmitionStep === 2 ? (
+          <ProductPriceInfo formik={formik} />
+        ) : (
+          <ProductMediaStep
+            images={images}
+            setImages={setImages}
+            data={data}
+            userData={userData}
+          />
+        )}
+        <div className="flex justify-between">
+          {/* Show Previous Button only when step > 1 */}
+          {productSubmitionStep > 1 && (
+            <Button
+              type="primary"
+              size="md"
+              text="Previous"
+              action="button"
+              clickHandler={() =>
+                setProductSubmitionStep(productSubmitionStep - 1)
+              }
+            />
+          )}
 
-            <div className="relative flex items-start flex-col">
-              <input
-                type="text"
-                id="productDescription"
-                name="productDescription"
-                placeholder="e.g The Best locket ever"
-                className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                  formik.touched.productDescription &&
-                  formik.errors.productDescription
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-                value={formik.values.productDescription}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.productDescription &&
-                formik.errors.productDescription && (
-                  <span className="text-red-500 text-[12px]">
-                    {formik.errors.productDescription}
-                  </span>
-                )}
-            </div>
+          {productSubmitionStep === 1 && (
+            <Button
+              type="primary"
+              size="md"
+              text="Cancel"
+              action="button"
+              clickHandler={() => setShowOverlay(false)}
+            />
+          )}
 
-            <div className="relative flex items-start flex-col">
-              <input
-                type="number"
-                id="productPrice"
-                name="productPrice"
-                placeholder="e.g 200"
-                className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                  formik.touched.productPrice && formik.errors.productPrice
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-                value={formik.values.productPrice}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.productPrice && formik.errors.productPrice && (
-                <span className="text-red-500 text-[12px]">
-                  {formik.errors.productPrice}
-                </span>
-              )}
-            </div>
-          </div>
+          {(productSubmitionStep === 1 || productSubmitionStep === 2) && (
+            <Button
+              type="secondary"
+              size="md"
+              text="Next"
+              action="button"
+              clickHandler={() =>
+                setProductSubmitionStep(productSubmitionStep + 1)
+              }
+            />
+          )}
 
-          <div className=" flex flex-col gap-y-2">
-            <div className="relative flex justify-start flex-col">
-              <Select
-                id="productCategory"
-                name="productCategory"
-                options={options}
-                value={formik.values.productCategory}
-                onChange={(option) => {
-                  formik.setFieldValue("productCategory", option);
-                }}
-                styles={{
-                  control: (baseStyles, state) => ({
-                    ...baseStyles,
-                    borderColor: state.isFocused ? "grey" : "black",
-
-                    height: "48px",
-                  }),
-                  option: (baseStyles, state) => ({
-                    ...baseStyles,
-                    backgroundColor: state.isSelected
-                      ? "black"
-                      : state.isFocused
-                      ? "#f0f0f0"
-                      : "",
-                    color: state.isSelected ? "white" : "inherit",
-                    cursor: "pointer",
-                  }),
-                  menuList: (baseStyles) => ({
-                    ...baseStyles,
-                    maxHeight: "150px",
-                    overflowY: "auto",
-                  }),
-                }}
-              />
-
-              {formik.errors.productCategory &&
-                formik.touched.productCategory && (
-                  <span className="text-red-500 text-[12px] float-left flex-none">
-                    {formik.errors.productCategory}
-                  </span>
-                )}
-            </div>
-            <div className="relative flex items-start flex-col">
-              <input
-                type="text"
-                id="colores"
-                name="colores"
-                placeholder="e.g blue, green"
-                className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                  formik.touched.colores && formik.errors.colores
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-                value={formik.values.colores}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.colores && formik.errors.colores && (
-                <span className="text-red-500 text-[12px]">
-                  {formik.errors.colores}
-                </span>
-              )}
-            </div>
-
-            <div className="relative flex items-start  flex-col">
-              <input
-                type="number"
-                id="limitedCounts"
-                name="limitedCounts"
-                placeholder="e.g 200"
-                className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                  formik.touched.limitedCounts && formik.errors.limitedCounts
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-                value={formik.values.limitedCounts}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.limitedCounts && formik.errors.limitedCounts && (
-                <span className="text-red-500 text-[12px]">
-                  {formik.errors.limitedCounts}
-                </span>
-              )}
-            </div>
-          </div>
+          {/* Step 3: Show Add Product or Update button */}
+          {productSubmitionStep === 3 && (
+            <Button
+              type={isLoading ? "disable" : "secondary"}
+              size="md"
+              text={
+                isLoading ? (
+                  <FontAwesomeIcon icon={faSpinner} spin />
+                ) : data ? (
+                  "Update"
+                ) : (
+                  "Add Product"
+                )
+              }
+              action="submit"
+              clickHandler={() => {
+                formik.handleSubmit();
+              }}
+            />
+          )}
         </div>
-
-        {data ? (
-          <div className="flex flex-row flex-wrap gap-x-4">
-            {data?.productImage?.map((img: any, idx: number) => (
-              <img
-                key={idx}
-                src={img.link}
-                alt="Product Image"
-                width={100}
-                height={100}
-                className="w-20 h-20 rounded object-cover"
-              />
-            ))}
-          </div>
-        ) : (
-          <FileInput
-            file={file}
-            setFile={setFile}
-            handleUpload={handleUpload}
-            handleFileChange={handleFileChange}
-            progress={progress}
-            multiple={true}
-            iconColor="black"
-            inputTitle="Your Product Images"
-          />
-        )}
-        {data ? (
-          <Button
-            type={isLoading ? "disable" : "secondary"}
-            size="md"
-            text={
-              isLoading ? <FontAwesomeIcon icon={faSpinner} spin /> : "Update"
-            }
-            action="submit"
-          />
-        ) : (
-          <Button
-            type={isLoading ? "disable" : "secondary"}
-            size="md"
-            text={
-              isLoading ? (
-                <FontAwesomeIcon icon={faSpinner} spin />
-              ) : (
-                "Add Product"
-              )
-            }
-            action="submit"
-          />
-        )}
       </form>
     </>
   );

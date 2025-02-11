@@ -135,7 +135,7 @@ const LeftSideProducts = ({
             </div>
           </div>
         </div>
-      ) : (
+      ) : data?.length > 0 ? (
         <div className="flex flex-col gap-4">
           {data?.map((p: any, i: number) => {
             return (
@@ -182,6 +182,8 @@ const LeftSideProducts = ({
             );
           })}
         </div>
+      ) : (
+        <h1 className="text-white text-2xl">There is no product to show</h1>
       )}
     </>
   );

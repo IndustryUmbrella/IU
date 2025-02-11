@@ -19,6 +19,7 @@ import Skeleton from "react-loading-skeleton";
 import NoUserInfoSkeleton from "./noUserInfoSkeleton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FaCamera } from "react-icons/fa6";
 
 const AccountTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
@@ -214,8 +215,19 @@ const AccountTab = () => {
         <SocialMediaInfoAccount formik={formik} userData={userData} />
 
         {userData?.companyLogo ? (
-          <div className="flex items-center justify-center">
-            <img src={userData?.companyLogo} className="w-64 h-64 rounded" />
+          <div className="relative flex items-center justify-center">
+            <img
+              src={userData?.companyLogo}
+              className="w-64 h-64 rounded mt-5"
+            />
+            <label className="absolute top-7 right-24 rounded-md cursor-pointer p-2 bg-white">
+              <FaCamera size={28} className="" color="black" />
+              <input
+                type="file"
+                className="hidden"
+                onChange={(e) => handleFileChange(e)}
+              />
+            </label>
           </div>
         ) : (
           <div className="my-10 text-center ">

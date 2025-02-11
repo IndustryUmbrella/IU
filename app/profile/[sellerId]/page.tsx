@@ -136,7 +136,7 @@ export default function SellerDashboard({
               <div
                 className="tab-content"
                 style={{
-                  minHeight: "200px", // Set a minimum height
+                  minHeight: "200px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",

@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Image1 from "../../public/images/image1.png";
-import Image from "next/image";
 import PopUp from "./popUp";
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { FaDeleteLeft, FaPencil, FaTrash } from "react-icons/fa6";
@@ -131,11 +129,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           </tr>
         </thead>
         <tbody>
-          {/* <tr>
-            {Array.from({length:3},(_,index) => {
-
-            })}
-          </tr> */}
           {data?.length == 0 || data == undefined
             ? Array.from({ length: 4 }, (_, idx) => {
                 return (
@@ -188,7 +181,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                   <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                     <div className="flex gap-x-2 items-center">
                       <img
-                        src={row?.productImage[0]?.link || Image1}
+                        src={row?.productImage[0]?.link || ""}
                         alt={`Product `}
                         className="w-[40px] h-[40px] object-center rounded-md"
                         width={40}
