@@ -8,6 +8,7 @@ import { validationSchema } from "@/helper/DashboardValidationScehma";
 import Overlay from "../general/overlay";
 import NewProductForm from "./newProductForm";
 import ProductList from "./productList";
+import { Tooltip } from "react-tooltip";
 
 const DashboardTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
@@ -61,13 +62,30 @@ const DashboardTab = () => {
       )}
       <div className="flex flex-row px-10 justify-between mb-10">
         <h1 className="text-3xl">Your product list</h1>
-        <Button
-          clickHandler={() => setShowOverlay(true)}
-          type="primary"
-          size="md"
-          text="+ Add Product"
-        />
+        <div
+          data-tooltip-id="my-tooltip"
+          data-tooltip-content="First Complete your profile!"
+        >
+          <Button
+            clickHandler={() => setShowOverlay(true)}
+            type={
+              // userData?.companyName &&
+              userData?.companyLogo &&
+              userData?.socialLinks &&
+              userData?.address
+                ? "primary"
+                : "disable"
+            }
+            size="md"
+            text="+ Add Product"
+          />
+
+          {userData?.socialLinks && !userData?.phone && !userData?.address && (
+            <Tooltip id="my-tooltip" />
+          )}
+        </div>
       </div>
+      <div></div>
       <ProductList />
     </div>
   );

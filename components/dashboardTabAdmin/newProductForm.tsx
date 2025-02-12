@@ -26,6 +26,7 @@ const NewProductForm = ({
   const userData = useSelector((state: RootState) => state.seller.user);
   const products = useSelector((state: RootState) => state.product.products);
 
+  const [imagesForRemove, setImagesForRemove] = useState<String[]>([]);
   const [productSubmitionStep, setProductSubmitionStep] = useState(1);
   const [images, setImages] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +35,15 @@ const NewProductForm = ({
     content: "",
     success: true,
   });
+  const options = [
+    { value: "living", label: "Home & living" },
+    { value: "jewerly", label: "Jewerly & Accessories" },
+    { value: "apperel", label: "Apperel and Wearbles" },
+    { value: "art", label: "Art & collections" },
+    { value: "gift", label: "Gift & Seasonable Items" },
+    { value: "beauty", label: "Beaaty & wellnes" },
+    { value: "crafts", label: "Crafts" },
+  ];
 
   const productSchema = Yup.object({
     productName: Yup.string().required("Product name is required"),
@@ -60,10 +70,10 @@ const NewProductForm = ({
       productImages: "",
       productPrice: "",
       discount: "",
-      sizes: "",
+      sizes: null,
       productCategory: null,
       subCategory: "",
-      colors: "",
+      colors: null,
       weight: 0,
       stockQuantity: "",
     },
@@ -83,12 +93,14 @@ const NewProductForm = ({
         productName: data.productName || "",
         productDescription: data.productDescription || "",
         productImages: data?.productImages || "",
-        productCategory: data?.productCategory || "",
+        productCategory:
+          options.find((option) => option.value === data?.productCategory) ||
+          null,
         subCategory: data?.subCategory || "",
         productPrice: data?.productPrice || "",
         discount: data?.discount || 0,
-        sizes: data?.sizes || "",
-        colors: data.colors?.[0] || "",
+        sizes: data?.sizes || null,
+        colors: data.colors?.[0] || null,
         stockQuantity: data.stockQuantity || 0,
         weight: data?.weight || 0,
       });
@@ -105,8 +117,8 @@ const NewProductForm = ({
     formData.append("subCategory", formik.values.subCategory);
     formData.append("productPrice", String(formik.values.productPrice || 0));
     formData.append("discount", String(formik.values.discount || 0));
-    formData.append("colors", JSON.stringify(formik.values.colors || []));
-    formData.append("sizes", JSON.stringify(formik.values.sizes || []));
+    formData.append("colors", JSON.stringify(formik.values.colors || null));
+    formData.append("sizes", JSON.stringify(formik.values.sizes || null));
     formData.append("stockQuantity", String(formik.values.stockQuantity || 0));
     formData.append("weight", String(formik.values.weight || 0));
 
@@ -154,6 +166,7 @@ const NewProductForm = ({
 
     try {
       setIsLoading(true);
+
       await axios.put(
         `${baseUrl}/api/product/product/${data?.productId}/${
           userData?.seller_id || userData?._id
@@ -163,7 +176,10 @@ const NewProductForm = ({
           productName: formik.values.productName,
           productDescription: formik.values.productDescription,
           productCategory: formik.values.productCategory?.value,
-          productImage: data?.productImage,
+          // productImage: data?.productImage,
+          productImage: data?.productImage.filter(
+            (img: any) => !imagesForRemove.includes(img.imageId)
+          ),
           productPrice: formik.values.productPrice,
           discount: formik.values.discount,
           sizes: formik.values.sizes,
@@ -182,10 +198,10 @@ const NewProductForm = ({
         content: "Product updated successfully",
         success: true,
       });
-    } catch (err) {
+    } catch (err: any) {
       setShowNotification({
         isShow: true,
-        content: "Something went wrong",
+        content: err?.message || "Something went wrong",
         success: false,
       });
     } finally {
@@ -211,6 +227,8 @@ const NewProductForm = ({
           <ProductPriceInfo formik={formik} />
         ) : (
           <ProductMediaStep
+            setImagesForRemove={setImagesForRemove}
+            imagesForRemove={imagesForRemove}
             images={images}
             setImages={setImages}
             data={data}
@@ -218,7 +236,6 @@ const NewProductForm = ({
           />
         )}
         <div className="flex justify-between">
-          {/* Show Previous Button only when step > 1 */}
           {productSubmitionStep > 1 && (
             <Button
               type="primary"

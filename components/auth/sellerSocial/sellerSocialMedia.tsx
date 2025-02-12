@@ -17,6 +17,7 @@ const SellerSocialMedia = ({ socialLinks }: { socialLinks: any }) => {
     Pinterest: <FaPinterest size={28} color={"white"} />,
     Website: <FaGlobe size={28} color={"white"} />,
   };
+  if (socialLinks?.companySocialMedia.length === 0) return;
 
   return (
     <div className="">

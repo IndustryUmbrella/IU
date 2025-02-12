@@ -56,12 +56,7 @@ const ConfirmationPrompt: React.FC<ConfirmationPromptProps> = ({
             text="Cancel"
             clickHandler={onClose}
           />
-          <Button
-            size="md"
-            type="secondary"
-            text="Yes"
-            clickHandler={onConfirm}
-          />
+          <Button size="md" type="danger" text="Yes" clickHandler={onConfirm} />
         </div>
       </div>
     </div>

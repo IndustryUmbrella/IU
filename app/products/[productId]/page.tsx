@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import ProductCartActions from "@/components/products/handleAddToCart";
 import ShareButton from "@/components/general/shareButton";
 import SellerSocialMedia from "@/components/auth/sellerSocial/sellerSocialMedia";
+import BackButton from "@/components/general/backButton";
 const getProduct = async (id?: any) => {
   if (!id) return null;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -68,6 +69,7 @@ const ProductDetails = async ({
 
   return (
     <div>
+      <BackButton />
       <div className="p-6 flex flex-col md:flex-row gap-10 w-full">
         {product?.productImage?.length > 0 && (
           <ProductCarousel

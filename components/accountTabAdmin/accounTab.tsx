@@ -79,6 +79,7 @@ const AccountTab = () => {
   };
 
   const updateSeller = async () => {
+    await formik.validateForm();
     if (Object.keys(formik.errors).length > 0) return;
 
     try {
@@ -96,36 +97,24 @@ const AccountTab = () => {
         formData.append("companyLogo", file);
       }
 
-      const socialLinks = [
-        formik.values.facebook && {
-          title: "Facebook",
-          link: formik.values.facebook,
-        },
-        formik.values.instagram && {
-          title: "Instagram",
-          link: formik.values.instagram,
-        },
-        formik.values.twitter && {
-          title: "Twitter",
-          link: formik.values.twitter,
-        },
-        formik.values.linkedin && {
-          title: "LinkedIn",
-          link: formik.values.linkedin,
-        },
-        formik.values.pinterest && {
-          title: "Pinterest",
-          link: formik.values.pinterest,
-        },
-        formik.values.website && {
-          title: "Website",
-          link: formik.values.website,
-        },
-      ].filter(Boolean);
+      const socialLinks = Object.entries(formik.values)
+        .filter(
+          ([key, value]) =>
+            [
+              "facebook",
+              "instagram",
+              "twitter",
+              "linkedin",
+              "pinterest",
+              "website",
+            ].includes(key) && value
+        )
+        .map(([key, value]) => ({
+          title: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize first letter
+          link: value as string,
+        }));
 
-      if (socialLinks.length > 0) {
-        formData.append("socialLinks", JSON.stringify(socialLinks));
-      }
+      formData.append("socialLinks", JSON.stringify(socialLinks));
 
       const response = await axios.put(
         `${baseUrl}/api/auth/seller/${userData?.seller?._id || userData?._id}`,
@@ -137,8 +126,8 @@ const AccountTab = () => {
           },
         }
       );
-      setIsLoading(false);
 
+      setIsLoading(false);
       setShowNotification({
         isShow: true,
         content: "Fields Updated Successfully",
@@ -146,7 +135,6 @@ const AccountTab = () => {
       });
     } catch (err) {
       setIsLoading(false);
-
       setShowNotification({
         isShow: true,
         content: "Update failed!",

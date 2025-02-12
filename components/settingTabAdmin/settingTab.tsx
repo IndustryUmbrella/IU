@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { login, setIsLogged } from "@/app/store/sellerSlice";
 import { setProducts } from "@/app/store/productSlice";
+import Button from "../general/button";
 
 const SettingTab = ({ userData }: { userData: any }) => {
   const token = Cookies.get("authToken");
@@ -26,38 +27,36 @@ const SettingTab = ({ userData }: { userData: any }) => {
   const handleDeleteAccount = async () => {
     if (inputValue === textToType) {
       try {
-        const deleteProduct = await axios.delete(
-          `${baseUrl}/api/product/delete-products/${userData?._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (deleteProduct?.data?.success) {
-          try {
-            const deleteAccount = await axios.delete(
-              `${baseUrl}/api/auth/seller/${userData?._id}`,
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setShowNotification({
-              isShow: true,
-              content: "Account Delete SuccessFully",
-              success: false,
-            });
-            Cookies.remove("authToken");
-            dispatch(login(null));
-            dispatch(setIsLogged(false));
-            dispatch(setProducts({}));
-            router.push("/login");
-            router.push("/login");
-          } catch (err) {
-            setShowNotification({
-              isShow: true,
-              content: "can't delete account right now, Please try again",
-              success: false,
-            });
-          }
+        try {
+          const deleteAccount = await axios.delete(
+            `${baseUrl}/api/auth/seller/${userData?._id}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setShowNotification({
+            isShow: true,
+            content: "Account Delete SuccessFully",
+            success: false,
+          });
+          Cookies.remove("authToken");
+          dispatch(login(null));
+          dispatch(setIsLogged(false));
+          dispatch(setProducts({}));
+          router.push("/login");
+          router.push("/login");
+          const deleteProduct = await axios.delete(
+            `${baseUrl}/api/product/delete-products/${userData?._id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        } catch (err) {
+          setShowNotification({
+            isShow: true,
+            content: "You haven't any product",
+            success: false,
+          });
         }
       } catch (err) {
         setShowNotification({
@@ -99,11 +98,11 @@ const SettingTab = ({ userData }: { userData: any }) => {
         >
           <div className="flex  flex-col ">
             <h1 className="text-2xl font-semibold">Delete Your Account</h1>
-            <p className="text-red-500 ">
-              By Deleting your account all <b>PRODUCTS</b> will be delete.
-            </p>
+            {/* <p className="text-red-500 ">
+              <b>PRODUCTS</b> will be delete.
+            </p> */}
 
-            <p>
+            <p className="text-sm mt-4">
               Type <b>{textToType} </b>
               to continue
             </p>
@@ -126,21 +125,22 @@ const SettingTab = ({ userData }: { userData: any }) => {
             type="checkbox"
             id="agree"
             className="w-5 h-5 accent-red-900 checked:accent-red-900 cursor-pointer"
-            checked={checkbox} // Controlled component
-            onChange={(e) => setCheckbox(e.target.checked)} // Updates state correctly
+            checked={checkbox}
+            onChange={(e) => setCheckbox(e.target.checked)}
           />
 
           <label htmlFor="agree">I agree to delete my account.</label>
         </div>
-        <button
-          disabled={!checkbox}
+
+        <Button
+          size="md"
+          type={checkbox ? "danger" : "disable"}
+          text="Delete My Account"
+          clickHandler={() => setShowPrompt(true)}
           className={` ${
             checkbox ? "bg-red-600" : "bg-red-400 cursor-not-allowed"
           } text-white p-3 rounded`}
-          onClick={() => setShowPrompt(true)}
-        >
-          Delete My account
-        </button>
+        />
       </div>
     </div>
   );

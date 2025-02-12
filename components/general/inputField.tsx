@@ -11,6 +11,7 @@ const InputField = ({
   handleBlur,
   touched,
   className,
+  disable,
 }: {
   id: string | any;
   name: string;
@@ -22,6 +23,7 @@ const InputField = ({
   handleBlur: any;
   touched: any;
   className?: any;
+  disable?: boolean | false;
 }) => {
   const [focused, setFocused] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -53,6 +55,7 @@ const InputField = ({
       </label>
 
       <input
+        disabled={disable}
         id={id}
         name={name}
         value={value}

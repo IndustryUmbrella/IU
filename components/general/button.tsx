@@ -7,7 +7,7 @@ const Button = ({
   clickHandler,
   action,
 }: {
-  type: "primary" | "secondary" | "disable";
+  type: "primary" | "secondary" | "disable" | "danger";
   text: any;
   size: "xs" | "sm" | "md" | "lg";
   className?: string;
@@ -38,6 +38,8 @@ const Button = ({
             ? "bg-primary text-white border border-white hover:bg-white hover:border-black hover:text-black transition-all duration-300"
             : type === "disable"
             ? "bg-gray-300 text-black border"
+            : type === "danger"
+            ? "bg-red-600 text-white border border-white hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-300"
             : "bg-primary text-white border border-white hover:bg-white hover:border-black hover:text-black transition-all duration-300"
         } ${className}`}
       >

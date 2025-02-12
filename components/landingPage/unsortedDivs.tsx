@@ -24,7 +24,7 @@ const UnsortedDivs = () => {
     <>
       <div className="w-full h-full max-w-[1000px] max-h-[510px] mt-10 relative hidden lg:block">
         <div
-          className="mockup border z-[1000]"
+          className="mockup border z-[1000] shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             position: "absolute",
             top: "0px",
@@ -37,7 +37,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             position: "absolute",
             top: "40px",
@@ -50,7 +50,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             position: "absolute",
             top: "120px",
@@ -63,7 +63,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             position: "absolute",
             top: "100px",
@@ -76,7 +76,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             position: "absolute",
             top: "200px",
@@ -89,7 +89,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             top: "100px",
             right: "120px",
@@ -101,7 +101,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             top: "300px",
             right: "120px",
@@ -113,7 +113,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             top: "100px",
             right: "120px",
@@ -124,7 +124,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             top: "200px",
             right: "10px",
@@ -136,7 +136,7 @@ const UnsortedDivs = () => {
           }}
         ></div>
         <div
-          className="mockup"
+          className="mockup shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{
             top: "250px",
             right: "220px",
