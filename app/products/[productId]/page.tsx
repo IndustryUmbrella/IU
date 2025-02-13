@@ -108,12 +108,23 @@ const ProductDetails = async ({
                   {product?.productDescription || ""}
                 </span>
               </p>
-              <p className="text-[14px] text-white">
-                Price:{" "}
-                <span className="font-bold text-xl">
-                  {product?.productPrice || ""}
-                </span>
-              </p>
+
+              <div className="flex flex-row gap-x-2 ">
+                <p className="text-[14px] text-white">
+                  <span className="font-bold text-xl line-through">
+                    {(
+                      (product?.productPrice * 100) /
+                      (100 - product?.discount)
+                    ).toFixed(2)}
+                    $
+                  </span>
+                </p>
+
+                <p className=" text-white">
+                  Price:
+                  <b>{product?.productPrice}$</b>
+                </p>
+              </div>
               <p className="text-[14px] text-white">
                 Category:{" "}
                 <span className="font-bold text-xl">
@@ -123,10 +134,23 @@ const ProductDetails = async ({
             </div>
             <ProductRating />
             <ProductCartActions product={product} />
+            <div className="mt-4">
+              <SellerSocialMedia socialLinks={seller} />
+            </div>
           </div>
-          <div className="flex flex-col  items-center justify-between my-10 gap-y-5  ">
+          <div className="flex flex-col  items-center justify-center my-10 gap-y-20  ">
             <ShareButton details={product} />
-            <SellerSocialMedia socialLinks={seller} />
+            <div>
+              <div className="text-white text-xl">
+                {product?.sizes.split(",").join(" ")}
+              </div>
+              <div className="text-white text-xl">
+                {product?.colors.split(",")?.map((s: any, i: any) => (
+                  <p key={i}>{s}</p>
+                ))}
+              </div>
+              <div className="text-white text-xl">{product?.weight}KG</div>
+            </div>
           </div>
         </div>
       </div>

@@ -49,12 +49,12 @@ const NewProductForm = ({
     productName: Yup.string().required("Product name is required"),
     productDescription: Yup.string().required("Description is required"),
     productPrice: Yup.number().required("Product price is required").min(1),
-    sizes: Yup.string(),
     productCategory: Yup.object().shape({
       value: Yup.string().required("Category selection is required"),
     }),
     discount: Yup.number().required("Discount is required"),
     subCategory: Yup.string().required("Subcategory is required"),
+    sizes: Yup.string(),
     colors: Yup.string(),
     stockQuantity: Yup.string().required("Limited count is required"),
     weight: Yup.number().required(),
@@ -70,10 +70,10 @@ const NewProductForm = ({
       productImages: "",
       productPrice: "",
       discount: "",
-      sizes: null,
+      sizes: "",
       productCategory: null,
       subCategory: "",
-      colors: null,
+      colors: "",
       weight: 0,
       stockQuantity: "",
     },
@@ -99,8 +99,8 @@ const NewProductForm = ({
         subCategory: data?.subCategory || "",
         productPrice: data?.productPrice || "",
         discount: data?.discount || 0,
-        sizes: data?.sizes || null,
-        colors: data.colors?.[0] || null,
+        sizes: data?.sizes || "",
+        colors: data.colors || "",
         stockQuantity: data.stockQuantity || 0,
         weight: data?.weight || 0,
       });
@@ -117,8 +117,8 @@ const NewProductForm = ({
     formData.append("subCategory", formik.values.subCategory);
     formData.append("productPrice", String(formik.values.productPrice || 0));
     formData.append("discount", String(formik.values.discount || 0));
-    formData.append("colors", JSON.stringify(formik.values.colors || null));
-    formData.append("sizes", JSON.stringify(formik.values.sizes || null));
+    formData.append("colors", formik.values.colors || "");
+    formData.append("sizes", formik.values.sizes || "");
     formData.append("stockQuantity", String(formik.values.stockQuantity || 0));
     formData.append("weight", String(formik.values.weight || 0));
 
@@ -164,6 +164,25 @@ const NewProductForm = ({
   const updateProduct = async () => {
     if (Object.keys(formik.errors).length > 0) return;
 
+    const formData = new FormData();
+
+    formData.append("seller_id", userData?._id);
+    formData.append("productName", formik.values.productName);
+    formData.append("productDescription", formik.values.productDescription);
+    formData.append("productCategory", formik.values.productCategory?.value);
+    formData.append("productPrice", formik.values.productPrice);
+    formData.append("discount", formik.values.discount);
+    formData.append("sizes", formik.values.sizes);
+    formData.append("colors", formik.values.colors);
+    formData.append("stockQuantity", formik.values.stockQuantity);
+    formData.append("weight", formik.values.weight);
+
+    if (images && typeof images === "object") {
+      Object.values(images).forEach((image: any) => {
+        formData.append("images", image);
+      });
+    }
+
     try {
       setIsLoading(true);
 
@@ -171,26 +190,15 @@ const NewProductForm = ({
         `${baseUrl}/api/product/product/${data?.productId}/${
           userData?.seller_id || userData?._id
         }`,
+        formData,
         {
-          seller_id: userData?._id,
-          productName: formik.values.productName,
-          productDescription: formik.values.productDescription,
-          productCategory: formik.values.productCategory?.value,
-          // productImage: data?.productImage,
-          productImage: data?.productImage.filter(
-            (img: any) => !imagesForRemove.includes(img.imageId)
-          ),
-          productPrice: formik.values.productPrice,
-          discount: formik.values.discount,
-          sizes: formik.values.sizes,
-          colors: formik.values.colors,
-          stockQuantity: formik.values.stockQuantity,
-          weight: formik.values.weight,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
+
       setShowOverlay(false);
       dispatch(triggerRefresh());
       setShowNotification({

@@ -28,6 +28,7 @@ const RegisterForm = () => {
       .required("Confirm Password is required"),
   });
 
+  const [passwordField, setPasswordField] = useState(false);
   const [isVerfied, setIsVerfied] = useState<any>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
@@ -289,21 +290,23 @@ const RegisterForm = () => {
               )}
             </div>
 
-            <div className="flex flex-col">
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter Your Password"
-                className={`w-[260px] md:w-64 h-12 border rounded px-2 text-sm ${
-                  formik.touched.password && formik.errors.password
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
+            <div className="flex flex-col relative">
+              <div>
+                <input
+                  type={passwordField ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  placeholder="Enter Your Password"
+                  className={`w-[260px] md:w-64 h-12 border rounded px-2 text-sm ${
+                    formik.touched.password && formik.errors.password
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </div>
               {formik.touched.password && formik.errors.password && (
                 <span className="text-red-500 text-[12px]">
                   {formik.errors.password}
@@ -313,7 +316,7 @@ const RegisterForm = () => {
 
             <div className="flex flex-col">
               <input
-                type="password"
+                type={passwordField ? "text" : "password"}
                 id="confirmPassword"
                 name="confirmPassword"
                 placeholder="Confirm Your Password"
@@ -333,6 +336,21 @@ const RegisterForm = () => {
                     {formik.errors.confirmPassword}
                   </span>
                 )}
+              <div className="flex items-center mt-2 gap-x-1">
+                <input
+                  type="checkbox"
+                  id="passwordField"
+                  checked={passwordField}
+                  onChange={(e) => setPasswordField(e.target.checked)}
+                  className="w-4 h-4 accent-white checked:accent-white cursor-pointer"
+                />
+                <label
+                  htmlFor="passwordField"
+                  className="text-white text-xs select-none"
+                >
+                  Show Password
+                </label>
+              </div>
             </div>
             <p className="text-white">
               Already Have an account?{" "}

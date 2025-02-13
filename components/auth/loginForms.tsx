@@ -23,6 +23,7 @@ const RegisterForm = () => {
     success: false,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordField, setPasswordField] = useState(false);
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email format")
@@ -124,7 +125,7 @@ const RegisterForm = () => {
 
             <div className="flex flex-col">
               <input
-                type="password"
+                type={passwordField ? "text" : "password"}
                 id="password"
                 name="password"
                 placeholder="Enter Your Password"
@@ -142,6 +143,23 @@ const RegisterForm = () => {
                   {formik.errors.password}
                 </span>
               )}
+            </div>
+            <div>
+              <div className="flex items-center mt-2 gap-x-1">
+                <input
+                  type="checkbox"
+                  id="passwordField"
+                  checked={passwordField}
+                  onChange={(e) => setPasswordField(e.target.checked)}
+                  className="w-4 h-4 accent-white checked:accent-white cursor-pointer"
+                />
+                <label
+                  htmlFor="passwordField"
+                  className="text-white text-xs select-none"
+                >
+                  Show Password
+                </label>
+              </div>
             </div>
 
             <div>

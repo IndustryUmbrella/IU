@@ -14,6 +14,7 @@ import { setProducts } from "@/app/store/productSlice";
 import Button from "../general/button";
 import Cart from "../general/cartPage";
 import { FaBagShopping, FaCartShopping } from "react-icons/fa6";
+import ConfirmationPrompt from "../general/confirmationPrompt";
 
 const AuthOptions = () => {
   const pathname = usePathname();
@@ -24,7 +25,7 @@ const AuthOptions = () => {
   const isLogged = useSelector((state: RootState) => state.seller.isLogged);
   const userData = useSelector((state: RootState) => state.seller.user);
   const cartItem = useSelector((state: RootState) => state.cart.items);
-  // const cart_length = useSelector((state: RootState) => state.cart.cartsLength);
+  const [showConfirmationPrompt, setShowConfirmationPrompt] = useState(false);
 
   const [showNotification, setShowNotification] = useState({
     isShow: false,
@@ -46,6 +47,7 @@ const AuthOptions = () => {
       dispatch(login(null));
       dispatch(setIsLogged(false));
       dispatch(setProducts({}));
+      setShowConfirmationPrompt(false);
       route.push("/login");
     } catch (err) {
       setShowNotification({
@@ -90,6 +92,15 @@ const AuthOptions = () => {
 
   return (
     <>
+      {ConfirmationPrompt && (
+        <ConfirmationPrompt
+          isOpen={showConfirmationPrompt}
+          onClose={() => setShowConfirmationPrompt(false)}
+          onConfirm={logoutUser}
+        >
+          Do You want to logout your accout?
+        </ConfirmationPrompt>
+      )}
       {showNotification?.isShow && (
         <Notification
           content={showNotification.content}
@@ -176,7 +187,7 @@ const AuthOptions = () => {
                       <p className="">Logout</p>
                     </div>
                   ),
-                  action: logoutUser,
+                  action: () => setShowConfirmationPrompt(true),
                 },
               ]}
               closePopUp={() => setPopUpOpen(false)}

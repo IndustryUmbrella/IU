@@ -41,7 +41,7 @@ const Landing = () => {
     } else {
       setIsLoading(false);
     }
-  }, [products]);
+  }, [dispatch]);
 
   return (
     <div className="px-[6px] sm:px-mobile md:px-tablet lg:px-desktop  overflow-x-hidden">

@@ -5,6 +5,7 @@ import Button from "../general/button";
 import { useDispatch, useSelector } from "react-redux";
 import { setBuyerData } from "@/app/store/buyerSlice";
 import { RootState } from "@/app/store/store";
+import InputField from "../general/inputField";
 
 const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
   const dispatch = useDispatch();
@@ -76,202 +77,133 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-y-3">
-        <div className="relative flex flex-col">
-          <input
-            type="email"
+      <div className="flex flex-col gap-y-3 items-center sm:items-start justify-center sm:justify-start">
+        <div className="relative flex flex-col ">
+          <InputField
+            type="text"
             id="email"
             name="email"
-            placeholder="e.g example@gmail.com"
-            className={`w-[260px] md:w-full  h-12 border rounded px-2 text-sm ${
-              formik.touched.email && formik.errors.email
-                ? "border-red-500"
-                : "border-gray-300"
-            } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-            value={formik.values.email}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            handleBlur={formik.handleBlur}
+            value={formik.values.email}
+            labelText=" Email"
+            error={formik.errors.email}
+            touched={formik.touched.email}
+            className="w-[530px]"
           />
-          {formik.touched.email && formik.errors.email && (
-            <span className="text-red-500 text-[12px]">
-              {formik.errors.email}
-            </span>
-          )}
         </div>
-        <div className="flex flex-row gap-x-2">
-          <div className="relative flex flex-col">
-            <input
-              type="firstname"
+        <div className="flex flex-col sm:flex-row gap-x-2">
+          <div className="relative flex flex-col ">
+            <InputField
+              type="text"
               id="firstname"
               name="firstname"
-              placeholder="e.g John"
-              className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                formik.touched.firstname && formik.errors.firstname
-                  ? "border-red-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
+              onChange={formik.handleChange}
+              handleBlur={formik.handleBlur}
               value={formik.values.firstname}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              labelText=" firstname"
+              error={formik.errors.firstname}
+              touched={formik.touched.firstname}
             />
-            {formik.touched.firstname && formik.errors.firstname && (
-              <span className="text-red-500 text-[12px]">
-                {formik.errors.firstname}
-              </span>
-            )}
           </div>
-          <div className="relative flex flex-col">
-            <input
-              type="lastname"
-              id="lastname"
+          <div className="relative flex flex-col ">
+            <InputField
+              type="text"
+              id="emalastnameil"
               name="lastname"
-              placeholder="e.g Doe"
-              className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                formik.touched.lastname && formik.errors.lastname
-                  ? "border-red-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-              value={formik.values.lastname}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              handleBlur={formik.handleBlur}
+              value={formik.values.lastname}
+              labelText=" lastname"
+              error={formik.errors.lastname}
+              touched={formik.touched.lastname}
             />
-            {formik.touched.lastname && formik.errors.lastname && (
-              <span className="text-red-500 text-[12px]">
-                {formik.errors.lastname}
-              </span>
-            )}
           </div>
         </div>
 
-        <div className="relative flex flex-col">
-          <input
-            type="phone"
+        <div className="relative flex flex-col ">
+          <InputField
+            type="text"
             id="phone"
             name="phone"
-            placeholder="+12345678"
-            className={`w-[260px] md:w-full  h-12 border rounded px-2 text-sm ${
-              formik.touched.phone && formik.errors.phone
-                ? "border-red-500"
-                : "border-gray-300"
-            } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-            value={formik.values.phone}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            handleBlur={formik.handleBlur}
+            value={formik.values.phone}
+            labelText=" phone"
+            error={formik.errors.phone}
+            touched={formik.touched.phone}
+            className="w-[530px]"
           />
-          {formik.touched.phone && formik.errors.phone && (
-            <span className="text-red-500 text-[12px]">
-              {formik.errors.phone}
-            </span>
-          )}
         </div>
-        <div className="flex flex-row gap-x-2">
-          <div className="relative flex flex-col">
-            <input
-              type="region"
+        <div className="flex flex-col sm:flex-row gap-x-2">
+          <div className="relative flex flex-col ">
+            <InputField
+              type="text"
               id="region"
               name="region"
-              placeholder="e.g USA"
-              className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                formik.touched.region && formik.errors.region
-                  ? "border-red-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
+              onChange={formik.handleChange}
+              handleBlur={formik.handleBlur}
               value={formik.values.region}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              labelText=" region"
+              error={formik.errors.region}
+              touched={formik.touched.region}
             />
-            {formik.touched.region && formik.errors.region && (
-              <span className="text-red-500 text-[12px]">
-                {formik.errors.region}
-              </span>
-            )}
           </div>
-          <div className="relative flex flex-col">
-            <input
-              type="city"
-              id="city"
+          <div className="relative flex flex-col ">
+            <InputField
+              type="text"
+              id="cit"
               name="city"
-              placeholder="Texas"
-              className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                formik.touched.city && formik.errors.city
-                  ? "border-red-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-              value={formik.values.city}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              handleBlur={formik.handleBlur}
+              value={formik.values.city}
+              labelText=" city"
+              error={formik.errors.city}
+              touched={formik.touched.city}
             />
-            {formik.touched.city && formik.errors.city && (
-              <span className="text-red-500 text-[12px]">
-                {formik.errors.city}
-              </span>
-            )}
           </div>
         </div>
 
-        <div className="relative flex flex-col">
-          <input
-            type="address"
+        <div className="relative flex flex-col ">
+          <InputField
+            type="text"
             id="address"
             name="address"
-            placeholder="address"
-            className={`w-full  h-12 border rounded px-2 text-sm ${
-              formik.touched.address && formik.errors.address
-                ? "border-red-500"
-                : "border-gray-300"
-            } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-            value={formik.values.address}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            handleBlur={formik.handleBlur}
+            value={formik.values.address}
+            labelText=" address"
+            error={formik.errors.address}
+            touched={formik.touched.address}
+            className="w-[530px]"
           />
-          {formik.touched.address && formik.errors.address && (
-            <span className="text-red-500 text-[12px]">
-              {formik.errors.address}
-            </span>
-          )}
         </div>
-        <div className="flex flex-row gap-x-2">
-          <div className="relative flex flex-col">
-            <input
-              type="state"
+        <div className="flex flex-col sm:flex-row gap-x-2">
+          <div className="relative flex flex-col ">
+            <InputField
+              type="text"
               id="state"
               name="state"
-              placeholder="e.g California"
-              className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                formik.touched.state && formik.errors.state
-                  ? "border-red-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-              value={formik.values.state}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              handleBlur={formik.handleBlur}
+              value={formik.values.state}
+              labelText=" state"
+              error={formik.errors.state}
+              touched={formik.touched.state}
             />
-            {formik.touched.state && formik.errors.state && (
-              <span className="text-red-500 text-[12px]">
-                {formik.errors.state}
-              </span>
-            )}
           </div>
-          <div className="relative flex flex-col">
-            <input
-              type="zipcode"
+          <div className="relative flex flex-col ">
+            <InputField
+              type="text"
               id="zipcode"
               name="zipcode"
-              placeholder="76115"
-              className={`w-[260px] md:w-64  h-12 border rounded px-2 text-sm ${
-                formik.touched.city && formik.errors.zipcode
-                  ? "border-red-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-[#090909]`}
-              value={formik.values.zipcode}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              handleBlur={formik.handleBlur}
+              value={formik.values.zipcode}
+              labelText=" zipcode"
+              error={formik.errors.zipcode}
+              touched={formik.touched.zipcode}
             />
-            {formik.touched.zipcode && formik.errors.zipcode && (
-              <span className="text-red-500 text-[12px]">
-                {formik.errors.zipcode}
-              </span>
-            )}
           </div>
         </div>
         <Button

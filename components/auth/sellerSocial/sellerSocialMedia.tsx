@@ -10,12 +10,48 @@ import {
 
 const SellerSocialMedia = ({ socialLinks }: { socialLinks: any }) => {
   const iconMap: any = {
-    Facebook: <FaFacebook size={28} color={"white"} />,
-    Instagram: <FaInstagram size={28} color={"white"} />,
-    Twitter: <FaTwitter size={28} color={"white"} />,
-    LinkedIn: <FaLinkedin size={28} color={"white"} />,
-    Pinterest: <FaPinterest size={28} color={"white"} />,
-    Website: <FaGlobe size={28} color={"white"} />,
+    Facebook: (
+      <FaFacebook
+        className="scale-1 transition-all duration-200 hover:scale-[1.2]"
+        size={28}
+        color={"white"}
+      />
+    ),
+    Instagram: (
+      <FaInstagram
+        className="scale-1 transition-all duration-200 hover:scale-[1.2]"
+        size={28}
+        color={"white"}
+      />
+    ),
+    Twitter: (
+      <FaTwitter
+        className="scale-1 transition-all duration-200 hover:scale-[1.2]"
+        size={28}
+        color={"white"}
+      />
+    ),
+    Linkedin: (
+      <FaLinkedin
+        className="scale-1 transition-all duration-200 hover:scale-[1.2]"
+        size={28}
+        color={"white"}
+      />
+    ),
+    Pinterest: (
+      <FaPinterest
+        className="scale-1 transition-all duration-200 hover:scale-[1.2]"
+        size={28}
+        color={"white"}
+      />
+    ),
+    Website: (
+      <FaGlobe
+        className="scale-1 transition-all duration-200 hover:scale-[1.2]"
+        size={28}
+        color={"white"}
+      />
+    ),
   };
   if (socialLinks?.companySocialMedia.length === 0) return;
 
@@ -31,7 +67,11 @@ const SellerSocialMedia = ({ socialLinks }: { socialLinks: any }) => {
               <div key={idx} className="">
                 <a href={social?.link} target="_blank">
                   {iconMap[social?.title] || (
-                    <FaGlobe size={28} color="white" />
+                    <FaGlobe
+                      size={28}
+                      color="white"
+                      className="scale-1 transition-all duration-200 hover:scale-[1.2]"
+                    />
                   )}
                 </a>
               </div>

@@ -23,7 +23,7 @@ import { FaCamera } from "react-icons/fa6";
 
 const AccountTab = () => {
   let userData = useSelector((state: RootState) => state.seller.user);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<any>(null);
   const [images, setImages] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -228,6 +228,9 @@ const AccountTab = () => {
               />
             ) : (
               <FileInput
+                style="styled"
+                iconColor=""
+                multiple={false}
                 file={file}
                 setFile={setFile}
                 handleUpload={handleUpload}

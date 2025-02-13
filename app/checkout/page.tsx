@@ -57,7 +57,7 @@ const Checkout = () => {
 
   return (
     <div className="px-[6px] lg:px-desktop md:px-tablet sm:px-mobile mt-10 ">
-      <div className="flex flex-col-reverse sm:flex-row gap-x-5 justify-between">
+      <div className="flex flex-col-reverse lg:flex-row gap-x-5 justify-between">
         <div className="space-y-5">
           <div className=" hidden sm:flex  sm:flex-row gap-x-2">
             <div

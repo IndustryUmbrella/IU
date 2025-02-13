@@ -43,7 +43,6 @@ const ProductPriceInfo = ({ formik }: { formik: any }) => {
           onChange={formik.handleChange}
           touched={formik.touched.sizes}
           handleBlur={formik.handleBlur}
-          className="-mt-3"
         />
 
         <InputField
@@ -57,7 +56,6 @@ const ProductPriceInfo = ({ formik }: { formik: any }) => {
           onChange={formik.handleChange}
           touched={formik.touched.colors}
           handleBlur={formik.handleBlur}
-          className="-mt-3"
         />
       </div>
       <div className="relative flex flex-col gap-y-4 sm:flex-row gap-x-4 items-start ">
