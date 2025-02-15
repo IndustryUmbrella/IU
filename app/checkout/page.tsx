@@ -40,7 +40,7 @@ const Checkout = () => {
 
   if (!isClient || cartItem?.length == 0) {
     return (
-      <div className="flex flex-col gap-x-10 items-center justify-center">
+      <div className="flex flex-col gap-x-10 items-center justify-center overflow-x-hidden">
         <EmptyCartMockup />
         <h1 className="text-center text-white text-3xl mt-4">
           You haven't any cart to buy something
@@ -57,9 +57,9 @@ const Checkout = () => {
 
   return (
     <div className="px-[6px] lg:px-desktop md:px-tablet sm:px-mobile mt-10 ">
-      <div className="flex flex-col-reverse lg:flex-row gap-x-5 justify-between">
+      <div className="flex flex-col-reverse md:flex-row gap-x-5 justify-between">
         <div className="space-y-5">
-          <div className=" hidden sm:flex  sm:flex-row gap-x-2">
+          <div className=" hidden md:flex  md:flex-row gap-x-2">
             <div
               className={`w-full  rounded-md transition-all duration-200 ${
                 shipStep == 1 ? "h-1.5" : "h-1"
@@ -83,24 +83,26 @@ const Checkout = () => {
               ></div>
             </div>
           </div>
-          {shipStep === 1 ? (
-            <>
-              <ShippingDataForm setShipState={setShipStep} />
-            </>
-          ) : (
-            <div className="w-[400px] max-w-[400px]">
-              <Elements stripe={stripePromise}>
-                <PaymentDetails setShipStep={setShipStep} />
-              </Elements>
-            </div>
-          )}
+          <div className="flex items-center justify-center w-full">
+            {shipStep === 1 ? (
+              <>
+                <ShippingDataForm setShipState={setShipStep} />
+              </>
+            ) : (
+              <div className="w-full max-w-[300px]">
+                <Elements stripe={stripePromise}>
+                  <PaymentDetails setShipStep={setShipStep} />
+                </Elements>
+              </div>
+            )}
+          </div>
         </div>
-        <div>
+        <div className="">
           {cartItem?.map((item, idx) => {
             return (
               <div
                 key={item?.id}
-                className="flex flex-row items-center border-b border-b-white text-white w-full gap-x-7 gap-y-6"
+                className="flex flex-row items-center justify-between border-b border-b-white px-6 text-white w-full gap-x-7 gap-y-6"
               >
                 <div className="flex flex-col gap-2">
                   <img

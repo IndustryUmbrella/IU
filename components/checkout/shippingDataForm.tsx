@@ -77,8 +77,8 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-y-3 items-center sm:items-start justify-center sm:justify-start">
-        <div className="relative flex flex-col ">
+      <div className=" flex flex-col gap-y-3 items-center  sm:items-start justify-center sm:justify-start">
+        <div className="relative flex flex-col justify-center :items-center md:justify-center  w-full">
           <InputField
             type="text"
             id="email"
@@ -89,10 +89,10 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
             labelText=" Email"
             error={formik.errors.email}
             touched={formik.touched.email}
-            className="w-[530px]"
+            className=" w-[530px]  max-w-[260px] sm:max-w-[530px]"
           />
         </div>
-        <div className="flex flex-col sm:flex-row gap-x-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center  gap-x-2">
           <div className="relative flex flex-col ">
             <InputField
               type="text"
@@ -109,7 +109,7 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
           <div className="relative flex flex-col ">
             <InputField
               type="text"
-              id="emalastnameil"
+              id="lastname"
               name="lastname"
               onChange={formik.handleChange}
               handleBlur={formik.handleBlur}
@@ -121,7 +121,7 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
           </div>
         </div>
 
-        <div className="relative flex flex-col ">
+        <div className="relative flex flex-col w-full ">
           <InputField
             type="text"
             id="phone"
@@ -132,7 +132,7 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
             labelText=" phone"
             error={formik.errors.phone}
             touched={formik.touched.phone}
-            className="w-[530px]"
+            className=" w-full max-w-[260px] sm:max-w-[530px]"
           />
         </div>
         <div className="flex flex-col sm:flex-row gap-x-2">
@@ -164,7 +164,7 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
           </div>
         </div>
 
-        <div className="relative flex flex-col ">
+        <div className="relative flex flex-col w-full">
           <InputField
             type="text"
             id="address"
@@ -175,7 +175,7 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
             labelText=" address"
             error={formik.errors.address}
             touched={formik.touched.address}
-            className="w-[530px]"
+            className=" w-full max-w-[260px] sm:max-w-[530px]"
           />
         </div>
         <div className="flex flex-col sm:flex-row gap-x-2">

@@ -27,37 +27,28 @@ const SettingTab = ({ userData }: { userData: any }) => {
   const handleDeleteAccount = async () => {
     if (inputValue === textToType) {
       try {
-        try {
-          const deleteAccount = await axios.delete(
-            `${baseUrl}/api/auth/seller/${userData?._id}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          setShowNotification({
-            isShow: true,
-            content: "Account Delete SuccessFully",
-            success: false,
-          });
-          Cookies.remove("authToken");
-          dispatch(login(null));
-          dispatch(setIsLogged(false));
-          dispatch(setProducts({}));
-          router.push("/login");
-          router.push("/login");
-          const deleteProduct = await axios.delete(
-            `${baseUrl}/api/product/delete-products/${userData?._id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-        } catch (err) {
-          setShowNotification({
-            isShow: true,
-            content: "You haven't any product",
-            success: false,
-          });
-        }
+        const deleteAccount = await axios.delete(
+          `${baseUrl}/api/auth/seller/delete-account/`,
+
+          {
+            data: {
+              id: userData?._id,
+              email: userData?.email,
+            },
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setShowNotification({
+          isShow: true,
+          content: "Account Delete SuccessFully",
+          success: false,
+        });
+        Cookies.remove("authToken");
+        dispatch(login(null));
+        dispatch(setIsLogged(false));
+        dispatch(setProducts({}));
+        router.push("/login");
+        router.push("/login");
       } catch (err) {
         setShowNotification({
           isShow: true,

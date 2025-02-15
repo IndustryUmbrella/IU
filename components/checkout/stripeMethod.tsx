@@ -12,7 +12,7 @@ import { useFormik } from "formik";
 import { RootState } from "@/app/store/store";
 import { useSelector } from "react-redux";
 
-export default function PaymentForm() {
+export default function StripeMethod() {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -81,14 +81,14 @@ export default function PaymentForm() {
 
   return (
     <form
-      className="p-4 border rounded flex flex-col gap-4 w-full"
+      className="p-4 border rounded flex flex-col gap-4  overflow-x-hidden mt-4 "
       onSubmit={handleSubmit}
     >
       <div className="w-full text-white">
         <label htmlFor="card-number">Card Number</label>
         <CardNumberElement
           id="card-number"
-          className="p-3 border rounded bg-white w-full h-12 mb-4 text-[#fff]"
+          className="p-3 border rounded bg-white w-full  h-12 mb-4 text-[#fff]"
           onChange={formik.handleChange}
         />
       </div>
@@ -96,17 +96,17 @@ export default function PaymentForm() {
         <label htmlFor="expiry-date">Expiry Date</label>
         <CardExpiryElement
           id="expiry-date"
-          className="p-3 border rounded bg-white w-full h-12 mb-4"
+          className="p-3 border rounded bg-white w-full h-12 mb-4 "
           onChange={formik.handleChange}
         />
       </div>
       <div className="w-full ">
-        <label htmlFor="cvv" className="text-white">
+        <label htmlFor="cvv" className="text-white ">
           CVV
         </label>
         <CardCvcElement
           id="cvv"
-          className="p-3 border  rounded bg-white h-12 w-full mb-4"
+          className="p-3 border  rounded bg-white h-12 w-full mb-4 "
           onChange={formik.handleChange}
         />
       </div>

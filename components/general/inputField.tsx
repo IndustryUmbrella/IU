@@ -36,11 +36,7 @@ const InputField = ({
   };
 
   return (
-    <div
-      className={`relative  ${
-        error ? "mb-1" : "mb-2"
-      } flex flex-col items-start `}
-    >
+    <div className={`relative   ${error ? "mb-1" : "mb-2"} flex flex-col  `}>
       <label
         htmlFor={id}
         className={`absolute left-2 text-gray-400 transition-all duration-100 text-sm ${
@@ -63,11 +59,10 @@ const InputField = ({
         onChange={onChange}
         onFocus={handleFocus}
         onBlur={handleBlur2}
-        className={`w-[260px]  h-12 border rounded px-2 text-sm pt-0.5  ${
-          touched && error ? "border-red-500" : "border-gray-300"
-        } focus:outline-none focus:ring-2 focus:ring-[#090909] ${
-          className || "max-w-[300px]"
-        }`}
+        className={`h-12 border rounded px-2 text-sm pt-0.5 
+    ${touched && error ? "border-red-500" : "border-gray-300"} 
+    focus:outline-none focus:ring-2 focus:ring-[#090909] 
+    ${className ? className : "w-[260px] max-w-[300px]"}`}
       />
 
       {error && touched && (
