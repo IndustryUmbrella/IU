@@ -152,7 +152,7 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
           <div className="relative flex flex-col ">
             <InputField
               type="text"
-              id="cit"
+              id="city"
               name="city"
               onChange={formik.handleChange}
               handleBlur={formik.handleBlur}

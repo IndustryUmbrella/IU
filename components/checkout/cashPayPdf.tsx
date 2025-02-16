@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
@@ -36,7 +36,7 @@ const CashPayPdf = ({ data }: { data: any }) => {
         <View style={styles.section}>
           <Text style={styles.heading}>Cash Payment Order</Text>
           <Text style={styles.text}>
-            Dear {data?.buyer.firstName} {data?.buyer.lastnae},
+            Dear {data?.buyer.firstname} {data?.buyer.lastname},
           </Text>
           <Text style={styles.text}>
             Industry Umbrella, along with other companies, supports in-person

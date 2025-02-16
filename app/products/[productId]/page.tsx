@@ -133,7 +133,7 @@ const ProductDetails = async ({
               </p>
             </div>
             <ProductRating />
-            <ProductCartActions product={product} />
+            <ProductCartActions product={product} userData={seller} />
             <div className="mt-4">
               <SellerSocialMedia socialLinks={seller} />
             </div>
@@ -154,7 +154,11 @@ const ProductDetails = async ({
           </div>
         </div>
       </div>
-      <ProductsCards showLoadMore={false} category={product?.productCategory} />
+      <ProductsCards
+        showLoadMore={false}
+        userData={seller}
+        category={product?.productCategory}
+      />
     </div>
   );
 };

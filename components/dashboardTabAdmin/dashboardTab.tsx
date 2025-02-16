@@ -60,8 +60,8 @@ const DashboardTab = () => {
           </>
         </Overlay>
       )}
-      <div className="flex flex-row px-10 justify-between mb-10">
-        <h1 className="text-3xl">Your product list</h1>
+      <div className="flex flex-row px-2  sm:px-10  justify-between mb-10">
+        <h1 className="text-xl sm:text-3xl">Your product list</h1>
         <div
           data-tooltip-id="my-tooltip"
           data-tooltip-content="First Complete your profile!"

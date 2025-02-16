@@ -31,14 +31,17 @@ interface Product {
   productDescription: string;
   productPrice: number;
   productImage: { link: string }[];
-
+  seller_id: string;
+  companyName: string;
   productCategory: string;
 }
 
 const ProductsCards = ({
   category,
   showLoadMore,
+  userData,
 }: {
+  userData: any;
   category: any;
   showLoadMore: Boolean;
 }) => {
@@ -99,6 +102,8 @@ const ProductsCards = ({
         productImage: product?.productImage[0]?.link,
         description: product?.productDescription,
         category: product?.productCategory || "",
+        seller_id: product?.seller_id,
+        companyName: userData?.companyName,
       })
     );
   };
@@ -196,14 +201,12 @@ const ProductsCards = ({
                         Price {product?.productPrice}$
                       </p>
                     </div>
-                    <div
-                      className="flex flex-col gap-y-5"
-                      onClick={() => handleAddToCart(product)}
-                    >
+                    <div className="flex flex-col gap-y-5">
                       <FaCartShopping
                         color="white"
                         size={22}
                         className="cursor-pointer"
+                        onClick={() => handleAddToCart(product)}
                       />
                       <Link
                         href={`/products/${product?.productId}`}

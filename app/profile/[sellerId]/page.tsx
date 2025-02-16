@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import NotFound from "@/app/not-found";
 import DashboardTab from "@/components/dashboardTabAdmin/dashboardTab";
 import SettingTab from "@/components/settingTabAdmin/settingTab";
+import OrderTab from "@/components/orderTabAdmin/orderTab";
 
 export default function SellerDashboard({
   params: paramsPromise,
@@ -91,7 +92,8 @@ export default function SellerDashboard({
       {sellerId &&
       (activeTab == "dashboard" ||
         activeTab == "account" ||
-        activeTab == "settings") ? (
+        activeTab == "settings" ||
+        activeTab == "orders") ? (
         <div>
           <h1 className="my-10">
             Welcome to your <b>{userData?.companyName}</b> Dashboard
@@ -99,7 +101,7 @@ export default function SellerDashboard({
           <div className="flex flex-col lg:flex-row ">
             <div className="flex flex-row lg:flex-col gap-4 my-4 bg-[#0c0c0b]   shadow-xl shadow-gray-950 px-4 sm:px-20 py-4 rounded-md">
               <button
-                className={`px-4 py-2 ${
+                className={`px-2 text-sm sm:text-base sm:px-4 py-2 ${
                   activeTab === "dashboard"
                     ? "bg-[#090909] shadow-md shadow-gray-900 text-white"
                     : "bg-white text-black rounded-md"
@@ -110,7 +112,7 @@ export default function SellerDashboard({
               </button>
 
               <button
-                className={`px-4 py-2 ${
+                className={`px-2 text-sm sm:text-base sm:px-4 py-2 ${
                   activeTab === "account"
                     ? "bg-[#090909] shadow-md shadow-gray-900 text-white"
                     : "bg-white text-black rounded-md"
@@ -121,7 +123,7 @@ export default function SellerDashboard({
               </button>
 
               <button
-                className={`px-4 py-2 ${
+                className={`px-2 text-sm sm:text-base sm:px-4 py-2 ${
                   activeTab === "settings"
                     ? "bg-[#090909] shadow-md shadow-gray-900 text-white"
                     : "bg-white text-black rounded-md"
@@ -129,6 +131,16 @@ export default function SellerDashboard({
                 onClick={() => handleTabChange("settings")}
               >
                 Settings
+              </button>
+              <button
+                className={`px-2 text-sm sm:text-base sm:px-4 py-2 ${
+                  activeTab === "orders"
+                    ? "bg-[#090909] shadow-md shadow-gray-900 text-white"
+                    : "bg-white text-black rounded-md"
+                }`}
+                onClick={() => handleTabChange("orders")}
+              >
+                Orders
               </button>
             </div>
 
@@ -145,6 +157,7 @@ export default function SellerDashboard({
                 {activeTab === "dashboard" && <DashboardTab />}
                 {activeTab === "account" && <AccountTab />}
                 {activeTab === "settings" && <SettingTab userData={userData} />}
+                {activeTab === "orders" && <OrderTab />}
               </div>
             </div>
           </div>

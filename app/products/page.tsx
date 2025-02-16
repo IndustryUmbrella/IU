@@ -5,9 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import NotFound from "@/app/not-found";
 import Categories from "@/components/products/categories";
 import ProductsCards from "@/components/products/productCards";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 function ProductsContent() {
   const router = useRouter();
+  const userData = useSelector((state: RootState) => state.seller.user);
   const searchParams = useSearchParams();
 
   type CategoriesTab =
@@ -65,7 +68,11 @@ function ProductsContent() {
             />
             <div className="mt-4 flex-grow"></div>
           </div>
-          <ProductsCards showLoadMore={true} category={activeTab} />
+          <ProductsCards
+            userData={userData}
+            showLoadMore={true}
+            category={activeTab}
+          />
         </div>
       ) : (
         <NotFound />

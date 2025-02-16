@@ -4,9 +4,10 @@ import React from "react";
 import SocialMedia from "../contact/socialMedia";
 
 const Footer = () => {
+  const currentDate = new Date().getFullYear();
   return (
-    <>
-      <div className="bg-white flex flex-col sm:flex-row flex-wrap justify-between overflow-x-hidden px-[6px] lg:px-desktop md:px-tablet sm:px-mobile gap-y-8 mt-10 rounded p-4">
+    <div className="bg-white">
+      <div className=" flex flex-col sm:flex-row flex-wrap justify-between overflow-x-hidden px-[6px] lg:px-desktop md:px-tablet sm:px-mobile gap-y-8 mt-10 rounded p-4">
         <div className="flex flex-col  font-light text-lg gap-x-3">
           <Link href="/">
             <Logo className={"w-[60px] h-[60px] sm:w-[80px] sm:h-[80px]"} />
@@ -44,7 +45,10 @@ const Footer = () => {
           <SocialMedia colores="black" />
         </div>
       </div>
-    </>
+      <p className="text-center">
+        Copyright &copy; 2024 - {currentDate} Industry Umbrella
+      </p>
+    </div>
   );
 };
 

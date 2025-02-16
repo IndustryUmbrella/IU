@@ -5,7 +5,13 @@ import { addToCart } from "@/app/store/cartSlice";
 import Button from "@/components/general/button";
 import Link from "next/link";
 
-const ProductCartActions = ({ product }: { product: any }) => {
+const ProductCartActions = ({
+  product,
+  userData,
+}: {
+  product: any;
+  userData: any;
+}) => {
   const dispatch = useDispatch();
 
   const handleAddToCart = (product: any) => {
@@ -18,6 +24,8 @@ const ProductCartActions = ({ product }: { product: any }) => {
         productImage: product?.productImage[0]?.link,
         description: product?.productDescription,
         category: product?.productCategory,
+        seller_id: product?.seller_id,
+        companyName: userData?.companyName,
       })
     );
   };
