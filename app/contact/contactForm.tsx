@@ -30,26 +30,23 @@ const ContactForm = () => {
     onSubmit: (values) => {
       const emailParams = {
         from_name: values.name,
-        from_email: values.email, // You can include the user's email here
+        from_email: values.email,
         message: values.message,
-        to_email: values.email, // Send to user's email
+        to_email: values.email,
       };
 
-      // Send email using EmailJS
       emailjs
         .send(
           "service_vm7eyca",
-          "template_o0qi9bf", // Replace with your template ID
+          "template_o0qi9bf",
           emailParams,
           "wYG1v-g2lyi2AldPs"
         )
         .then(
           (result) => {
-            console.log(result.text);
             setStatus("Message sent successfully!");
           },
           (error) => {
-            console.log(error.text);
             setStatus("An error occurred. Please try again later.");
           }
         );

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Button from "../general/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import axios from "axios";
 import * as Yup from "yup";
@@ -20,8 +20,10 @@ import NoUserInfoSkeleton from "./noUserInfoSkeleton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FaCamera } from "react-icons/fa6";
+import { triggerRefresh } from "@/app/store/productSlice";
 
 const AccountTab = () => {
+  const dispatch = useDispatch();
   let userData = useSelector((state: RootState) => state.seller.user);
   const [file, setFile] = useState<any>(null);
   const [images, setImages] = useState<any>();
@@ -63,19 +65,16 @@ const AccountTab = () => {
     onSubmit: async (values) => {},
   });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
+  const handleFileChange = (e: any) => {
+    const selectedFile = e.target.files[0];
     setImages(e.target.files);
+    setFile(e.target.files);
 
     if (selectedFile) {
       setFile(selectedFile);
       setProgress(0);
       setUploadedImageUrl(null);
     }
-  };
-
-  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
   };
 
   const updateSeller = async () => {
@@ -110,7 +109,7 @@ const AccountTab = () => {
             ].includes(key) && value
         )
         .map(([key, value]) => ({
-          title: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize first letter
+          title: key.charAt(0).toUpperCase() + key.slice(1),
           link: value as string,
         }));
 
@@ -133,6 +132,7 @@ const AccountTab = () => {
         content: "Fields Updated Successfully",
         success: true,
       });
+      dispatch(triggerRefresh());
     } catch (err) {
       setIsLoading(false);
       setShowNotification({
@@ -233,7 +233,6 @@ const AccountTab = () => {
                 multiple={false}
                 file={file}
                 setFile={setFile}
-                handleUpload={handleUpload}
                 handleFileChange={handleFileChange}
                 progress={progress}
               />

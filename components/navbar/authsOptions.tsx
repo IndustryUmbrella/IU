@@ -86,10 +86,6 @@ const AuthOptions = () => {
     }, 4000);
   }, [showNotification]);
 
-  useEffect(() => {
-    console.log(cartItem?.length);
-  }, [cartItem]);
-
   return (
     <>
       {ConfirmationPrompt && (

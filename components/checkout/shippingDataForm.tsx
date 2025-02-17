@@ -38,7 +38,7 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
     },
     validationSchema: ShippingSchema,
     onSubmit: () => {
-      console.log("maish");
+      handleBuyerData();
     },
   });
 
@@ -77,142 +77,145 @@ const ShippingDataForm = ({ setShipState }: { setShipState: any }) => {
 
   return (
     <>
-      <div className=" flex flex-col gap-y-3 items-center  sm:items-start justify-center sm:justify-start">
-        <div className="relative flex flex-col justify-center :items-center md:justify-center  w-full">
-          <InputField
-            type="text"
-            id="email"
-            name="email"
-            onChange={formik.handleChange}
-            handleBlur={formik.handleBlur}
-            value={formik.values.email}
-            labelText=" Email"
-            error={formik.errors.email}
-            touched={formik.touched.email}
-            className=" w-[530px]  max-w-[260px] sm:max-w-[530px]"
-          />
-        </div>
-        <div className="flex flex-col sm:flex-row items-center justify-center  gap-x-2">
-          <div className="relative flex flex-col ">
+      <form onSubmit={formik.handleSubmit}>
+        <div className=" flex flex-col gap-y-3 items-center  sm:items-start justify-center sm:justify-start">
+          <div className="relative flex flex-col justify-center :items-center md:justify-center  w-full">
             <InputField
               type="text"
-              id="firstname"
-              name="firstname"
+              id="email"
+              name="email"
               onChange={formik.handleChange}
               handleBlur={formik.handleBlur}
-              value={formik.values.firstname}
-              labelText=" firstname"
-              error={formik.errors.firstname}
-              touched={formik.touched.firstname}
+              value={formik.values.email}
+              labelText=" Email"
+              error={formik.errors.email}
+              touched={formik.touched.email}
+              className=" w-[530px]  max-w-[260px] sm:max-w-[530px]"
             />
           </div>
-          <div className="relative flex flex-col ">
-            <InputField
-              type="text"
-              id="lastname"
-              name="lastname"
-              onChange={formik.handleChange}
-              handleBlur={formik.handleBlur}
-              value={formik.values.lastname}
-              labelText=" lastname"
-              error={formik.errors.lastname}
-              touched={formik.touched.lastname}
-            />
+          <div className="flex flex-col sm:flex-row items-center justify-center  gap-x-2">
+            <div className="relative flex flex-col ">
+              <InputField
+                type="text"
+                id="firstname"
+                name="firstname"
+                onChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.firstname}
+                labelText=" firstname"
+                error={formik.errors.firstname}
+                touched={formik.touched.firstname}
+              />
+            </div>
+            <div className="relative flex flex-col ">
+              <InputField
+                type="text"
+                id="lastname"
+                name="lastname"
+                onChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.lastname}
+                labelText=" lastname"
+                error={formik.errors.lastname}
+                touched={formik.touched.lastname}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="relative flex flex-col w-full ">
-          <InputField
-            type="text"
-            id="phone"
-            name="phone"
-            onChange={formik.handleChange}
-            handleBlur={formik.handleBlur}
-            value={formik.values.phone}
-            labelText=" phone"
-            error={formik.errors.phone}
-            touched={formik.touched.phone}
-            className=" w-full max-w-[260px] sm:max-w-[530px]"
-          />
-        </div>
-        <div className="flex flex-col sm:flex-row gap-x-2">
-          <div className="relative flex flex-col ">
+          <div className="relative flex flex-col w-full ">
             <InputField
               type="text"
-              id="region"
-              name="region"
+              id="phone"
+              name="phone"
               onChange={formik.handleChange}
               handleBlur={formik.handleBlur}
-              value={formik.values.region}
-              labelText=" region"
-              error={formik.errors.region}
-              touched={formik.touched.region}
+              value={formik.values.phone}
+              labelText=" phone"
+              error={formik.errors.phone}
+              touched={formik.touched.phone}
+              className=" w-full max-w-[260px] sm:max-w-[530px]"
             />
           </div>
-          <div className="relative flex flex-col ">
-            <InputField
-              type="text"
-              id="city"
-              name="city"
-              onChange={formik.handleChange}
-              handleBlur={formik.handleBlur}
-              value={formik.values.city}
-              labelText=" city"
-              error={formik.errors.city}
-              touched={formik.touched.city}
-            />
+          <div className="flex flex-col sm:flex-row gap-x-2">
+            <div className="relative flex flex-col ">
+              <InputField
+                type="text"
+                id="region"
+                name="region"
+                onChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.region}
+                labelText=" region"
+                error={formik.errors.region}
+                touched={formik.touched.region}
+              />
+            </div>
+            <div className="relative flex flex-col ">
+              <InputField
+                type="text"
+                id="city"
+                name="city"
+                onChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.city}
+                labelText=" city"
+                error={formik.errors.city}
+                touched={formik.touched.city}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="relative flex flex-col w-full">
-          <InputField
-            type="text"
-            id="address"
-            name="address"
-            onChange={formik.handleChange}
-            handleBlur={formik.handleBlur}
-            value={formik.values.address}
-            labelText=" address"
-            error={formik.errors.address}
-            touched={formik.touched.address}
-            className=" w-full max-w-[260px] sm:max-w-[530px]"
+          <div className="relative flex flex-col w-full">
+            <InputField
+              type="text"
+              id="address"
+              name="address"
+              onChange={formik.handleChange}
+              handleBlur={formik.handleBlur}
+              value={formik.values.address}
+              labelText=" address"
+              error={formik.errors.address}
+              touched={formik.touched.address}
+              className=" w-full max-w-[260px] sm:max-w-[530px]"
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row gap-x-2">
+            <div className="relative flex flex-col ">
+              <InputField
+                type="text"
+                id="state"
+                name="state"
+                onChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.state}
+                labelText=" state"
+                error={formik.errors.state}
+                touched={formik.touched.state}
+              />
+            </div>
+            <div className="relative flex flex-col ">
+              <InputField
+                type="text"
+                id="zipcode"
+                name="zipcode"
+                onChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.zipcode}
+                labelText=" zipcode"
+                error={formik.errors.zipcode}
+                touched={formik.touched.zipcode}
+              />
+            </div>
+          </div>
+          <Button
+            type="secondary"
+            size="lg"
+            text="Next"
+            action="submit"
+            // clickHandler={handleBuyerData}
           />
         </div>
-        <div className="flex flex-col sm:flex-row gap-x-2">
-          <div className="relative flex flex-col ">
-            <InputField
-              type="text"
-              id="state"
-              name="state"
-              onChange={formik.handleChange}
-              handleBlur={formik.handleBlur}
-              value={formik.values.state}
-              labelText=" state"
-              error={formik.errors.state}
-              touched={formik.touched.state}
-            />
-          </div>
-          <div className="relative flex flex-col ">
-            <InputField
-              type="text"
-              id="zipcode"
-              name="zipcode"
-              onChange={formik.handleChange}
-              handleBlur={formik.handleBlur}
-              value={formik.values.zipcode}
-              labelText=" zipcode"
-              error={formik.errors.zipcode}
-              touched={formik.touched.zipcode}
-            />
-          </div>
-        </div>
-        <Button
-          type="secondary"
-          size="lg"
-          text="Next"
-          clickHandler={handleBuyerData}
-        />
-      </div>
+      </form>
     </>
   );
 };

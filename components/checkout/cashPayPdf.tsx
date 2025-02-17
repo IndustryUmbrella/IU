@@ -42,11 +42,13 @@ const CashPayPdf = ({ data }: { data: any }) => {
             Industry Umbrella, along with other companies, supports in-person
             cash payments. We have collected your order details and generated
             this PDF. Please print or save this document and bring it to the
-            following address along with the total amount of $1500.
+            following address:
+          </Text>
+          <Text style={{ fontWeight: "bold" }}>
+            Kabul,KhairKhana, Qalae Najar Ha, Rawnaq Bahar Lozhestic company.
           </Text>
         </View>
 
-        {/* Table */}
         <View style={styles.table}>
           <Text
             style={{
@@ -57,20 +59,21 @@ const CashPayPdf = ({ data }: { data: any }) => {
               fontSize: "18px",
             }}
           >
-            Company Name
+            Your Products Info
           </Text>
-          {/* Table Header */}
+
           <View style={[styles.tableRow, styles.tableHeader]}>
+            <Text style={styles.tableCell}>Company Name</Text>
             <Text style={styles.tableCell}>Product Name</Text>
             <Text style={styles.tableCell}>Quantity</Text>
             <Text style={styles.tableCell}>Price per Unit ($)</Text>
             <Text style={styles.tableCell}>Total Price ($)</Text>
           </View>
 
-          {/* Table Rows */}
           {data?.productData?.map((product: any, idx: number) => {
             return (
               <View key={idx} style={[styles.tableRow, styles.tableHeader]}>
+                <Text style={styles.tableCell}>{product?.companyName}</Text>
                 <Text style={styles.tableCell}>{product?.name}</Text>
                 <Text style={styles.tableCell}>{product?.quantity}</Text>
                 <Text style={styles.tableCell}>{product?.price} ($)</Text>
@@ -82,7 +85,6 @@ const CashPayPdf = ({ data }: { data: any }) => {
           })}
         </View>
 
-        {/* Total Amount */}
         <Text style={styles.totalAmount}>
           Total Amount:
           {data?.productData
@@ -100,7 +102,6 @@ const CashPayPdf = ({ data }: { data: any }) => {
           TIP2: We will submit your order when you complete the payment.
         </Text>
 
-        {/* Regards at the Bottom */}
         <Text style={styles.regards}>
           Regards, Industry Umbrella (IU) Team.
         </Text>

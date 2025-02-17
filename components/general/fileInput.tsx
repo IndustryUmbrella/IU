@@ -16,7 +16,7 @@ const FileInput = ({
   file: FileList | null;
   setFile: React.Dispatch<React.SetStateAction<FileList | null>>;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleUpload: any;
+  handleUpload?: any;
   progress: number;
   multiple?: boolean;
   iconColor?: string;
@@ -49,6 +49,13 @@ const FileInput = ({
           htmlFor="newImage"
           className="border border-blue-800 w-40 mt-4 bg-gray-200 py-2 rounded cursor-pointer  flex flex-row items-center justify-center gap-x-2"
         >
+          <input
+            multiple={multiple}
+            type="file"
+            id="newImage"
+            className="w-[260px] md:w-64 text-black h-12 border rounded px-2 text-sm bg-transparent hidden"
+            onChange={handleFileChange}
+          />
           <FaCamera />
           Add Image
         </label>

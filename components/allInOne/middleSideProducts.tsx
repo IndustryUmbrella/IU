@@ -1,9 +1,12 @@
+"use client";
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Button from "../general/button";
-import { FaHeart } from "react-icons/fa6";
+import { FaCartShopping, FaHeart } from "react-icons/fa6";
 import { Carousel } from "react-responsive-carousel";
 import Link from "next/link";
+import { addToCart } from "@/app/store/cartSlice";
+import { useDispatch } from "react-redux";
 
 const MiddleSideProducts = ({
   isLoading,
@@ -12,6 +15,22 @@ const MiddleSideProducts = ({
   isLoading: true | boolean;
   data: any;
 }) => {
+  const dispatch = useDispatch();
+  const handleAddToCart = (product: any) => {
+    dispatch(
+      addToCart({
+        id: product?.productId,
+        name: product?.productName,
+        price: product?.productPrice,
+        quantity: 1,
+        productImage: product?.productImage[0]?.link,
+        description: product?.productDescription,
+        category: product?.productCategory,
+        seller_id: product?.seller_id,
+        companyName: product?.companyName,
+      })
+    );
+  };
   return (
     <>
       {isLoading ? (
@@ -44,7 +63,11 @@ const MiddleSideProducts = ({
                 height={50}
                 className="rounded-full"
               />
-              <FaHeart color="black" size={24} />
+              <FaCartShopping
+                color="black"
+                size={24}
+                onClick={() => handleAddToCart(data[0])}
+              />
             </div>
             <img
               src={data[0]?.productImage[0]?.link}
@@ -52,10 +75,33 @@ const MiddleSideProducts = ({
               className="w-full px-10 h-[320px] sm:h-[360px]"
             />
 
-            <div className="text-center">
-              <p>{data[0]?.productName}</p>
-              <p>{data[0]?.productDescription}</p>
-              <p>{data[0]?.productPrice}</p>
+            <div className="flex justify-between">
+              <div>
+                <p>{data[0]?.productName}</p>
+                <p>{data[0]?.productDescription}</p>
+                <p className="line-through">
+                  {(
+                    (data[0]?.productPrice * 100) /
+                    (100 - data[0]?.discount)
+                  ).toFixed(2)}
+                  $
+                </p>
+                <p>{data[0]?.productPrice}$</p>
+              </div>
+              <div className="">
+                <div className="flex flex-col gap-y-5 justify-between">
+                  <p>{data[0]?.productCategory} Categorry</p>
+                  <p>
+                    {data[0]?.status == "active" ? (
+                      <span className="bg-green-300 rounded-xl p-1 px-2">
+                        In-Stock
+                      </span>
+                    ) : (
+                      <span>Out Of Stock</span>
+                    )}
+                  </p>
+                </div>
+              </div>
             </div>
             <Button
               size="sm"

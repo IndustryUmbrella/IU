@@ -22,7 +22,6 @@ const OrderTab = () => {
             withCredentials: true,
           }
         );
-        console.log(response.data.orders, "Filtered Orders");
         setOrderList(response.data.orders || []);
       } catch (error) {
         console.error("Error fetching orders:", error);

@@ -111,6 +111,7 @@ const NewProductForm = ({
     if (Object.keys(formik.errors).length > 0) return;
     const formData = new FormData();
     formData.append("seller_id", userData?._id);
+    formData.append("companyName", userData?.companyName);
     formData.append("productName", formik.values.productName);
     formData.append("productDescription", formik.values.productDescription);
     formData.append("productCategory", formik.values.productCategory?.value);
@@ -167,6 +168,7 @@ const NewProductForm = ({
     const formData = new FormData();
 
     formData.append("seller_id", userData?._id);
+    formData.append("companyName", userData?.companyName);
     formData.append("productName", formik.values.productName);
     formData.append("productDescription", formik.values.productDescription);
     formData.append("productCategory", formik.values.productCategory?.value);

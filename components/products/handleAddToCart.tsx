@@ -25,7 +25,7 @@ const ProductCartActions = ({
         description: product?.productDescription,
         category: product?.productCategory,
         seller_id: product?.seller_id,
-        companyName: userData?.companyName,
+        companyName: product?.companyName,
       })
     );
   };

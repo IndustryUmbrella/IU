@@ -65,7 +65,6 @@ export default function StripeMethod() {
       console.log(error);
       setError(error?.message);
     } else {
-      console.log("Payment Method:", paymentMethod);
       alert("Payment successful!");
       setError("");
     }

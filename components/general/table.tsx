@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { triggerRefresh } from "@/app/store/productSlice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Notification from "./notification";
 
 interface TableProps {
   columns: string[];
@@ -28,6 +29,11 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
 
   let [productForDelete, setProductForDelete] = useState<any>("");
   const [selectedProduct, setSelectedProduct] = useState<any>({});
+  const [showNotification, setShowNotification] = useState({
+    isShow: false,
+    content: "",
+    success: false,
+  });
   const popUpRef = useRef<HTMLDivElement>(null);
   const token = Cookies.get("authToken");
 
@@ -65,11 +71,32 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
         }
       );
       dispatch(triggerRefresh());
+      setShowNotification({
+        isShow: true,
+        content: "Product Deleted Successfully",
+        success: true,
+      });
       setConfirmationPrompt(false);
-    } catch (error) {
-      console.log("Error deleting product:", error);
+    } catch (error: any) {
+      setShowNotification({
+        isShow: true,
+        content:
+          error?.message ||
+          "Error occured in deleting a product Please Try Again!",
+        success: true,
+      });
     }
   };
+
+  useEffect(() => {
+    const notif = setTimeout(() => {
+      setShowNotification({
+        isShow: false,
+        content: "",
+        success: false,
+      });
+    }, 4000);
+  }, [showNotification]);
 
   // useEffect(() => {
   //   const handleOutsideClick = (event: MouseEvent) => {
@@ -90,6 +117,11 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
 
   return (
     <div>
+      <Notification
+        isShow={showNotification.isShow}
+        content={showNotification.content}
+        success={showNotification.success}
+      />
       {showOverlay && (
         <Overlay onClose={() => setShowOverlay(false)} isOpen={showOverlay}>
           <NewProductForm

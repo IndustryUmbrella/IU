@@ -56,7 +56,6 @@ const CashPay = ({
       }
     } catch (err) {
       setLoading(false);
-      console.log(err);
     }
   };
   return (

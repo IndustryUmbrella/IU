@@ -4,12 +4,14 @@ interface SellerSlice {
   user: any;
   isLogged: Boolean;
   profilePicture: null;
+  refresh: Boolean;
 }
 
 const initialState: SellerSlice = {
   user: null,
   isLogged: false,
   profilePicture: null,
+  refresh: false,
 };
 
 const sellerSlice = createSlice({
@@ -24,6 +26,9 @@ const sellerSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
+    },
+    triggerRefresh: (state) => {
+      state.refresh = !state.refresh;
     },
   },
 });
