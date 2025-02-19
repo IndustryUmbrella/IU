@@ -7,6 +7,7 @@ import { decodeToken } from "@/helper/isAuthorized";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "@/app/store/productSlice";
 import { RootState } from "@/app/store/store";
+import { createOrder } from "@/app/store/orderSlice";
 
 const FetchUserData: React.FC = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,18 @@ const FetchUserData: React.FC = () => {
               withCredentials: true,
             }
           );
+          try {
+            const response = await axios.get(
+              `${baseUrl}/api/order/get-order/${userData?._id}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true,
+              }
+            );
+            dispatch(createOrder(response?.data));
+          } catch (error) {
+            console.error("Error fetching orders:", error);
+          }
 
           const productData = fetchProductResponse.data;
           dispatch(setProducts(productData));

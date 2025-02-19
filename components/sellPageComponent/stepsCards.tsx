@@ -60,7 +60,7 @@ const StepsCards = () => {
         <div
           key={index}
           ref={(el: any) => (cardsRef.current[index] = el!)}
-          className="bg-white p-2 rounded-3xl max-w-[480px] h-[300px] px-6 opacity-0 transform scale-90"
+          className="bg-white p-2 rounded-3xl max-w-[380px] h-[300px] px-6 opacity-0 transform scale-90"
         >
           <div className="flex justify-between">
             {step.mockup}
@@ -69,7 +69,7 @@ const StepsCards = () => {
             </div>
           </div>
           <div>
-            <p className="text-primary w-[340px] h-[280px] text-base font-light mt-3 px-4">
+            <p className="text-primary w-[300px] h-[280px] text-base font-light mt-3 px-4">
               {step.text}
             </p>
           </div>

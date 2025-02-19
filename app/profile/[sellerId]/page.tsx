@@ -88,15 +88,15 @@ export default function SellerDashboard({
   };
 
   return (
-    <div className="text-white lg:px-desktop md:px-tablet sm:px-mobile">
+    <div className="text-white px-[6px] lg:px-desktop md:px-tablet sm:px-mobile">
       {sellerId &&
       (activeTab == "dashboard" ||
         activeTab == "account" ||
         activeTab == "settings" ||
         activeTab == "orders") ? (
         <div>
-          <h1 className="my-10">
-            Welcome to your <b>{userData?.companyName}</b> Dashboard
+          <h1 className="my-10 text-2xl">
+            Welcome to your Dashboard <b>{userData?.companyName}</b>
           </h1>
           <div className="flex flex-col lg:flex-row ">
             <div className="flex flex-row lg:flex-col gap-4 my-4 bg-[#0c0c0b]   shadow-xl shadow-gray-950 px-4 sm:px-20 py-4 rounded-md">

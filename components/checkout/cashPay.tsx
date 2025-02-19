@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import SuccessOrderPlaced from "./successOrderPlaced";
 import { clearCart } from "@/app/store/cartSlice";
+import { createOrder } from "@/app/store/orderSlice";
 
 const CashPay = ({
   orderPlaced,
@@ -49,6 +50,7 @@ const CashPay = ({
           paymentMethod: "Cash Pay",
         }
       );
+      dispatch(createOrder(order?.data));
       setLoading(false);
       if (order?.data?.success) {
         dispatch(clearCart());

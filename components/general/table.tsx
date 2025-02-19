@@ -210,7 +210,12 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
               })
             : data?.map((row: any, index: number) => (
                 <tr key={index}>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                  <td
+                    style={{
+                      borderBottom: "1px solid #ddd",
+                      padding: "8px",
+                    }}
+                  >
                     <div className="flex gap-x-2 items-center">
                       <img
                         src={row?.productImage[0]?.link || ""}
@@ -227,17 +232,23 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                       </div>
                     </div>
                   </td>
-                  <td className="border border-[#ddd] p-[8px] text-center">
-                    {row.productPrice}
+                  <td className="border-b border-[#ddd] p-[8px] text-center">
+                    {row.productPrice}$
                   </td>
                   <td
-                    style={{ border: "1px solid #ddd", padding: "8px" }}
+                    style={{
+                      borderBottom: "1px solid #ddd",
+                      padding: "8px",
+                    }}
                     className="text-center"
                   >
                     Active
                   </td>
                   <td
-                    style={{ border: "1px solid #ddd", padding: "8px" }}
+                    style={{
+                      borderBottom: "1px solid #ddd",
+                      padding: "8px",
+                    }}
                     className="relative"
                   >
                     <p

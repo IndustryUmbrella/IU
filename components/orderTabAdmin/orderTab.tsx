@@ -7,31 +7,7 @@ import Cookies from "js-cookie";
 import { formatDate } from "@/helper/dateFormatter";
 
 const OrderTab = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const userData = useSelector((state: RootState) => state.seller?.user);
-  const [orderList, setOrderList] = useState<any[]>([]);
-  const token = Cookies.get("authToken");
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get(
-          `${baseUrl}/api/order/get-order/${userData?._id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-          }
-        );
-        setOrderList(response.data.orders || []);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-    };
-
-    if (userData?._id) {
-      fetchOrders();
-    }
-  }, [userData?._id, baseUrl, token]);
+  const orderList = useSelector((state: RootState) => state.orders);
 
   return (
     <>

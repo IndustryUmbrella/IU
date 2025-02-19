@@ -59,9 +59,7 @@ const MiddleSideProducts = ({
             <div className="flex justify-between mt-2 ">
               <img
                 src={data[0]?.productImage[0]?.link}
-                width={50}
-                height={50}
-                className="rounded-full"
+                className="rounded-full w-[50px] h-[50px]"
               />
               <FaCartShopping
                 color="black"
@@ -72,7 +70,7 @@ const MiddleSideProducts = ({
             <img
               src={data[0]?.productImage[0]?.link}
               alt=""
-              className="w-full px-10 h-[320px] sm:h-[360px]"
+              className="w-full px-10 h-[320px] sm:h-[360px] mb-2"
             />
 
             <div className="flex justify-between">
