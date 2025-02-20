@@ -9,6 +9,10 @@ import ProductCartActions from "@/components/products/handleAddToCart";
 import ShareButton from "@/components/general/shareButton";
 import SellerSocialMedia from "@/components/auth/sellerSocial/sellerSocialMedia";
 import BackButton from "@/components/general/backButton";
+import { FaFontAwesome } from "react-icons/fa6";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import InfoPopUp from "@/components/general/infoPopUp";
 const getProduct = async (id?: any) => {
   if (!id) return null;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -76,81 +80,71 @@ const ProductDetails = async ({
             images={product.productImage.map((img: any) => img?.link)}
           />
         )}
-        <div className="flex flex-col-reverse sm:flex-row justify-between  w-full">
+        <div className="w-full">
           <div>
             {seller?.companyLogo && (
-              <div className="mt-4 flex items-center gap-4">
-                <img
-                  src={seller?.companyLogo}
-                  width={50}
-                  height={50}
-                  className="rounded-full border border-white border-opacity-20"
-                  alt="Seller profile"
-                />
-                <div className="flex flex-col">
-                  <p className="text-white font-semibold">
-                    {seller?.companyName}
-                  </p>
-                  <p className="text-white">{seller?.companyDescription}</p>
+              <div className="flex flex-row items-center justify-between  w-full ">
+                <div className="mt-4 flex items-center gap-4 ">
+                  <img
+                    src={seller?.companyLogo}
+                    className="rounded-full border border-white border-opacity-20 w-[50px] h-[50px]"
+                    alt="Seller profile"
+                  />
+                  <div className="flex flex-col">
+                    <p className="text-white font-semibold">
+                      {seller?.companyName}
+                    </p>
+                    <p className="text-white">{seller?.companyDescription}</p>
+                  </div>
+                </div>
+                <div className="flex flex-row  items-center justify-center gap-x-10 ">
+                  <InfoPopUp data={product} />
+                  <ShareButton details={product} />
                 </div>
               </div>
             )}
-            <div className="mt-5">
+          </div>
+          <div className="mt-5  w-full max-w-[380px]">
+            <p className="text-[14px] text-white">
+              Product Name:{" "}
+              <span className="font-bold text-xl">
+                {product?.productName || ""}
+              </span>
+            </p>
+            <p className="text-[14px] text-white">
+              Description:{" "}
+              <span className="font-bold text-xl">
+                {product?.productDescription || ""}
+              </span>
+            </p>
+
+            <div className="flex flex-row gap-x-2 ">
               <p className="text-[14px] text-white">
-                Product Name:{" "}
-                <span className="font-bold text-xl">
-                  {product?.productName || ""}
-                </span>
-              </p>
-              <p className="text-[14px] text-white">
-                Description:{" "}
-                <span className="font-bold text-xl">
-                  {product?.productDescription || ""}
+                <span className="font-bold text-xl line-through">
+                  {(
+                    (product?.productPrice * 100) /
+                    (100 - product?.discount)
+                  ).toFixed(2)}
+                  $
                 </span>
               </p>
 
-              <div className="flex flex-row gap-x-2 ">
-                <p className="text-[14px] text-white">
-                  <span className="font-bold text-xl line-through">
-                    {(
-                      (product?.productPrice * 100) /
-                      (100 - product?.discount)
-                    ).toFixed(2)}
-                    $
-                  </span>
-                </p>
-
-                <p className=" text-white">
-                  Price:
-                  <b>{product?.productPrice}$</b>
-                </p>
-              </div>
-              <p className="text-[14px] text-white">
-                Category:{" "}
-                <span className="font-bold text-xl">
-                  {product?.productCategory || ""}
-                </span>
+              <p className=" text-white">
+                Price:
+                <b>{product?.productPrice}$</b>
               </p>
             </div>
+            <p className="text-[14px] text-white">
+              Category:{" "}
+              <span className="font-bold text-xl">
+                {product?.productCategory || ""}
+              </span>
+            </p>
             <ProductRating />
             <ProductCartActions product={product} userData={seller} />
-            <div className="mt-4">
-              <SellerSocialMedia socialLinks={seller} />
-            </div>
           </div>
-          <div className="flex flex-col  items-center justify-center my-10 gap-y-20  ">
-            <ShareButton details={product} />
-            <div>
-              <div className="text-white text-xl">
-                {product?.sizes.split(",").join(" ")}
-              </div>
-              <div className="text-white text-xl">
-                {product?.colors.split(",")?.map((s: any, i: any) => (
-                  <p key={i}>{s}</p>
-                ))}
-              </div>
-              <div className="text-white text-xl">{product?.weight}KG</div>
-            </div>
+          <div className="mt-4">
+            <SellerSocialMedia socialLinks={seller} />
           </div>
         </div>
       </div>

@@ -62,9 +62,9 @@ const Checkout = () => {
       {orderPlaced ? (
         <SuccessOrderPlaced />
       ) : (
-        <div className="flex flex-col-reverse md:flex-row gap-x-5 justify-between">
+        <div className="flex flex-col-reverse lg:flex-row gap-x-5 justify-between">
           <div className="space-y-5">
-            <div className=" hidden md:flex  md:flex-row gap-x-2">
+            <div className=" hidden lg:flex  lg:flex-row gap-x-2">
               <div
                 className={`w-full  rounded-md transition-all duration-200 ${
                   shipStep == 1 ? "h-1.5" : "h-1"
@@ -111,21 +111,19 @@ const Checkout = () => {
               return (
                 <div
                   key={item?.id}
-                  className="flex flex-row items-center justify-between border-b border-b-white px-6 text-white w-full gap-x-7 gap-y-6"
+                  className="flex flex-row items-center justify-between border-b border-b-white px-6 text-white  gap-x-7 gap-y-6"
                 >
                   <div className="flex flex-col gap-2">
                     <img
                       src={item?.productImage}
-                      width={110}
-                      height={110}
-                      className="border border-black rounded"
+                      className="border border-black rounded w-[110px] h-[110px]"
                     />
                     <p>${Number(item?.price)?.toFixed(2)}</p>
                   </div>
 
                   <div className="flex flex-col gap-y-2 items-start justify-start">
-                    <p className="">{item?.name}</p>
-                    <p className="">{item?.description}</p>
+                    <p className="line-clamp-1">{item?.name}</p>
+                    <p className="line-clamp-1">{item?.description}</p>
                   </div>
 
                   <div className="flex items-center justify-center gap-x-2">

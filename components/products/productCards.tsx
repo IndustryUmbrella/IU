@@ -127,22 +127,24 @@ const ProductsCards = ({
 
   return (
     <div>
-      <div className="flex gap-x-2  items-center justify-center mt-5 w-full px-4">
-        <input
-          type="search"
-          className="border border-white h-12 rounded w-full text-primary px-4 "
-          placeholder="Search Product e.g Necklace"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-        <button
-          type="button"
-          className="flex items-center justify-center bg-white  w-12  h-12 rounded"
-          onClick={handleSearch}
-        >
-          <FaSearch size={24} color="black" />
-        </button>
-      </div>
+      {showLoadMore && (
+        <div className="flex gap-x-2  items-center justify-center mt-5 w-full px-4">
+          <input
+            type="search"
+            className="border border-white h-12 rounded w-full text-primary px-4 "
+            placeholder="Search Product e.g Necklace"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+          <button
+            type="button"
+            className="flex items-center justify-center bg-white  w-12  h-12 rounded"
+            onClick={handleSearch}
+          >
+            <FaSearch size={24} color="black" />
+          </button>
+        </div>
+      )}
       <div className="flex flex-col">
         {loading ? (
           <div className="flex flex-wrap gap-6 p-4">

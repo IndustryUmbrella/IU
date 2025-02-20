@@ -44,7 +44,7 @@ const Landing = () => {
 
   return (
     <div className="px-[6px] sm:px-mobile md:px-tablet lg:px-desktop  overflow-x-hidden">
-      <div className="block lg:flex min-h-screen overflow-x-hidden">
+      <div className="block lg:flex mt-10 overflow-x-hidden">
         <Slogan />
         <UnsortedDivs />
       </div>

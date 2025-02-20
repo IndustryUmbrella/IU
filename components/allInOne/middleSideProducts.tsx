@@ -55,7 +55,7 @@ const MiddleSideProducts = ({
         </div>
       ) : (
         data?.length > 0 && (
-          <div className="bg-white px-4 w-full  sm:w-[500px] min-w-[350px] h-[605px] rounded-md">
+          <div className="bg-white px-4  max-w-[450px] min-w-[330px] h-[605px] rounded-md">
             <div className="flex justify-between mt-2 ">
               <img
                 src={data[0]?.productImage[0]?.link}
@@ -69,10 +69,8 @@ const MiddleSideProducts = ({
             </div>
             <img
               src={data[0]?.productImage[0]?.link}
-              alt=""
-              className="w-full px-10 h-[320px] sm:h-[360px] mb-2"
+              className="w-full  h-[320px] rounded-lg mt-4 bg-blue-500 sm:h-[360px] mb-2 object-cover"
             />
-
             <div className="flex justify-between">
               <div>
                 <p>{data[0]?.productName}</p>

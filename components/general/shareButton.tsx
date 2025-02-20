@@ -30,13 +30,12 @@ const ShareButton = ({ details }: { details: any }) => {
           />
         </Overlay>
       )}
-      <button
+      <Share2
+        size={20}
         onClick={handleShare}
-        className="flex items-center gap-2 px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
-      >
-        <Share2 size={20} />
-        <span>Share</span>
-      </button>
+        color="white"
+        className="cursor-pointer"
+      />
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
