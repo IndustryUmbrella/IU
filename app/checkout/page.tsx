@@ -20,12 +20,14 @@ const stripePromise = loadStripe(
 const Checkout = () => {
   const dispatch = useDispatch();
   const cartItem = useSelector((state: RootState) => state.cart.items);
+  const orderPlaced = useSelector(
+    (state: RootState) => state.orders.orderPlaced
+  );
   const [shipStep, setShipStep] = useState(1);
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
-  const [orderPlaced, setOrderPlaced] = useState(false);
 
   const handleRemoveFromCart = (id: string) => {
     dispatch(removeFromCart(id));
@@ -40,7 +42,7 @@ const Checkout = () => {
     setShipStep(2);
   };
 
-  if (!isClient || cartItem?.length == 0) {
+  if (!isClient && !orderPlaced) {
     return (
       <div className="flex flex-col gap-x-10 items-center justify-center overflow-x-hidden">
         <EmptyCartMockup />
@@ -59,7 +61,7 @@ const Checkout = () => {
 
   return (
     <div className="px-[6px] lg:px-desktop md:px-tablet sm:px-mobile mt-10 ">
-      {orderPlaced ? (
+      {orderPlaced && cartItem?.length == 0 ? (
         <SuccessOrderPlaced />
       ) : (
         <div className="flex flex-col-reverse lg:flex-row gap-x-5 justify-between">
@@ -96,11 +98,7 @@ const Checkout = () => {
               ) : (
                 <div className="w-full max-w-[300px]">
                   <Elements stripe={stripePromise}>
-                    <PaymentDetails
-                      orderPlaced={orderPlaced}
-                      setOrderPlaced={setOrderPlaced}
-                      setShipStep={setShipStep}
-                    />
+                    <PaymentDetails setShipStep={setShipStep} />
                   </Elements>
                 </div>
               )}

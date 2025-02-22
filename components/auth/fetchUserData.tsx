@@ -7,7 +7,7 @@ import { decodeToken } from "@/helper/isAuthorized";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "@/app/store/productSlice";
 import { RootState } from "@/app/store/store";
-import { createOrder } from "@/app/store/orderSlice";
+import { setOrders } from "@/app/store/orderSlice";
 
 const FetchUserData: React.FC = () => {
   const dispatch = useDispatch();
@@ -52,7 +52,8 @@ const FetchUserData: React.FC = () => {
                 withCredentials: true,
               }
             );
-            dispatch(createOrder(response?.data));
+
+            dispatch(setOrders(response?.data?.orders));
           } catch (error) {
             console.error("Error fetching orders:", error);
           }

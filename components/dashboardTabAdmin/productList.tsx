@@ -45,8 +45,18 @@ const ProductList = () => {
 
         <div className="hidden sm:block">
           <Table
-            columns={["Product Info", "product Price", "active", "action"]}
+            columns={[
+              { key: "productName", label: "productName" },
+              {
+                key: "finalPrice",
+                label: "product Price",
+                render: (row) =>
+                  row.finalPrice ? `${row.finalPrice.toFixed(2)}$` : "0.00",
+              },
+              { key: "status", label: "Active" },
+            ]}
             data={products?.data}
+            color="black"
           />
         </div>
       </div>

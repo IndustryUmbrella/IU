@@ -10,18 +10,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import SuccessOrderPlaced from "./successOrderPlaced";
 import { clearCart } from "@/app/store/cartSlice";
-import { createOrder } from "@/app/store/orderSlice";
+import { setOrderPlaced, triggerRefreshOrder } from "@/app/store/orderSlice";
 
-const CashPay = ({
-  orderPlaced,
-  setOrderPlace,
-}: {
-  orderPlaced: any;
-  setOrderPlace: any;
-}) => {
+const CashPay = () => {
   const [showPreview, setShowPreview] = useState(false);
   const carts = useSelector((state: RootState) => state.cart.items);
   const buyerData = useSelector((state: RootState) => state.buyer.shippingData);
+  const orderPlaced = useSelector(
+    (state: RootState) => state.orders.orderPlaced
+  );
   const [loading, setLoading] = useState(false);
 
   const allBuyerData = {
@@ -50,16 +47,18 @@ const CashPay = ({
           paymentMethod: "Cash Pay",
         }
       );
-      dispatch(createOrder(order?.data));
       setLoading(false);
       if (order?.data?.success) {
+        dispatch(setOrderPlaced(true));
+        dispatch(triggerRefreshOrder());
         dispatch(clearCart());
-        setOrderPlace(true);
+        console.log(orderPlaced, order?.data?.success, "ssssssssssss");
       }
     } catch (err) {
       setLoading(false);
     }
   };
+
   return (
     <>
       <>

@@ -111,11 +111,11 @@ const AuthOptions = () => {
           <div className="flex gap-x-4 items-center">
             <Link
               href="/register"
-              className="bg-white text-black rounded-md p-2 px-4"
+              className="hidden md:flex bg-white text-black rounded-md p-2 px-4"
             >
               Register
             </Link>
-            <Link className="hidden md:flex" href="/login">
+            <Link className="px-4 " href="/login">
               Login
             </Link>
           </div>

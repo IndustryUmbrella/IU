@@ -5,13 +5,37 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { formatDate } from "@/helper/dateFormatter";
+import Table from "../general/table";
 
 const OrderTab = () => {
-  const orderList = useSelector((state: RootState) => state.orders);
+  const orderList = useSelector((state: RootState) => state.orders.orders);
 
   return (
     <>
-      {Array.isArray(orderList) && orderList.length > 0 ? (
+      <Table
+        columns={[
+          { key: "name", label: "Customer Name" },
+          { key: "totalAmount", label: "Total" },
+          { key: "paymentMethod", label: "Payment Method" },
+          { key: "paymentStatus", label: "Payment" },
+          {
+            key: "quantity",
+            label: "Quantity",
+            render: (row) =>
+              row.products.map((product: any) => product.quantity).join(", "),
+          },
+          {
+            key: "productName",
+            label: "Product Name",
+            render: (row) =>
+              row.products.map((product: any) => product.name).join(", "),
+          },
+        ]}
+        data={orderList}
+        color="white"
+      />
+
+      {/* {Array.isArray(orderList) && orderList.length > 0 ? (
         orderList.map((order: any, idx: number) => (
           <div key={idx}>
             <h3>Order ID: {order?._id}</h3>
@@ -41,7 +65,7 @@ const OrderTab = () => {
         ))
       ) : (
         <p>No orders found</p>
-      )}
+      )} */}
     </>
   );
 };

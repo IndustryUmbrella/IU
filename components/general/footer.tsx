@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <div className="bg-white">
       <div className=" flex flex-col sm:flex-row flex-wrap justify-between overflow-x-hidden px-[6px] lg:px-desktop md:px-tablet sm:px-mobile gap-y-8 mt-10 rounded p-4">
-        <div className="flex flex-col  font-light text-lg gap-x-3">
+        <div className="flex flex-col  font-light  gap-x-3 text-base">
           <Link href="/">
             <Logo className={"w-[60px] h-[60px] sm:w-[80px] sm:h-[80px]"} />
           </Link>
@@ -18,7 +18,7 @@ const Footer = () => {
           <Link href="/products?tab=all">Products</Link>
           <Link href="/contaact">Contact</Link>
         </div>
-        <div className="flex flex-col font-light text-lg gap-x-3">
+        <div className="flex flex-col font-light text-base gap-x-3 ">
           <h1 className="font-medium">Our Categories</h1>
           <Link href="/products?tab=all">All Categories</Link>
           <Link href="/products?tab=living">Home & Living</Link>
@@ -29,14 +29,14 @@ const Footer = () => {
           <Link href="/products?tab=crafts">Eco-Friendly Crafts</Link>
           <Link href="/products?tab=apperel">Apparel & Wearables</Link>
         </div>
-        <div className="flex flex-col font-light text-lg gap-x-3">
+        <div className="flex flex-col font-light  gap-x-3 text-base">
           <h1 className="font-medium">Our Policies</h1>
           <Link href="/">Terms and Policies</Link>
           <Link href="/">Shiping</Link>
           <Link href="/">Our Team</Link>
           <Link href="/">Gifts & Seasonal Items</Link>
         </div>
-        <div className="flex flex-col font-light text-lg gap-x-3">
+        <div className="flex flex-col font-light text-base gap-x-3">
           <h1 className="font-medium">Contact Us:</h1>
           <p>Support: iu.afg11111@gmail.com</p>
           <p>Phone: +123456789</p>

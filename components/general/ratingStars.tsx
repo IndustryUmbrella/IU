@@ -1,33 +1,20 @@
 "use client";
 import { useState } from "react";
 
-// Custom Star Rating Component
-const StarRating = ({
-  value,
-  onRatingChange,
-  maxStars = 5,
-}: {
+interface StarRatingProps {
   value: number;
   onRatingChange: (rating: number) => void;
   maxStars?: number;
+  readonly?: boolean;
+}
+
+const StarRating: React.FC<StarRatingProps> = ({
+  value,
+  onRatingChange,
+  maxStars = 5,
+  readonly = false,
 }) => {
-  const [hoveredStar, setHoveredStar] = useState(0); // Track hovered star
-  const [readonly, setReadonly] = useState(false); // To prevent double rating
-
-  const handleMouseEnter = (index: number) => {
-    if (!readonly) setHoveredStar(index);
-  };
-
-  const handleMouseLeave = () => {
-    if (!readonly) setHoveredStar(0);
-  };
-
-  const handleClick = (index: number) => {
-    if (!readonly) {
-      onRatingChange(index);
-      setReadonly(true); // Make stars read-only after rating
-    }
-  };
+  const [hoveredStar, setHoveredStar] = useState(0);
 
   return (
     <div className="flex items-center gap-1">
@@ -36,15 +23,14 @@ const StarRating = ({
         return (
           <span
             key={starIndex}
-            onMouseEnter={() => handleMouseEnter(starIndex)}
-            onMouseLeave={handleMouseLeave}
-            onClick={() => handleClick(starIndex)}
-            className="transition-all duration-300 "
-            style={{
-              cursor: readonly ? "default" : "pointer",
-              fontSize: "32px",
-              color: starIndex <= (hoveredStar || value) ? "gold" : "white",
-            }}
+            onMouseEnter={() => !readonly && setHoveredStar(starIndex)}
+            onMouseLeave={() => !readonly && setHoveredStar(0)}
+            onClick={() => !readonly && onRatingChange(starIndex)}
+            className={`transition-all duration-300 text-3xl cursor-pointer ${
+              starIndex <= (hoveredStar || value)
+                ? "text-yellow-400"
+                : "text-gray-400"
+            } ${readonly ? "cursor-default" : "hover:scale-110"}`}
           >
             ★
           </span>

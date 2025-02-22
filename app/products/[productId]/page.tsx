@@ -72,9 +72,9 @@ const ProductDetails = async ({
   const { product, seller } = response;
 
   return (
-    <div>
+    <div className="px-[6px] lg:px-desktop md:px-tablet sm:px-mobile">
       <BackButton />
-      <div className="p-6 flex flex-col md:flex-row gap-10 w-full">
+      <div className="flex flex-col md:flex-row gap-10 w-full mt-4">
         {product?.productImage?.length > 0 && (
           <ProductCarousel
             images={product.productImage.map((img: any) => img?.link)}
@@ -140,7 +140,7 @@ const ProductDetails = async ({
                 {product?.productCategory || ""}
               </span>
             </p>
-            <ProductRating />
+            <ProductRating productId={productId} />
             <ProductCartActions product={product} userData={seller} />
           </div>
           <div className="mt-4">

@@ -48,7 +48,7 @@ const Landing = () => {
         <Slogan />
         <UnsortedDivs />
       </div>
-      <div className="mt-5">
+      <div className="mt-10">
         <div className="flex justify-between">
           <h1 className="text-2xl sm:text-4xl capitalize text-white text-center font-aboreto mb-14">
             All In One

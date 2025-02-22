@@ -22,7 +22,7 @@ const UnsortedDivs = () => {
 
   return (
     <>
-      <div className="w-full h-full max-w-[1000px] max-h-[510px] mt-10 relative hidden lg:block">
+      <div className="w-full h-full max-w-[1000px] max-h-[510px] mt-10 relative hidden lg:block bg-red-500">
         <div
           className="mockup border z-[1000] shadow-[0px_5px_30px_rgba(255,255,255,0.4)] "
           style={{

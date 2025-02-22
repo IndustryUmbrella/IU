@@ -9,15 +9,7 @@ import { FaCcMastercard, FaMoneyBill, FaPaypal } from "react-icons/fa6";
 // import PayPalButton from "./paypalMethod";
 import CashPay from "./cashPay";
 
-const PaymentDetails = ({
-  setShipStep,
-  orderPlaced,
-  setOrderPlaced,
-}: {
-  setShipStep: any;
-  orderPlaced: any;
-  setOrderPlaced: any;
-}) => {
+const PaymentDetails = ({ setShipStep }: { setShipStep: any }) => {
   const dispatch = useDispatch();
   const paymentMethod = useSelector(
     (state: RootState) => state.checkout.method
@@ -103,7 +95,7 @@ const PaymentDetails = ({
       ) : // ) : paymentMethod == "Paypal" ? (
       //   <PayPalButton />
       paymentMethod == "Cash Pay" ? (
-        <CashPay orderPlaced={orderPlaced} setOrderPlace={setOrderPlaced} />
+        <CashPay />
       ) : null}
       <BackButton clickHandler={() => setShipStep(1)} />
     </>

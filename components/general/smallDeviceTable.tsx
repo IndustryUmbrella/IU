@@ -109,15 +109,15 @@ const SmallDeviceTable = ({ data, columns }: { data: any; columns: any }) => {
           />
         </Overlay>
       )}
-      {data?.length > 0 ? (
-        <div>
+      {data?.length == 0 ? (
+        <div className="space-y-4">
           {Array.from({ length: 4 }, (_, idx) => {
             return (
               <div
                 className="bg-primary rounded-md w-auto h-full border border-white px-2 flex gap-x-4  justify-between py-2"
                 key={idx}
               >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-full ">
                   <div className="flex gap-x-2 items-center ">
                     <Skeleton
                       height={30}
@@ -126,23 +126,14 @@ const SmallDeviceTable = ({ data, columns }: { data: any; columns: any }) => {
                       className="mb-2"
                     />
                   </div>
-                  <Skeleton
-                    className="min-w-[150px] w-full h-[10px]"
-                    baseColor="gray"
-                  />
-                  <Skeleton
-                    className="min-w-[150px] w-full h-[10px]"
-                    baseColor="gray"
-                  />
-                  <Skeleton
-                    className="min-w-[150px] w-full h-[10px]"
-                    baseColor="gray"
-                  />
+                  <Skeleton className=" w-full h-[10px]" baseColor="gray" />
+                  <Skeleton className=" w-full h-[10px]" baseColor="gray" />
+                  <Skeleton className=" w-full h-[10px]" baseColor="gray" />
                 </div>
                 <div>
                   <Skeleton
-                    className="w-auto min-w-[120px] h-auto min-h-[120px] mb-2"
-                    baseColor="gray"
+                    className="w-auto border border-gray-700 min-w-[120px] h-auto min-h-[120px] mt-2"
+                    baseColor="#080808"
                   />
                 </div>
               </div>
@@ -234,7 +225,7 @@ const SmallDeviceTable = ({ data, columns }: { data: any; columns: any }) => {
 
               {/* Toggle Button */}
               <button
-                className="absolute left-36 z-10 -bottom-4 w-6 h-6 flex items-center justify-center text-white"
+                className="absolute left-0 z-10 -bottom-4 w-6 h-6 flex items-center justify-center text-white"
                 onClick={() => toggleDetails(idx)}
               >
                 {isExpanded ? <BiUpArrow /> : <BiDownArrow />}
