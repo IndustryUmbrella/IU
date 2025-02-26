@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "@/app/store/cartSlice";
 import Button from "@/components/general/button";
 import Link from "next/link";
+import { setOrderPlaced } from "@/app/store/orderSlice";
 
 const ProductCartActions = ({
   product,
@@ -28,6 +29,7 @@ const ProductCartActions = ({
         companyName: product?.companyName,
       })
     );
+    dispatch(setOrderPlaced(false));
   };
 
   return (

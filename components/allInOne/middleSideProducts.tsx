@@ -75,14 +75,8 @@ const MiddleSideProducts = ({
               <div>
                 <p>{data[0]?.productName}</p>
                 <p>{data[0]?.productDescription}</p>
-                <p className="line-through">
-                  {(
-                    (data[0]?.productPrice * 100) /
-                    (100 - data[0]?.discount)
-                  ).toFixed(2)}
-                  $
-                </p>
-                <p>{data[0]?.productPrice}$</p>
+                <p className="line-through">{data[0]?.productPrice}$</p>
+                <p>{data[0]?.finalPrice}$</p>
               </div>
               <div className="">
                 <div className="flex flex-col gap-y-5 justify-between">

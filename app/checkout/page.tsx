@@ -42,7 +42,7 @@ const Checkout = () => {
     setShipStep(2);
   };
 
-  if (!isClient && !orderPlaced) {
+  if (!orderPlaced && cartItem?.length == 0) {
     return (
       <div className="flex flex-col gap-x-10 items-center justify-center overflow-x-hidden">
         <EmptyCartMockup />
@@ -61,7 +61,7 @@ const Checkout = () => {
 
   return (
     <div className="px-[6px] lg:px-desktop md:px-tablet sm:px-mobile mt-10 ">
-      {orderPlaced && cartItem?.length == 0 ? (
+      {orderPlaced ? (
         <SuccessOrderPlaced />
       ) : (
         <div className="flex flex-col-reverse lg:flex-row gap-x-5 justify-between">

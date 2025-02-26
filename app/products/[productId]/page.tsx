@@ -121,17 +121,13 @@ const ProductDetails = async ({
             <div className="flex flex-row gap-x-2 ">
               <p className="text-[14px] text-white">
                 <span className="font-bold text-xl line-through">
-                  {(
-                    (product?.productPrice * 100) /
-                    (100 - product?.discount)
-                  ).toFixed(2)}
-                  $
+                  {product?.productPrice}$
                 </span>
               </p>
 
               <p className=" text-white">
                 Price:
-                <b>{product?.productPrice}$</b>
+                <b>{product?.finalPrice}$</b>
               </p>
             </div>
             <p className="text-[14px] text-white">

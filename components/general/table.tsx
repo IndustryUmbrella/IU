@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PopUp from "./popUp";
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import { FaPencil, FaTrash } from "react-icons/fa6";
 import Overlay from "./overlay";
 import NewProductForm from "../dashboardTabAdmin/newProductForm";
 import ConfirmationPrompt from "./confirmationPrompt";
-import Notification from "./notification";
-import Skeleton from "react-loading-skeleton";
+import axios from "axios";
+import { triggerRefresh } from "@/app/store/productSlice";
+import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
 
 interface Column {
   key: string;
@@ -19,23 +21,58 @@ interface Column {
 interface TableProps {
   columns: Column[];
   data: any[];
-  color: String;
+  color: string;
+  showThreeDots?: boolean;
 }
 
-const Table: React.FC<TableProps> = ({ columns, data, color }) => {
+const Table: React.FC<TableProps> = ({
+  columns,
+  data,
+  color,
+  showThreeDots = true,
+}) => {
   const [isPopUp, setIsPopUp] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
   const [confirmationPrompt, setConfirmationPrompt] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>({});
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [showNotification, setShowNotification] = useState({
+    isShow: false,
+    content: "",
+    success: false,
+  });
 
-  if (!data || data.length === 0) {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const dispatch = useDispatch();
+  const token = Cookies.get("authToken");
+
+  useEffect(() => {
+    if (data?.length > 0) {
+      setLoading(false);
+    }
+  }, [data]);
+
+  if (loading) {
+    return (
+      <div>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div
+            key={index}
+            className="animate-pulse bg-gray-300 h-10 w-full my-2 rounded"
+          ></div>
+        ))}
+      </div>
+    );
+  }
+
+  if (!data || data?.length === 0) {
     return <p className="text-black">No data available.</p>;
   }
 
   const showPopUp = (id: number) => {
     setSelectedId(selectedId === id ? null : id);
-    setIsPopUp(!isPopUp);
+    setIsPopUp(selectedId !== id);
   };
 
   const setDataAndShowOverlay = (data: any) => {
@@ -43,8 +80,46 @@ const Table: React.FC<TableProps> = ({ columns, data, color }) => {
     setSelectedProduct(data);
   };
 
+  const handleDeleteClick = (product: any) => {
+    setSelectedProduct(product);
+    setConfirmationPrompt(true);
+  };
+
+  const deleteProduct = async () => {
+    if (!selectedProduct) {
+      setShowNotification({
+        isShow: true,
+        content: "No product selected for deletion.",
+        success: false,
+      });
+      return;
+    }
+    try {
+      await axios.delete(
+        `${baseUrl}/api/product/product/${selectedProduct.productId}`,
+        {
+          data: { seller_id: selectedProduct.seller_id },
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      dispatch(triggerRefresh());
+      setShowNotification({
+        isShow: true,
+        content: "Deleted successfully",
+        success: true,
+      });
+      setConfirmationPrompt(false);
+    } catch (error) {
+      setShowNotification({
+        isShow: true,
+        content: "Error deleting product!",
+        success: false,
+      });
+    }
+  };
+
   return (
-    <div className="">
+    <div>
       {showOverlay && (
         <Overlay onClose={() => setShowOverlay(false)} isOpen={showOverlay}>
           <NewProductForm
@@ -58,7 +133,7 @@ const Table: React.FC<TableProps> = ({ columns, data, color }) => {
         <ConfirmationPrompt
           onClose={() => setConfirmationPrompt(false)}
           isOpen={confirmationPrompt}
-          onConfirm={() => console.log("Delete confirmed")}
+          onConfirm={deleteProduct}
         >
           Would you like to delete this item?
         </ConfirmationPrompt>
@@ -72,47 +147,54 @@ const Table: React.FC<TableProps> = ({ columns, data, color }) => {
                 {column.label}
               </th>
             ))}
-            <th className="border p-2 bg-gray-200">Actions</th>
+            {showThreeDots && (
+              <th className="border p-2 bg-gray-200">Actions</th>
+            )}
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
+          {data?.map((row, index) => (
             <tr key={index}>
               {columns.map((column) => (
                 <td key={column.key} className="border p-2 text-center">
                   {column.render ? column.render(row) : row[column.key] || "-"}
                 </td>
               ))}
-              <td className="border p-2 text-center">
-                <button onClick={() => showPopUp(index)}>
-                  <PiDotsThreeOutlineVertical size={18} />
-                </button>
-                {index === selectedId && isPopUp && (
-                  <PopUp
-                    items={[
-                      {
-                        label: (
-                          <div className="flex gap-2 items-center">
-                            <FaPencil size={18} />
-                            <p>Edit</p>
-                          </div>
-                        ),
-                        action: () => setDataAndShowOverlay(row),
-                      },
-                      {
-                        label: (
-                          <div className="flex gap-2 items-center text-red-500">
-                            <FaTrash size={18} />
-                            <p>Delete</p>
-                          </div>
-                        ),
-                        action: () => setConfirmationPrompt(true),
-                      },
-                    ]}
-                    closePopUp={() => setIsPopUp(false)}
-                  />
-                )}
-              </td>
+              {showThreeDots && (
+                <td className="border p-2 text-center relative">
+                  <button onClick={() => showPopUp(index)}>
+                    <PiDotsThreeOutlineVertical size={18} />
+                  </button>
+
+                  <div>
+                    {index === selectedId && isPopUp && (
+                      <PopUp
+                        items={[
+                          {
+                            label: (
+                              <div className="flex gap-2 items-center">
+                                <FaPencil size={18} />
+                                <p>Edit</p>
+                              </div>
+                            ),
+                            action: () => setDataAndShowOverlay(row),
+                          },
+                          {
+                            label: (
+                              <div className="flex gap-2 items-center text-red-500">
+                                <FaTrash size={18} />
+                                <p>Delete</p>
+                              </div>
+                            ),
+                            action: () => handleDeleteClick(row),
+                          },
+                        ]}
+                        closePopUp={() => setIsPopUp(false)}
+                      />
+                    )}
+                  </div>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

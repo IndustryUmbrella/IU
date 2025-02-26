@@ -183,11 +183,10 @@ const LeftSideProducts = ({
                   <p className="text-sm text-white">{p?.productName}</p>
                   <p className="text-sm text-white">{p?.productDescription}</p>
                   <p className="text-sm text-white line-through">
-                    {((p?.productPrice * 100) / (100 - p?.discount)).toFixed(2)}
-                    $
+                    {p?.productPrice}$
                   </p>
                   <p className="text-sm text-white font-bold">
-                    {p?.productPrice}$
+                    {p?.finalPrice}$
                   </p>
 
                   <div className="flex gap-x-1 sm:gap-x-4 items-center mt-2">

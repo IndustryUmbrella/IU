@@ -52,7 +52,6 @@ const CashPay = () => {
         dispatch(setOrderPlaced(true));
         dispatch(triggerRefreshOrder());
         dispatch(clearCart());
-        console.log(orderPlaced, order?.data?.success, "ssssssssssss");
       }
     } catch (err) {
       setLoading(false);
