@@ -14,13 +14,13 @@ const InfoPopUp = ({ data }: { data: any }) => {
           <div className="flex flex-col gap-y-4">
             <div className="">
               <h4 className="">Product Colores </h4>
-              <p className="">
+              <div className="">
                 {data?.colors
                   ? data?.colors
                       .split(",")
                       ?.map((s: any, i: any) => <p key={i}>{s}</p>)
                   : "No Specific Color"}
-              </p>
+              </div>
             </div>
             <div>
               <h4>Product Status </h4>

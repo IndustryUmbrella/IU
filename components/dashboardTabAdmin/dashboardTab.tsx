@@ -69,7 +69,6 @@ const DashboardTab = () => {
           <Button
             clickHandler={() => setShowOverlay(true)}
             type={
-              // userData?.companyName &&
               userData?.companyLogo &&
               userData?.socialLinks &&
               userData?.address

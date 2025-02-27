@@ -32,14 +32,13 @@ const Footer = () => {
         <div className="flex flex-col font-light  gap-x-3 text-base">
           <h1 className="font-medium">Our Policies</h1>
           <Link href="/">Terms and Policies</Link>
-          <Link href="/">Shiping</Link>
-          <Link href="/">Our Team</Link>
-          <Link href="/">Gifts & Seasonal Items</Link>
+          <Link href="/sell">Shiping</Link>
+          <Link href="https://masihullah.vercel.app">Our Team</Link>
         </div>
         <div className="flex flex-col font-light text-base gap-x-3">
           <h1 className="font-medium">Contact Us:</h1>
           <p>Support: iu.afg11111@gmail.com</p>
-          <p>Phone: +123456789</p>
+          <p>Phone: +1 (406) 316-0069</p>
           <p>Address: Kabul, Afghanistan</p>
           <p>Follow Us On:</p>
           <SocialMedia colores="black" />

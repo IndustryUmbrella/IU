@@ -59,14 +59,16 @@ const Cart = ({ isOpen, setIsOpen }: { isOpen: any; setIsOpen: any }) => {
                   <div className="flex flex-col gap-2">
                     <img
                       src={item?.productImage}
-                      width={100}
-                      height={100}
-                      className="border border-black rounded"
+                      className="border border-black rounded w-[80px] h-[60px]"
                     />
                     <p>${Number(item?.price)?.toFixed(2)}</p>
                   </div>
-
-                  <p className="w-full">{item?.name}</p>
+                  <div>
+                    <p className="w-full">{item?.name}</p>
+                    <p className="w-[160px] text-ellipsis truncate">
+                      {item?.description}
+                    </p>
+                  </div>
 
                   <div className="flex items-center justify-center gap-x-2">
                     <button

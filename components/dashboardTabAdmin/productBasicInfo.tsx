@@ -9,7 +9,7 @@ const ProductBasicInfo = ({ formik }: { formik: any }) => {
     { value: "apperel", label: "Apperel and Wearbles" },
     { value: "art", label: "Art & collections" },
     { value: "gift", label: "Gift & Seasonable Items" },
-    { value: "beauty", label: "Beaaty & wellnes" },
+    { value: "beauty", label: "Beauty & wellnes" },
     { value: "crafts", label: "Crafts" },
   ];
 

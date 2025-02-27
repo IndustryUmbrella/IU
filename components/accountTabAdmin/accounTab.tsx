@@ -264,6 +264,7 @@ const AccountTab = () => {
               isLoading ? <FontAwesomeIcon icon={faSpinner} spin /> : "Update"
             }
             clickHandler={updateSeller}
+            className="mt-3"
           />
         )}
       </form>

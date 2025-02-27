@@ -114,16 +114,32 @@ const ProductsCards = ({
     dispatch(setProductLimit(productLimit + 10));
   };
   const handleSearch = () => {
-    if (!searchValue) return;
+    if (!searchValue) {
+      setProductsToShow(products);
+    }
 
     const productsNames = products?.filter((product: any) =>
-      product?.productName?.includes(searchValue)
+      product?.productName?.toLowerCase().includes(searchValue.toLowerCase())
     );
 
     if (productsNames.length > 0) {
       setProductsToShow(productsNames);
     }
   };
+
+  useEffect(() => {
+    if (!searchValue) {
+      setProductsToShow(products);
+    }
+
+    const productsNames = products?.filter((product: any) =>
+      product?.productName?.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    if (productsNames.length > 0) {
+      setProductsToShow(productsNames);
+    }
+  }, [searchValue]);
 
   return (
     <div>
@@ -210,10 +226,8 @@ const ProductsCards = ({
                           <div key={`${product.productId}-${index}`}>
                             <img
                               src={img?.link}
-                              width={200}
-                              height={200}
                               alt=""
-                              className="rounded mb-4 w-full h-36 my-7"
+                              className="rounded mb-4  h-36 my-7 w-[200px] h-[200[x] object-cover object-center "
                             />
                           </div>
                         );

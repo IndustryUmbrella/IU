@@ -31,14 +31,15 @@ export const validationSchema = Yup.object({
   linkedin: Yup.string()
     .url("Invalid LinkedIn URL")
     .matches(
-      /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9(\.\?)?]+$/,
+      /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|company)\/[\w\u0600-\u06FF-]+\/?$/,
       "Invalid LinkedIn URL"
     )
     .nullable(),
   pinterest: Yup.string()
     .url("Invalid Pinterest URL")
     .matches(
-      /^(https?:\/\/)?(www\.)?pinterest\.com\/[a-zA-Z0-9(\.\?)?]+$/,
+      /^(https?:\/\/)?(www\.)?pinterest\.com\/[a-zA-Z0-9._]+\/?$/,
+
       "Invalid Pinterest URL"
     )
     .nullable(),

@@ -64,7 +64,11 @@ const LeftSideProducts = ({
                 baseColor="gray"
               />
               <div className="flex gap-x-2 sm:gap-x-4 items-center mt-2">
-                <FaCartShopping color="white" size="18" />
+                <FaCartShopping
+                  color="white"
+                  size="18"
+                  className="cursor-pointer"
+                />
                 <Button
                   size="sm"
                   type="primary"
@@ -166,7 +170,7 @@ const LeftSideProducts = ({
             return (
               <div
                 key={i}
-                className="bg-primary rounded-md w-full h-full border border-white px-2 flex flex-row gap-x-14   py-2"
+                className="bg-primary rounded-md w-full h-auto border border-white px-2 flex flex-row gap-x-14  py-2"
               >
                 <div className="flex flex-col gap-2  w-[200px]">
                   <div className="flex gap-x-2  items-center ">
@@ -174,19 +178,19 @@ const LeftSideProducts = ({
                       src={p?.productImage[0]?.link}
                       width={40}
                       height={40}
-                      className="rounded-full w-[40px] h-[40px] object-center"
+                      className="rounded-full w-[40px] h-[40px] "
                     />
                     <p className="text-sm text-white w-full">
-                      {p?.productName}
+                      {p?.companyName}
                     </p>
                   </div>
                   <p className="text-sm text-white">{p?.productName}</p>
                   <p className="text-sm text-white">{p?.productDescription}</p>
-                  <p className="text-sm text-white line-through">
-                    {p?.productPrice}$
-                  </p>
-                  <p className="text-sm text-white font-bold">
-                    {p?.finalPrice}$
+                  <p className="text-sm text-white">
+                    <span className=" line-through">
+                      {p?.productPrice}$ {"  "}
+                    </span>
+                    <span>{p?.finalPrice}$</span>
                   </p>
 
                   <div className="flex gap-x-1 sm:gap-x-4 items-center mt-2">
@@ -194,6 +198,7 @@ const LeftSideProducts = ({
                       color="white"
                       size={18}
                       onClick={() => handleAddToCart(p)}
+                      className="cursor-pointer"
                     />
                     <Button
                       size="sm"

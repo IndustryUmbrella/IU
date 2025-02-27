@@ -1,8 +1,12 @@
+"use client";
 import Hearth from "@/public/svgs/heart";
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Button from "../general/button";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/app/store/cartSlice";
+import { FaCartShopping } from "react-icons/fa6";
 
 const RightSideProducts = ({
   isLoading,
@@ -11,6 +15,22 @@ const RightSideProducts = ({
   isLoading: false | boolean;
   data: any;
 }) => {
+  const dispatch = useDispatch();
+  const handleAddToCart = (product: any) => {
+    dispatch(
+      addToCart({
+        id: product?.productId,
+        name: product?.productName,
+        price: product?.productPrice,
+        quantity: 1,
+        productImage: product?.productImage[0]?.link,
+        description: product?.productDescription,
+        category: product?.productCategory,
+        seller_id: product?.seller_id,
+        companyName: product?.companyName,
+      })
+    );
+  };
   return (
     <>
       {isLoading ? (
@@ -64,14 +84,22 @@ const RightSideProducts = ({
                 return (
                   <div
                     key={idx}
-                    className="w-auto h-auto min-h-[300px] min-w-[300px]  border border-white rounded-md px-4 py-2"
+                    className="w-auto h-auto min-h-[300px] min-w-[300px]    border border-white rounded-md px-4 py-2"
                   >
                     <div className="flex justify-between my-3">
-                      <img
-                        src={product?.productImage[0]?.link}
-                        className="w-[50px] h-[50px] rounded-full"
+                      <div className="flex flex-row gap-x-2 items-center">
+                        <img
+                          src={product?.productImage[0]?.link}
+                          className="w-[50px] h-[50px] rounded-full"
+                        />
+                        <p className="text-white">{product?.companyName}</p>
+                      </div>
+                      <FaCartShopping
+                        onClick={() => handleAddToCart(data[0])}
+                        color="white"
+                        size={24}
+                        className="cursor-pointer"
                       />
-                      <Hearth />
                     </div>
                     <div className="flex gap-x-4">
                       <img
@@ -79,13 +107,11 @@ const RightSideProducts = ({
                         className="w-[120px] h-[130px] rounded"
                       />
                       <div>
-                        <p className="text-white text-lg">
-                          {product?.productName}
-                        </p>
-                        <p className="text-white text-lg">
+                        <p className="text-white ">{product?.productName}</p>
+                        <p className="text-white ">
                           {product?.productDescription}
                         </p>
-                        <p className="text-white text-lg mt-4">
+                        <p className="text-white  mt-4">
                           {product?.productPrice}$
                         </p>
                       </div>

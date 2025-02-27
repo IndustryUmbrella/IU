@@ -11,9 +11,9 @@ import {
 import { IoCopyOutline } from "react-icons/io5";
 import {
   FacebookShareButton,
-  TwitterShareButton,
   WhatsappShareButton,
   TelegramShareButton,
+  TwitterShareButton,
 } from "react-share";
 
 const SocialShareButtons = ({ url, title }: { url: string; title: string }) => {
@@ -27,12 +27,12 @@ const SocialShareButtons = ({ url, title }: { url: string; title: string }) => {
   };
 
   return (
-    <div className="flex flex-col min-w-[400px]">
+    <div className="flex flex-col ">
       <h1 className="text-left text-2xl font-semibold">
         Share This Product with Your frinds! {"(:"}
       </h1>
 
-      <div className="flex space-x-3 my-10">
+      <div className="flex space-x-8 my-10">
         <FacebookShareButton url={url}>
           <FaFacebook className="text-blue-600" size={32} />
         </FacebookShareButton>

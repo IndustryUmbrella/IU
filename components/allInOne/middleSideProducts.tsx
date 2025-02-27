@@ -55,16 +55,20 @@ const MiddleSideProducts = ({
         </div>
       ) : (
         data?.length > 0 && (
-          <div className="bg-white px-4  max-w-[450px] min-w-[330px] h-[605px] rounded-md">
+          <div className="bg-white px-4  sm:max-w-[550px] min-w-[330px] sm:min-w-[630px] h-auto max-h-[630px] rounded-md">
             <div className="flex justify-between mt-2 ">
-              <img
-                src={data[0]?.productImage[0]?.link}
-                className="rounded-full w-[50px] h-[50px]"
-              />
+              <div>
+                <img
+                  src={data[0]?.productImage[0]?.link}
+                  className="rounded-full w-[50px] h-[50px]"
+                />
+                <p>{data[0]?.companyName}</p>
+              </div>
               <FaCartShopping
                 color="black"
                 size={24}
                 onClick={() => handleAddToCart(data[0])}
+                className="cursor-pointer"
               />
             </div>
             <img

@@ -60,56 +60,54 @@ const CashPay = () => {
 
   return (
     <>
-      <>
-        <div className="mt-5">
-          <p className="text-white">
-            Please Print The PDF and bring it with the desired amount to the
-            company address mentioned in the PDF.
-          </p>
+      <div className="mt-5">
+        <p className="text-white">
+          Please Print The PDF and bring it with the desired amount to the
+          company address mentioned in the PDF.
+        </p>
+      </div>
+
+      <div className="flex flex-row justify-between items-center mt-4">
+        <PDFDownloadLink
+          document={<CashPayPdf data={allBuyerData} />}
+          fileName="mypdf.pdf"
+        >
+          {({ loading }) => (
+            <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+              {loading ? "Loading..." : "Download PDF"}
+            </button>
+          )}
+        </PDFDownloadLink>
+
+        <button
+          onClick={() => setShowPreview(!showPreview)}
+          className="px-4 py-2 text-white rounded hover:bg-green-600"
+        >
+          {showPreview ? "Hide Preview" : "Show Preview"}
+        </button>
+      </div>
+
+      {showPreview && (
+        <div className="mt-4 w-full max-w-2xl h-[500px] border-2 border-gray-300">
+          <PDFViewer width="100%" height="100%">
+            <CashPayPdf data={allBuyerData} />
+          </PDFViewer>
         </div>
+      )}
 
-        <div className="flex flex-row justify-between items-center mt-4">
-          <PDFDownloadLink
-            document={<CashPayPdf data={allBuyerData} />}
-            fileName="mypdf.pdf"
-          >
-            {({ loading }) => (
-              <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                {loading ? "Loading..." : "Download PDF"}
-              </button>
-            )}
-          </PDFDownloadLink>
-
-          <button
-            onClick={() => setShowPreview(!showPreview)}
-            className="px-4 py-2 text-white rounded hover:bg-green-600"
-          >
-            {showPreview ? "Hide Preview" : "Show Preview"}
-          </button>
-        </div>
-
-        {showPreview && (
-          <div className="mt-4 w-full max-w-2xl h-[500px] border-2 border-gray-300">
-            <PDFViewer width="100%" height="100%">
-              <CashPayPdf data={allBuyerData} />
-            </PDFViewer>
-          </div>
-        )}
-
-        <Button
-          type={loading ? "disable" : "primary"}
-          size="md"
-          text={
-            loading ? (
-              <FontAwesomeIcon icon={faSpinner} size="1x" />
-            ) : (
-              "Submit Order"
-            )
-          }
-          className="mt-5"
-          clickHandler={placeanOrder}
-        />
-      </>
+      <Button
+        type={loading ? "disable" : "primary"}
+        size="md"
+        text={
+          loading ? (
+            <FontAwesomeIcon icon={faSpinner} size="1x" spin />
+          ) : (
+            "Submit Order"
+          )
+        }
+        className="mt-5"
+        clickHandler={placeanOrder}
+      />
     </>
   );
 };
